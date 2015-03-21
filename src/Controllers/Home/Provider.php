@@ -10,7 +10,7 @@ class Provider implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $app['home.controller'] = $app->share(function() use($app) {
-            return new Controller($app['twig']);
+            return new Controller($app['twig'], $app['repository.employeur']);
         });
         
         $controllers = $app['controllers_factory'];

@@ -9,6 +9,7 @@ use Gaufrette\Adapter\Local;
 use Puzzle\Configuration;
 use Silex\Provider\UrlGeneratorServiceProvider;
 
+use Assmat\DataSource\Repositories;
 
 class Application extends \Silex\Application
 {
@@ -23,6 +24,7 @@ class Application extends \Silex\Application
         $this->registerServiceProviders();
         $this->initializeDebugMode();
         $this->initializeServices();
+        $this->initializeRepositories();
         $this->mountProviders();
         $this->initializeErrorHandler();
     }
@@ -53,7 +55,18 @@ class Application extends \Silex\Application
     
     private function initializeServices()
     {
-
+    	
+    }
+    
+    private function initializeRepositories()
+    {
+		$this['repository.employeur'] = function($c) {
+			return new Repositories\Mysql\Employeur($c['repository.contact']);
+		};
+		
+		$this['repository.contact'] = function($c) {
+			return new Repositories\Mysql\Contact();
+		};
     }
     
     private function mountProviders()
