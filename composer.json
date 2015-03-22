@@ -7,6 +7,8 @@
         "silex/silex": "~1.2",
         "twig/twig": "~1.16",
         "niktux/karma": "~4.0",
-        "puzzle/configuration": "~1.4"
+        "puzzle/configuration": "~1.4",
+        "herrera-io/silex-pdo": "1.2.1",
+        "lebris/muffin": "1.2.0"
     }
 }
