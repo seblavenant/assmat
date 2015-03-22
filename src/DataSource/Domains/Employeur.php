@@ -13,7 +13,7 @@ class Employeur
 		$employeurRepository,
 		$contactRepository;
 	
-	public function __construct(Repositories\Employeur $employeurRepository, Repositories\Contact $contactRepository)
+	public function __construct( Repositories\Employeur $employeurRepository, Repositories\Contact $contactRepository)
 	{
 		$this->employeurRepository = $employeurRepository;
 		$this->contactRepository = $contactRepository;
