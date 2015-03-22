@@ -4,23 +4,23 @@ namespace Assmat\Controllers\Home;
 
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
-use Assmat\DataSource\Repositories;
+use Assmat\DataSource\Domains;
 
 class Controller
 {
     private
         $twig,
-    	$employeurRepository;
+    	$employeur;
 
-    public function __construct(Twig_Environment $twig, Repositories\Employeur $employeurRepository)
+    public function __construct(Twig_Environment $twig, Domains\Employeur $employeur)
     {
         $this->twig = $twig;
-        $this->employeurRepository = $employeurRepository;
+        $this->employeur = $employeur;
     }
     
     public function indexAction()
     {
-        $employeur = $this->employeurRepository->findById(42);
+        $employeur = $this->employeur->loadFromId(42);
         $employeur->getPageEmploiId();
         
         $contact = $employeur->getContact();

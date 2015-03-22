@@ -4,5 +4,5 @@ namespace Assmat\DataSource\Repositories;
 
 interface Employeur
 {
-	public function findById($id);
+	public function findFromId($id);
 }

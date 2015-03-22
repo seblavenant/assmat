@@ -10,12 +10,26 @@ class Employeur
 {
 	private
 		$fields,
+		$employeurRepository,
 		$contactRepository;
 	
-	public function __construct(Entities\Employeur $fields, Repositories\Contact $contactRepository)
+	public function __construct(Repositories\Employeur $employeurRepository, Repositories\Contact $contactRepository)
 	{
-		$this->fields = $fields;
+		$this->employeurRepository = $employeurRepository;
 		$this->contactRepository = $contactRepository;
+		$this->fields = new Entities\Employeur();
+	}
+	
+	public function loadFromId($id)
+	{
+		$this->fields = $this->employeurRepository->findFromId($id);
+		
+		return $this;
+	}
+	
+	public function getId()
+	{
+		return $this->fields->id;
 	}
 	
 	public function getPageEmploiId()
@@ -27,7 +41,7 @@ class Employeur
 	{
 		if(! $this->fields->contact instanceof Domains\Contact)
 		{
-			$this->fields->contact = $this->contactRepository->findByEmployeur($this);
+			$this->fields->contact = (new Domains\Contact($this->contactRepository))->loadFromEmployeur($this);
 		}
 		
 		return $this->fields->contact;

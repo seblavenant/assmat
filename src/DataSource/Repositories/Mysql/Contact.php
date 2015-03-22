@@ -8,12 +8,14 @@ use Assmat\DataSource\Repositories;
 
 class Contact implements Repositories\Contact
 {
-	public function findByEmployeur(Domains\Employeur $employeur)
+	public function findFromEmployeur(Domains\Employeur $employeur)
 	{
+		$employeurId = $employeur->getId();
+		
 		$contactEntity = new Entities\Contact();
 		$contactEntity->id = 42;
 		$contactEntity->nom = 'lavenant';
 		
-		return new Domains\Contact($contactEntity);
+		return $contactEntity;
 	}
 }
