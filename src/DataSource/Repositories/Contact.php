@@ -6,5 +6,5 @@ use Assmat\DataSource\Domains;
 
 interface Contact
 {
-	public function findFromEmployeur(Domains\Employeur $employeur);
+    public function findFromEmployeur(Domains\Employeur $employeur);
 }

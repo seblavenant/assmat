@@ -4,8 +4,8 @@ namespace Assmat\DataSource\Entities;
 
 class Employeur
 {
-	public
-		$id,
-		$contact,
-		$pajeEmploiId;
+    public
+        $id,
+        $contact,
+        $pajeEmploiId;
 }

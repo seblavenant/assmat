@@ -4,11 +4,11 @@ namespace Assmat\DataSource\Entities;
 
 class Contact
 {
-	public
-		$id,
-		$nom,
-		$prenom,
-		$adresse,
-		$codePostal,
-		$ville;
+    public
+        $id,
+        $nom,
+        $prenom,
+        $adresse,
+        $codePostal,
+        $ville;
 }

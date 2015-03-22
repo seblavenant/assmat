@@ -10,29 +10,28 @@ class Controller
 {
     private
         $twig,
-    	$employeur;
+        $employeur;
 
     public function __construct(Twig_Environment $twig, Domains\Employeur $employeur)
     {
         $this->twig = $twig;
         $this->employeur = $employeur;
     }
-    
+
     public function indexAction()
     {
         $employeur = $this->employeur->loadFromId(1);
         $employeur->getPageEmploiId();
-        
+
         $contact = $employeur->getContact();
         $contact->getNom();
-        
+
         var_dump($employeur);
         var_dump($contact);
 
-        
         return new Response();
     }
-    
+
     public function errorAction()
     {
         return $this->twig->render('Error/index.html.twig');

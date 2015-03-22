@@ -12,15 +12,15 @@ class Provider implements ControllerProviderInterface
         $app['home.controller'] = $app->share(function() use($app) {
             return new Controller($app['twig'], $app['domain.employeur']);
         });
-        
+
         $controllers = $app['controllers_factory'];
 
         $controllers->get('/', 'home.controller:indexAction')
                     ->bind('homepage');
-        
+
         $controllers->get('/error', 'home.controller:errorAction')
                     ->bind('error');
-        
+
         return $controllers;
     }
 }
