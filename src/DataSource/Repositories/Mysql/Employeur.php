@@ -11,6 +11,7 @@ class Employeur implements Repositories\Employeur
 	public function findFromId($id)
 	{
 		$employeurEntity = new Entities\Employeur();
+		$employeurEntity->id = $id;
 		$employeurEntity->pajeEmploiId = 42;
 		
 		return $employeurEntity;

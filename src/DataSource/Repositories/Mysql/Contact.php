@@ -10,12 +10,15 @@ class Contact implements Repositories\Contact
 {
 	public function findFromEmployeur(Domains\Employeur $employeur)
 	{
+		$contactEntity = new Entities\Contact();
 		$employeurId = $employeur->getId();
 		
-		$contactEntity = new Entities\Contact();
-		$contactEntity->id = 42;
-		$contactEntity->nom = 'lavenant';
-		
+		if($employeurId !== null)
+		{
+			$contactEntity->id = 42;
+			$contactEntity->nom = 'lavenant';
+		}
+
 		return $contactEntity;
 	}
 }
