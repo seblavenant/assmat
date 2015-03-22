@@ -11,6 +11,7 @@ use Silex\Provider\UrlGeneratorServiceProvider;
 
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains;
+use Herrera\Pdo\PdoServiceProvider;
 
 class Application extends \Silex\Application
 {
@@ -53,6 +54,21 @@ class Application extends \Silex\Application
         $this->register(new TwigServiceProvider(), array(
             'twig.path' => __DIR__ . '/../views',
         ));
+
+        $this->register(
+			new PdoServiceProvider(),
+        	array(
+        		'pdo.dsn' => sprintf(	'mysql:dbname=%s;host=%s', 
+        								$this->configuration->readRequired('databases/pdo/dbname'),
+        								$this->configuration->readRequired('databases/pdo/host')
+        		),
+        		'pdo.username' => $this->configuration->readRequired('databases/pdo/username'),
+        		'pdo.password' => $this->configuration->readRequired('databases/pdo/password'),
+        		'pdo.options' => array(
+        			\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"
+        		)
+        	)
+        );
     }
     
     private function initializeServices()
@@ -74,11 +90,11 @@ class Application extends \Silex\Application
     private function initializeRepositories()
     {
 		$this['repository.employeur'] = function($c) {
-			return new Repositories\Mysql\Employeur($c['repository.contact']);
+			return new Repositories\Mysql\Employeur($c['pdo']);
 		};
 		
 		$this['repository.contact'] = function($c) {
-			return new Repositories\Mysql\Contact();
+			return new Repositories\Mysql\Contact($c['pdo']);
 		};
     }
     
