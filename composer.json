@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/seblavenant/persistence"
+        }
+    ],
     "autoload": {
         "psr-4": { "Assmat\\": "src/" }
     },
@@ -9,6 +15,7 @@
         "niktux/karma": "~4.0",
         "puzzle/configuration": "~1.4",
         "herrera-io/silex-pdo": "1.2.1",
-        "lebris/muffin": "1.2.0"
+        "lebris/muffin": "1.2.0",
+        "silex-spear/persistence" : "~1.0"
     }
 }
