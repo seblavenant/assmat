@@ -1,11 +1,19 @@
 <?php
 
-namespace Assmat\DataSource\Entities;
+namespace Assmat\DataSource\DataTransferObjects;
 
-class Employeur
+use Spear\Silex\Persistence\DataTransferObjects\Related;
+
+class Employeur extends Related
 {
     public
         $id,
-        $contact,
         $pajeEmploiId;
+    
+    public function __construct()
+    {
+    	parent::__construct(array(
+    		'contact',
+    	));
+    }
 }
