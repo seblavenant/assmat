@@ -26,9 +26,6 @@ class Controller
         $contact = $employeur->getContact();
         $contact->getNom();
 
-        var_dump($employeur);
-        var_dump($contact);
-
         return new Response();
     }
 

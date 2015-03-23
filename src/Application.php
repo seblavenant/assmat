@@ -56,46 +56,46 @@ class Application extends \Silex\Application
         ));
 
         $this->register(
-			new PdoServiceProvider(),
-        	array(
-        		'pdo.dsn' => sprintf(	'mysql:dbname=%s;host=%s', 
-        								$this->configuration->readRequired('databases/pdo/dbname'),
-        								$this->configuration->readRequired('databases/pdo/host')
-        		),
-        		'pdo.username' => $this->configuration->readRequired('databases/pdo/username'),
-        		'pdo.password' => $this->configuration->readRequired('databases/pdo/password'),
-        		'pdo.options' => array(
-        			\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"
-        		)
-        	)
+            new PdoServiceProvider(),
+            array(
+                'pdo.dsn' => sprintf(    'mysql:dbname=%s;host=%s', 
+                                        $this->configuration->readRequired('databases/pdo/dbname'),
+                                        $this->configuration->readRequired('databases/pdo/host')
+                ),
+                'pdo.username' => $this->configuration->readRequired('databases/pdo/username'),
+                'pdo.password' => $this->configuration->readRequired('databases/pdo/password'),
+                'pdo.options' => array(
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"
+                )
+            )
         );
     }
     
     private function initializeServices()
     {
-    	
+        
     }
     
     private function initializeDomains()
     {
-    	$this['domain.employeur'] = function($c) {
-    		return new Domains\Employeur($c['repository.employeur'], $c['repository.contact']);
-    	};
-    	
-    	$this['domain.contact'] = function($c) {
-    		return new Domains\Contact($c['repository.contact']);
-    	};
+        $this['domain.employeur'] = function($c) {
+            return new Domains\Employeur($c['repository.employeur'], $c['repository.contact']);
+        };
+        
+        $this['domain.contact'] = function($c) {
+            return new Domains\Contact($c['repository.contact']);
+        };
     }
     
     private function initializeRepositories()
     {
-		$this['repository.employeur'] = function($c) {
-			return new Repositories\Mysql\Employeur($c['pdo']);
-		};
-		
-		$this['repository.contact'] = function($c) {
-			return new Repositories\Mysql\Contact($c['pdo']);
-		};
+        $this['repository.employeur'] = function($c) {
+            return new Repositories\Mysql\Employeur($c['pdo']);
+        };
+        
+        $this['repository.contact'] = function($c) {
+            return new Repositories\Mysql\Contact($c['pdo']);
+        };
     }
     
     private function mountProviders()
