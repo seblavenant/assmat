@@ -8,7 +8,8 @@ class Employeur extends Related
 {
     public
         $id,
-        $pajeEmploiId;
+        $pajeEmploiId,
+    	$contactId;
     
     public function __construct()
     {

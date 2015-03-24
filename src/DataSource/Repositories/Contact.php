@@ -4,7 +4,7 @@ namespace Assmat\DataSource\Repositories;
 
 use Assmat\DataSource\Domains;
 
-interface Contact
+interface Contact extends Repository
 {
-    public function findFromEmployeur(Domains\Employeur $employeur);
+    public function find($id);
 }

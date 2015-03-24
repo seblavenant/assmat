@@ -1,10 +1,4 @@
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/seblavenant/persistence"
-        }
-    ],
     "autoload": {
         "psr-4": { "Assmat\\": "src/" }
     },

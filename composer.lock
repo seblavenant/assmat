@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0bf51a9f54dc5bf3229443ca1f159337",
+    "hash": "d56911cc39b99f79e908cdef8bc883b7",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -489,12 +489,12 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/seblavenant/persistence.git",
+                "url": "https://github.com/silex-spear/persistence.git",
                 "reference": "ebaa05bb8b64cbcf29a618d03e9c75f0879e5074"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/seblavenant/persistence/zipball/ebaa05bb8b64cbcf29a618d03e9c75f0879e5074",
+                "url": "https://api.github.com/repos/silex-spear/persistence/zipball/ebaa05bb8b64cbcf29a618d03e9c75f0879e5074",
                 "reference": "ebaa05bb8b64cbcf29a618d03e9c75f0879e5074",
                 "shasum": ""
             },
@@ -507,6 +507,7 @@
                     "Spear\\Silex\\Persistence\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "Romain Renaud",
@@ -518,10 +519,6 @@
                 }
             ],
             "description": "Persistence couch common files",
-            "support": {
-                "source": "https://github.com/seblavenant/persistence/tree/1.0.0",
-                "issues": "https://github.com/seblavenant/persistence/issues"
-            },
             "time": "2015-03-23 20:51:46"
         },
         {

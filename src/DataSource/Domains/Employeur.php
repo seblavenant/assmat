@@ -2,7 +2,6 @@
 
 namespace Assmat\DataSource\Domains;
 
-use Spear\Silex\Persistence\DataTransferObjects\Related;
 use Assmat\DataSource\DataTransferObjects as DTO;
 
 class Employeur

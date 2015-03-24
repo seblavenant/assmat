@@ -2,7 +2,7 @@
 
 namespace Assmat\DataSource\Repositories;
 
-interface Employeur
+interface Employeur extends Repository
 {
-    public function findFromId($id);
+    public function find($id);
 }

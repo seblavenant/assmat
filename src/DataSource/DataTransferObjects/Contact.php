@@ -1,8 +1,10 @@
 <?php
 
-namespace Assmat\DataSource\Entities;
+namespace Assmat\DataSource\DataTransferObjects;
 
-class Contact
+use Spear\Silex\Persistence\DataTransferObject;
+
+class Contact implements DataTransferObject
 {
     public
         $id,

@@ -26,7 +26,6 @@ class Application extends \Silex\Application
         $this->registerServiceProviders();
         $this->initializeDebugMode();
         $this->initializeServices();
-        $this->initializeDomains();
         $this->initializeRepositories();
         $this->mountProviders();
         $this->initializeErrorHandler();
@@ -76,21 +75,10 @@ class Application extends \Silex\Application
         
     }
     
-    private function initializeDomains()
-    {
-        $this['domain.employeur'] = function($c) {
-            return new Domains\Employeur($c['repository.employeur'], $c['repository.contact']);
-        };
-        
-        $this['domain.contact'] = function($c) {
-            return new Domains\Contact($c['repository.contact']);
-        };
-    }
-    
     private function initializeRepositories()
     {
         $this['repository.employeur'] = function($c) {
-            return new Repositories\Mysql\Employeur($c['pdo']);
+            return new Repositories\Mysql\Employeur($c['pdo'], $c['repository.contact']);
         };
         
         $this['repository.contact'] = function($c) {

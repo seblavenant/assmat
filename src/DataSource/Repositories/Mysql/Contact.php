@@ -3,64 +3,52 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Assmat\DataSource\Domains;
-use Assmat\DataSource\Entities;
+use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 
 use Muffin\Queries;
-use Muffin\Conditions;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
+use Spear\Silex\Persistence\Fields;
+use Spear\Silex\Persistence\DataTransferObject;
 
-class Contact implements Repositories\Contact
+class Contact extends AbstractMysql implements Repositories\Contact
 {
     const
         DB_NAME = 'contact';
-
-    private 
-        $contactEntity,
-        $pdo;
-
-    public function __construct(\PDO $pdo)
+    
+    public function find($id)
     {
-        $this->pdo = $pdo;
-        $this->contactEntity = new Entities\Contact();
-    }
-
-    public function findFromEmployeur(Domains\Employeur $employeur)
-    {
-        $employeurId = $employeur->getId();
-
-        if($employeurId === null)
-        {
-            return $this->contactEntity;    
-        }
-
-        $queryBuilder = (new Queries\Select())->setEscaper(new SimpleEscaper())
+        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('c.id', 'c.nom', 'c.prenom', 'c.adresse', 'c.code_postal', 'c.ville'))
             ->from(self::DB_NAME, 'c')
             ->leftJoin(Repositories\Mysql\Employeur::DB_NAME, 'e')->on('e.contact_id', 'c.id')
-            ->where((new Types\Integer('e.contact_id'))->equal($employeurId));
+            ->where((new Types\Integer('e.contact_id'))->equal($id));
 
-        $statement = $this->pdo->query($queryBuilder->toString());
-
-        if(! $statement instanceof \PDOStatement)
-        {
-            return $this->contactEntity;    
-        }
-
-        $contact = $statement->fetchObject();
-        if($contact === false)
-        {
-            return $this->contactEntity;
-        }
-
-        $this->contactEntity->id = $contact->id;
-        $this->contactEntity->nom = $contact->nom;
-        $this->contactEntity->prenom = $contact->prenom;
-        $this->contactEntity->adresse = $contact->adresse;
-        $this->contactEntity->codePostal = $contact->code_postal;
-        $this->contactEntity->ville = $contact->ville;
-
-        return $this->contactEntity;
+        return $this->fetchOne($query);
     }
+    
+    public function getDomain(DataTransferObject $dto)
+    {
+    	return new Domains\Contact($dto);
+    }
+    
+    public function getDTO()
+    {
+    	return new DTO\Contact();
+    }
+    
+    public function getFields()
+    {
+    	return array(
+    		'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
+    		'nom' => new Fields\NotNullable(new Fields\String('nom')),
+    		'prenom' => new Fields\NotNullable(new Fields\String('prenom')),
+    		'adresse' => new Fields\NotNullable(new Fields\String('adresse')),
+    		'codePostal' => new Fields\NotNullable(new Fields\String('code_postal')),
+    		'ville' => new Fields\NotNullable(new Fields\String('ville')),
+    	);
+    }
+    
+
 }
