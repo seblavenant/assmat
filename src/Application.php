@@ -70,6 +70,10 @@ class Application extends \Silex\Application
             return new Repositories\Mysql\Employeur($c['db.default'], $c['repository.contact']);
         };
 
+        $this['repository.employe'] = function($c) {
+            return new Repositories\Mysql\Employe($c['db.default'], $c['repository.contact']);
+        };
+
         $this['repository.contact'] = function($c) {
             return new Repositories\Mysql\Contact($c['db.default']);
         };

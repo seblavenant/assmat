@@ -22,8 +22,7 @@ class Contact extends AbstractMysql implements Repositories\Contact
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('c.id', 'c.nom', 'c.prenom', 'c.adresse', 'c.code_postal', 'c.ville'))
             ->from(self::DB_NAME, 'c')
-            ->leftJoin(Repositories\Mysql\Employeur::DB_NAME, 'e')->on('e.contact_id', 'c.id')
-            ->where((new Types\Integer('e.contact_id'))->equal($id));
+            ->where((new Types\Integer('c.id'))->equal($id));
 
         return $this->fetchOne($query);
     }

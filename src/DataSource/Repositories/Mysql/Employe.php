@@ -14,10 +14,10 @@ use Spear\Silex\Persistence\DTOHydrators;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
 
-class Employeur extends AbstractMysql implements Repositories\Employeur
+class Employe extends AbstractMysql implements Repositories\Employe
 {
     const
-        DB_NAME = 'employeur';
+        DB_NAME = 'employe';
 
     private
         $contactRepository;
@@ -32,7 +32,7 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
     public function find($id)
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'paje_emploi_id', 'contact_id'))
+            ->select(array('id', 'ss_id', 'contact_id'))
             ->from(self::DB_NAME)
             ->where((new Types\Integer('id'))->equal($id));
 
@@ -43,7 +43,7 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-            'pajeEmploiId' => new Fields\NotNullable(new Fields\UnsignedInteger('paje_emploi_id')),
+            'ssId' => new Fields\NotNullable(new Fields\UnsignedInteger('ss_id')),
             'contactId' => new Fields\NotNullable(new Fields\UnsignedInteger('contact_id')),
         );
     }
@@ -54,11 +54,11 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
             return $this->contactRepository->find($dto->contactId);
         });
 
-        return new Domains\Employeur($dto);
+        return new Domains\Employe($dto);
     }
 
     public function getDTO()
     {
-        return new DTO\Employeur();
+        return new DTO\Employe();
     }
 }
