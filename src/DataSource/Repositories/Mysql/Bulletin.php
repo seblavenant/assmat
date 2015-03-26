@@ -13,20 +13,10 @@ use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
 
-class Contrat extends AbstractMysql implements Repositories\Contrat
+class Bulletin extends AbstractMysql implements Repositories\Bulletin
 {
     const
-        DB_NAME = 'contrat';
-
-    private
-        $bulletinRepository;
-
-    public function __construct(Connection $db, Repositories\Bulletin $bulletinRepository)
-    {
-        parent::__construct($db);
-
-        $this->bulletinRepository = $bulletinRepository;
-    }
+        DB_NAME = 'bulletin';
 
     public function find($id)
     {
@@ -36,10 +26,10 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         return $this->fetchOne($query);
     }
 
-    public function findFromEmploye($employeId)
+    public function findFromContrat($contratId)
     {
         $query = $this->getBaseQuery();
-        $query->where((new Types\Integer('employe_id'))->equal($employeId));
+        $query->where((new Types\Integer('contrat_id'))->equal($contratId));
 
         return $this->fetchAll($query);
     }
@@ -47,7 +37,7 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'base_heure', 'type', 'employe_id'))
+            ->select(array('id', 'date_debut', 'date_fin'))
             ->from(self::DB_NAME);
 
         return $query;
@@ -57,23 +47,18 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-            'baseHeure' => new Fields\NotNullable(new Fields\Float('base_heure')),
-            'type' => new Fields\NotNullable(new Fields\Integer('type')),
-            'employeId' => new Fields\NotNullable(new Fields\Integer('employe_id')),
+            'dateDebut' => new Fields\NotNullable(new Fields\DateTime('date_debut', 'Y-m-d')),
+            'dateFin' => new Fields\NotNullable(new Fields\DateTime('date_fin', 'Y-m-d')),
         );
     }
 
     public function getDomain(DataTransferObject $dto)
     {
-        $dto->set('bulletins', function() use($dto) {
-            return $this->bulletinRepository->findFromContrat($dto->id);
-        });
-
-        return new Domains\Contrat($dto);
+        return new Domains\Bulletin($dto);
     }
 
     public function getDTO()
     {
-        return new DTO\Contrat();
+        return new DTO\Bulletin();
     }
 }

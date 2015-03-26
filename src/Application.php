@@ -79,7 +79,11 @@ class Application extends \Silex\Application
         };
 
         $this['repository.contrat'] = function($c) {
-            return new Repositories\Mysql\Contrat($c['db.default']);
+            return new Repositories\Mysql\Contrat($c['db.default'], $c['repository.bulletin']);
+        };
+
+        $this['repository.bulletin'] = function($c) {
+            return new Repositories\Mysql\Bulletin($c['db.default']);
         };
     }
 

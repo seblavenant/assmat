@@ -27,7 +27,18 @@ class Controller
 
 		$employe = $this->employeRepository->find(1);
 		var_dump($employe->getContact());
-		var_dump($employe->getContrats());
+
+		foreach($employe->getContrats() as $contrat)
+		{
+			var_dump($contrat);
+
+			var_dump($contrat->getBulletins());
+
+			foreach($contrat->getBulletins() as $bulletin)
+			{
+				var_dump($bulletin);
+			}
+		}
 
         return new Response();
     }

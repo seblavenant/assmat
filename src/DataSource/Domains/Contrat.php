@@ -23,4 +23,9 @@ class Contrat
     {
         return $this->fields->load('employe');
     }
+
+    public function getBulletins()
+    {
+        return $this->fields->load('bulletins');
+    }
 }
