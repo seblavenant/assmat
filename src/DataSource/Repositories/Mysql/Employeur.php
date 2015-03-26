@@ -12,6 +12,7 @@ use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DTOHydrators;
 use Spear\Silex\Persistence\DataTransferObject;
+use Doctrine\DBAL\Driver\Connection;
 
 class Employeur extends AbstractMysql implements Repositories\Employeur
 {
@@ -21,10 +22,10 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
     private
         $contactRepository;
 
-    public function __construct(\PDO $pdo, Repositories\Contact $contactRepository)
+    public function __construct(Connection $db, Repositories\Contact $contactRepository)
     {
-        parent::__construct($pdo);
-        
+        parent::__construct($db);
+
         $this->contactRepository = $contactRepository;
     }
 
@@ -52,7 +53,7 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
         $dto->set('contact', function() use($dto) {
             return $this->contactRepository->find($dto->contactId);
         });
-        
+
         return new Domains\Employeur($dto);
     }
 

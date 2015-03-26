@@ -1,5 +1,5 @@
-pdo:
-    dbname: <%pdo.dbname%>
-    host: <%pdo.host%>
-    username: <%pdo.username%>
-    password: <%pdo.password%>
+default:
+    database: <%db.name%>
+    host: <%db.host%>
+    user: <%db.user%>
+    password: <%db.password%>

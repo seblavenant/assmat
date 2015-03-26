@@ -4,34 +4,28 @@ namespace Assmat\DataSource\Repositories\Mysql;
 
 use Muffin\Query;
 use Spear\Silex\Persistence\DTOHydrators;
+use Doctrine\DBAL\Driver\Connection;
 
 class AbstractMysql
 {
     private
-        $pdo;
+        $db;
 
-    public function __construct(\PDO $pdo)
+    public function __construct(Connection $db)
     {
-        $this->pdo = $pdo;
+        $this->db = $db;
     }
 
     protected function fetchOne(Query $query)
     {
-        $statement = $this->pdo->query($query->toString());
+        $record = $this->db->fetchAssoc($query->toString());
 
-        if($statement === false)
+        if($record === false)
         {
             return null;
         }
 
-        $dataSet = $statement->fetch();
-
-        if($dataSet === false)
-        {
-            return null;
-        }
-
-        return $this->buildDomainObject($dataSet);
+        return $this->buildDomainObject($record);
     }
 
     protected function buildDomainObject(array $record)

@@ -17,11 +17,11 @@ class Application extends \Silex\Application
 {
     private
         $configuration;
-        
+
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->loadConfiguration();
         $this->registerServiceProviders();
         $this->initializeDebugMode();
@@ -30,62 +30,51 @@ class Application extends \Silex\Application
         $this->mountProviders();
         $this->initializeErrorHandler();
     }
-    
+
     private function loadConfiguration()
     {
         $fileSystem = new Filesystem(
             new Local(__DIR__ . '/../config')
         );
-            
+
         $this->configuration = new Configuration\Yaml($fileSystem);
+        $this['configuration'] = $this->share(function(){
+            return $this->configuration;
+        });
     }
-    
+
     private function initializeDebugMode()
     {
         $this['debug'] = $this->configuration->readRequired('app/debug');
     }
-    
+
     private function registerServiceProviders()
     {
         $this->register(new ServiceControllerServiceProvider());
         $this->register(new UrlGeneratorServiceProvider());
-        
+        $this->register(new \Spear\Silex\Provider\DBAL());
+
         $this->register(new TwigServiceProvider(), array(
             'twig.path' => __DIR__ . '/../views',
         ));
-
-        $this->register(
-            new PdoServiceProvider(),
-            array(
-                'pdo.dsn' => sprintf(    'mysql:dbname=%s;host=%s', 
-                                        $this->configuration->readRequired('databases/pdo/dbname'),
-                                        $this->configuration->readRequired('databases/pdo/host')
-                ),
-                'pdo.username' => $this->configuration->readRequired('databases/pdo/username'),
-                'pdo.password' => $this->configuration->readRequired('databases/pdo/password'),
-                'pdo.options' => array(
-                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"
-                )
-            )
-        );
     }
-    
+
     private function initializeServices()
     {
-        
+
     }
-    
+
     private function initializeRepositories()
     {
         $this['repository.employeur'] = function($c) {
-            return new Repositories\Mysql\Employeur($c['pdo'], $c['repository.contact']);
+            return new Repositories\Mysql\Employeur($c['db.default'], $c['repository.contact']);
         };
-        
+
         $this['repository.contact'] = function($c) {
-            return new Repositories\Mysql\Contact($c['pdo']);
+            return new Repositories\Mysql\Contact($c['db.default']);
         };
     }
-    
+
     private function mountProviders()
     {
         $this->mount('/', new Controllers\Home\Provider());
