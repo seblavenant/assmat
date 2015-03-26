@@ -19,15 +19,15 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
         DB_NAME = 'employeur';
 
     private
-    	$contactRepository;
-    
+        $contactRepository;
+
     public function __construct(\PDO $pdo, Repositories\Contact $contactRepository)
     {
-    	parent::__construct($pdo);
-    	
-    	$this->contactRepository = $contactRepository;
+        parent::__construct($pdo);
+        
+        $this->contactRepository = $contactRepository;
     }
-    
+
     public function find($id)
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
@@ -38,33 +38,26 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
        return $this->fetchOne($query);
     }
 
-    public function getDomain(DataTransferObject $dto)
-    {
-    	return new Domains\Employeur($dto);
-    }
-    
-    public function getDTO()
-    {
-    	return new DTO\Employeur();
-    }
-    
     public function getFields()
     {
-    	return array(
-    		'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-    		'pajeEmploiId' => new Fields\NotNullable(new Fields\UnsignedInteger('paje_emploi_id')),
-    		'contactId' => new Fields\NotNullable(new Fields\UnsignedInteger('contact_id')),
-    	);
+        return array(
+                'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
+                'pajeEmploiId' => new Fields\NotNullable(new Fields\UnsignedInteger('paje_emploi_id')),
+                'contactId' => new Fields\NotNullable(new Fields\UnsignedInteger('contact_id')),
+        );
     }
-    
-    protected function buildDomainObject(array $record)
+
+    public function getDomain(DataTransferObject $dto)
     {
-    	$dto = parent::buildDTOObject($record);
-    	
-    	$dto->set('contact', function() use($dto) {
-    		return $this->contactRepository->find($dto->contactId);
-    	});
-    	
-    	return $this->getDomain($dto);
+        $dto->set('contact', function() use($dto) {
+            return $this->contactRepository->find($dto->contactId);
+        });
+        
+        return new Domains\Employeur($dto);
+    }
+
+    public function getDTO()
+    {
+        return new DTO\Employeur();
     }
 }

@@ -7,15 +7,15 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 class Contact
 {
     private
-    	$fields;
+        $fields;
 
     public function __construct(DTO\Contact $contactDTO)
     {
         $this->fields = $contactDTO;
     }
-    
-	public function getId()
-	{
-		return $this->fields->id;
-	}
+
+    public function getId()
+    {
+        return $this->fields->id;
+    }
 }

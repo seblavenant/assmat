@@ -9,12 +9,12 @@ class Employeur extends Related
     public
         $id,
         $pajeEmploiId,
-    	$contactId;
-    
+        $contactId;
+
     public function __construct()
     {
-    	parent::__construct(array(
-    		'contact',
-    	));
+        parent::__construct(array(
+            'contact',
+        ));
     }
 }

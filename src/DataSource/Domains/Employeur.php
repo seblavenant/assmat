@@ -11,16 +11,16 @@ class Employeur
 
     public function __construct(DTO\Employeur $employeurDTO)
     {
-		$this->fields = $employeurDTO;
+        $this->fields = $employeurDTO;
     }
-    
+
     public function getId()
     {
-    	return $this->fields->id;
+        return $this->fields->id;
     }
-    
+
     public function getContact()
     {
-    	return $this->fields->load('contact');
+        return $this->fields->load('contact');
     }
 }
