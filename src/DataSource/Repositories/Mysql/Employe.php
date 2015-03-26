@@ -20,13 +20,15 @@ class Employe extends AbstractMysql implements Repositories\Employe
         DB_NAME = 'employe';
 
     private
-        $contactRepository;
+        $contactRepository,
+        $contratRepository;
 
-    public function __construct(Connection $db, Repositories\Contact $contactRepository)
+    public function __construct(Connection $db, Repositories\Contact $contactRepository, Repositories\Contrat $contratRepository)
     {
         parent::__construct($db);
 
         $this->contactRepository = $contactRepository;
+        $this->contratRepository = $contratRepository;
     }
 
     public function find($id)
@@ -52,6 +54,9 @@ class Employe extends AbstractMysql implements Repositories\Employe
     {
         $dto->set('contact', function() use($dto) {
             return $this->contactRepository->find($dto->contactId);
+        });
+        $dto->set('contrats', function() use($dto) {
+            return $this->contratRepository->findFromEmploye($dto->id);
         });
 
         return new Domains\Employe($dto);

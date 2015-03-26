@@ -27,6 +27,7 @@ class Controller
 
 		$employe = $this->employeRepository->find(1);
 		var_dump($employe->getContact());
+		var_dump($employe->getContrats());
 
         return new Response();
     }

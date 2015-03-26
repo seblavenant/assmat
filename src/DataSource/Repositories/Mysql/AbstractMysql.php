@@ -28,6 +28,24 @@ class AbstractMysql
         return $this->buildDomainObject($record);
     }
 
+    protected function fetchAll(Query $query)
+    {
+        $dataSet = $this->db->fetchAll($query->toString());
+
+        if(empty($dataSet))
+        {
+            return null;
+        }
+
+        $domains = array();
+        foreach($dataSet as $record)
+        {
+            $domains[] = $this->buildDomainObject($record);
+        }
+
+        return $domains;
+    }
+
     protected function buildDomainObject(array $record)
     {
         $dto = $this->buildDTOObject($record);

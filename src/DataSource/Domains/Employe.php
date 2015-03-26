@@ -23,4 +23,9 @@ class Employe
     {
         return $this->fields->load('contact');
     }
+
+    public function getContrats()
+    {
+        return $this->fields->load('contrats');
+    }
 }

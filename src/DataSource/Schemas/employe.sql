@@ -4,4 +4,4 @@ CREATE TABLE `employe` (
  `ss_id` varchar(128) NOT NULL,
  PRIMARY KEY (`id`),
  KEY `contact_id` (`contact_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
