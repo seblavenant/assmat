@@ -37,7 +37,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'date_debut', 'date_fin'))
+            ->select(array('id', 'mois', 'annee'))
             ->from(self::DB_NAME);
 
         return $query;
@@ -47,8 +47,8 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-            'dateDebut' => new Fields\NotNullable(new Fields\DateTime('date_debut', 'Y-m-d')),
-            'dateFin' => new Fields\NotNullable(new Fields\DateTime('date_fin', 'Y-m-d')),
+            'mois' => new Fields\NotNullable(new Fields\Integer('mois')),
+            'annee' => new Fields\NotNullable(new Fields\Integer('annee')),
         );
     }
 

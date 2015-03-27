@@ -8,6 +8,6 @@ class Bulletin implements DataTransferObject
 {
     public
         $id,
-        $dateDebut,
-        $dateFin;
+        $mois,
+        $annee;
 }
