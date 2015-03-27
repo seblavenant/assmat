@@ -12,56 +12,36 @@ use Silex\Provider\UrlGeneratorServiceProvider;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains;
 use Herrera\Pdo\PdoServiceProvider;
+use Silex\Provider\SessionServiceProvider;
+use Spear\Silex\Application\AbstractApplication;
 
-class Application extends \Silex\Application
+class Application  extends AbstractApplication
 {
-    private
-        $configuration;
-
-    public function __construct()
+    protected function initializeServices()
     {
-        parent::__construct();
-
-        $this->loadConfiguration();
-        $this->registerServiceProviders();
-        $this->initializeDebugMode();
-        $this->initializeServices();
+        $this->configureTwig();
         $this->initializeRepositories();
-        $this->mountProviders();
-        $this->initializeErrorHandler();
     }
 
-    private function loadConfiguration()
+    private function configureTwig()
     {
-        $fileSystem = new Filesystem(
-            new Local(__DIR__ . '/../config')
-        );
-
-        $this->configuration = new Configuration\Yaml($fileSystem);
-        $this['configuration'] = $this->share(function(){
-            return $this->configuration;
-        });
-    }
-
-    private function initializeDebugMode()
-    {
-        $this['debug'] = $this->configuration->readRequired('app/debug');
-    }
-
-    private function registerServiceProviders()
-    {
-        $this->register(new ServiceControllerServiceProvider());
-        $this->register(new UrlGeneratorServiceProvider());
-        $this->register(new \Spear\Silex\Provider\DBAL());
-
-        $this->register(new TwigServiceProvider(), array(
-            'twig.path' => __DIR__ . '/../views',
+        $this['twig.path.manager']->addPath(array(
+            $this['root.path'] . 'views/',
         ));
     }
 
-    private function initializeServices()
+    protected function registerProviders()
     {
+        $this->register(new SessionServiceProvider());
+        $this->register(new UrlGeneratorServiceProvider());
+        $this->register(new \Spear\Silex\Provider\DBAL());
+        $this->register(new \Spear\Silex\Provider\Twig());
+        $this->register(new \Spear\Silex\Provider\AsseticServiceProvider());
+    }
 
+    protected function mountControllerProviders()
+    {
+        $this->mount('/', new Controllers\Home\Provider());
     }
 
     private function initializeRepositories()
@@ -90,14 +70,5 @@ class Application extends \Silex\Application
     private function mountProviders()
     {
         $this->mount('/', new Controllers\Home\Provider());
-    }
-
-    private function initializeErrorHandler()
-    {
-        $this->error(function () {
-            if(! $this['debug']) {
-                return $this->redirect($this['url_generator']->generate('error'));
-            }
-        });
     }
 }

@@ -23,24 +23,24 @@ class Controller
     public function indexAction()
     {
 		$employeur = $this->employeurRepository->find(1);
-		var_dump($employeur->getContact());
+// 		var_dump($employeur->getContact());
 
 		$employe = $this->employeRepository->find(1);
-		var_dump($employe->getContact());
+// 		var_dump($employe->getContact());
 
 		foreach($employe->getContrats() as $contrat)
 		{
-			var_dump($contrat);
+// 			var_dump($contrat);
 
-			var_dump($contrat->getBulletins());
+// 			var_dump($contrat->getBulletins());
 
 			foreach($contrat->getBulletins() as $bulletin)
 			{
-				var_dump($bulletin);
+// 				var_dump($bulletin);
 			}
 		}
 
-        return new Response();
+        return new Response($this->twig->render('home.html.twig'));
     }
 
     public function errorAction()

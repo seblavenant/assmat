@@ -7,9 +7,18 @@
         "silex/silex": "~1.2",
         "twig/twig": "~1.16",
         "niktux/karma": "~4.0",
-        "puzzle/configuration": "~1.4",
+        "puzzle/configuration": "~1.7",
         "silex-spear/dbal-provider": "2.0.0",
         "lebris/muffin": "1.2.0",
-        "silex-spear/persistence" : "~1.0"
+        "silex-spear/persistence" : "~1.0",
+        "symfony/console" : "~2.6",
+        "symfony/twig-bridge" : "~2.6",
+        "silex-spear/application": "~1.0",
+        "silex-spear/assetic-provider" : "~1.0",
+        "silex-spear/dbal-provider" : "~2.0",
+        "silex-spear/twig-provider" : "~1.0",
+        "twbs/bootstrap" : "~3.3",
+        "fortawesome/font-awesome": "~4.3",
+        "oyejorge/less.php" : "~1.7"
     }
 }
