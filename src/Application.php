@@ -14,6 +14,8 @@ use Assmat\DataSource\Domains;
 use Herrera\Pdo\PdoServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Spear\Silex\Application\AbstractApplication;
+use Silex\Provider\SecurityServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
 
 class Application  extends AbstractApplication
 {
@@ -21,6 +23,7 @@ class Application  extends AbstractApplication
     {
         $this->configureTwig();
         $this->initializeRepositories();
+        $this->initializeSecurity();
     }
 
     protected function registerProviders()
