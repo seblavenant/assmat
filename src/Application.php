@@ -23,13 +23,6 @@ class Application  extends AbstractApplication
         $this->initializeRepositories();
     }
 
-    private function configureTwig()
-    {
-        $this['twig.path.manager']->addPath(array(
-            $this['root.path'] . 'views/',
-        ));
-    }
-
     protected function registerProviders()
     {
         $this->register(new SessionServiceProvider());
@@ -42,7 +35,18 @@ class Application  extends AbstractApplication
     protected function mountControllerProviders()
     {
         $this->mount('/', new Controllers\Home\Provider());
+        $this->mount('/admin', new Controllers\Admin\Provider());
     }
+
+
+    private function configureTwig()
+    {
+        $this['twig.path.manager']->addPath(array(
+            $this['root.path'] . 'views/',
+            $this['root.path'] . 'vendor/silex-spear/application/views/',
+        ));
+    }
+
 
     private function initializeRepositories()
     {
@@ -65,10 +69,5 @@ class Application  extends AbstractApplication
         $this['repository.bulletin'] = function($c) {
             return new Repositories\Mysql\Bulletin($c['db.default']);
         };
-    }
-
-    private function mountProviders()
-    {
-        $this->mount('/', new Controllers\Home\Provider());
     }
 }

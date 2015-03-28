@@ -1,6 +1,6 @@
 <?php
 
-namespace Assmat\Controllers\Home;
+namespace Assmat\Controllers\Admin;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
@@ -10,17 +10,14 @@ class Provider implements ControllerProviderInterface
 {
     public function connect(Application $app)
     {
-        $app['home.controller'] = $app->share(function() use($app) {
-            return new Controller($app['twig'], $app['repository.employeur'], $app['repository.employe']);
+        $app['admin.controller'] = $app->share(function() use($app) {
+            return new Controller($app['twig']);
         });
 
         $controllers = $app['controllers_factory'];
 
         $controllers->get('/', 'home.controller:indexAction')
-                    ->bind('homepage');
-
-        $controllers->get('/error', 'home.controller:errorAction')
-                    ->bind('error');
+                    ->bind('admin_index');
 
         return $controllers;
     }
