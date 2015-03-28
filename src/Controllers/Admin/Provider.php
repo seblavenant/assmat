@@ -16,7 +16,7 @@ class Provider implements ControllerProviderInterface
 
         $controllers = $app['controllers_factory'];
 
-        $controllers->get('/', 'home.controller:indexAction')
+        $controllers->get('/', 'admin.controller:indexAction')
                     ->bind('admin_index');
 
         return $controllers;
