@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aa3c8b3a702b727c5494928e1c22d1df",
+    "hash": "942fdd9602fd8523a15450cec6764d5a",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -1089,23 +1089,22 @@
         },
         {
             "name": "silex-spear/application",
-            "version": "dev-security",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silex-spear/application.git",
-                "reference": "6580c69b4e0d99a17c3a3076a179cb047e67568f"
+                "reference": "f1201c3ec0351b6c75b282144b20c6e25f3f13ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silex-spear/application/zipball/6580c69b4e0d99a17c3a3076a179cb047e67568f",
-                "reference": "6580c69b4e0d99a17c3a3076a179cb047e67568f",
+                "url": "https://api.github.com/repos/silex-spear/application/zipball/f1201c3ec0351b6c75b282144b20c6e25f3f13ab",
+                "reference": "f1201c3ec0351b6c75b282144b20c6e25f3f13ab",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
                 "puzzle/configuration": "~1.7",
-                "silex/silex": "~1.2",
-                "symfony/security": "~2.6"
+                "silex/silex": "~1.2"
             },
             "type": "library",
             "autoload": {
@@ -1113,6 +1112,7 @@
                     "Spear\\Silex\\Application\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1122,11 +1122,7 @@
                     "email": "claude.lebris@gmail.com"
                 }
             ],
-            "support": {
-                "source": "https://github.com/silex-spear/application/tree/security",
-                "issues": "https://github.com/silex-spear/application/issues"
-            },
-            "time": "2015-03-28 10:39:43"
+            "time": "2015-03-04 21:24:40"
         },
         {
             "name": "silex-spear/assetic-provider",
@@ -2160,9 +2156,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "silex-spear/application": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

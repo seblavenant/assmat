@@ -43,8 +43,33 @@ class Application  extends AbstractApplication
     {
         $this['twig.path.manager']->addPath(array(
             $this['root.path'] . 'views/',
-            $this['root.path'] . 'vendor/silex-spear/application/views/',
         ));
+    }
+
+    private function initializeSecurity()
+    {
+        if(PHP_SAPI === 'cli')
+        {
+            return;
+        }
+
+        $this->register(new SecurityServiceProvider());
+        $this['security.firewalls'] = array(
+            'admin' => array(
+                'pattern' => '^/admin',
+                'form' => array('login_path' => '/user/login', 'check_path' => '/admin/login_check'),
+                'users' => array(
+                    'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+                ),
+            ),
+        );
+
+        $this->get('/user/login', function(Request $request){
+            return $this['twig']->render('user/login_form.html.twig', array(
+                'error'         => $this['security.last_error']($request),
+                'last_username' => $this['session']->get('_security.last_username'),
+            ));
+        })->bind('user_login');
     }
 
 
