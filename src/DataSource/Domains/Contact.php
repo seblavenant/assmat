@@ -21,21 +21,21 @@ class Contact
 
     public function getEmail()
     {
-    	return $this->fields->email;
+        return $this->fields->email;
     }
 
     public function getPassword()
     {
-    	return $this->fields->password;
+        return $this->fields->password;
     }
 
     public function getNom()
     {
-    	return $this->fields->nom;
+        return $this->fields->nom;
     }
 
     public function getPrenom()
     {
-    	return $this->fields->prenom;
+        return $this->fields->prenom;
     }
 }
