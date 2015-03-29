@@ -65,10 +65,10 @@ class Application  extends AbstractApplication
             'admin' => array(
                 'pattern' => '^/admin',
                 'form' => array('login_path' => '/user/login', 'check_path' => '/admin/login_check'),
-            	'logout' => array('logout_path' => '/admin/logout'),
+                'logout' => array('logout_path' => '/admin/logout'),
                 'users' => $this->share(function () {
-    				return new Security\UserProvider($this['repository.contact']);
-				}),
+                    return new Security\UserProvider($this['repository.contact']);
+                }),
             ),
         );
 
