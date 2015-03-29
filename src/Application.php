@@ -16,7 +16,7 @@ use Silex\Provider\SessionServiceProvider;
 use Spear\Silex\Application\AbstractApplication;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
-use Assmat\Services\Security;
+use Assmat\Services;
 
 class Application  extends AbstractApplication
 {
@@ -48,9 +48,8 @@ class Application  extends AbstractApplication
         $this['twig.path.manager']->addPath(array(
             $this['root.path'] . 'views/',
         ));
-        $this['twig']->addFunction(new \Twig_SimpleFunction('md5', function($value) {
-            return md5($value);
-        }));
+
+        $this['twig']->addExtension(new Services\Twig\AdminExtension());
     }
 
     private function initializeSecurity()
@@ -67,7 +66,7 @@ class Application  extends AbstractApplication
                 'form' => array('login_path' => '/user/login', 'check_path' => '/admin/login_check'),
                 'logout' => array('logout_path' => '/admin/logout'),
                 'users' => $this->share(function () {
-                    return new Security\UserProvider($this['repository.contact']);
+                    return new Services\Security\UserProvider($this['repository.contact']);
                 }),
             ),
         );
