@@ -18,4 +18,24 @@ class Contact
     {
         return $this->fields->id;
     }
+
+    public function getEmail()
+    {
+    	return $this->fields->email;
+    }
+
+    public function getPassword()
+    {
+    	return $this->fields->password;
+    }
+
+    public function getNom()
+    {
+    	return $this->fields->nom;
+    }
+
+    public function getPrenom()
+    {
+    	return $this->fields->prenom;
+    }
 }

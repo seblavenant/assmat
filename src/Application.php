@@ -16,6 +16,7 @@ use Silex\Provider\SessionServiceProvider;
 use Spear\Silex\Application\AbstractApplication;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
+use Assmat\Services\Security;
 
 class Application  extends AbstractApplication
 {
@@ -61,9 +62,9 @@ class Application  extends AbstractApplication
             'admin' => array(
                 'pattern' => '^/admin',
                 'form' => array('login_path' => '/user/login', 'check_path' => '/admin/login_check'),
-                'users' => array(
-                    'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
-                ),
+                'users' => $this->share(function () {
+    				return new Security\UserProvider($this['repository.contact']);
+				}),
             ),
         );
 

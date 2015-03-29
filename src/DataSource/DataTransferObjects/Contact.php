@@ -8,6 +8,8 @@ class Contact implements DataTransferObject
 {
     public
         $id,
+        $email,
+        $password,
         $nom,
         $prenom,
         $adresse,

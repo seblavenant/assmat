@@ -19,18 +19,35 @@ class Contact extends AbstractMysql implements Repositories\Contact
 
     public function find($id)
     {
-        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('c.id', 'c.nom', 'c.prenom', 'c.adresse', 'c.code_postal', 'c.ville'))
-            ->from(self::DB_NAME, 'c')
-            ->where((new Types\Integer('c.id'))->equal($id));
+		$query = $this->getBaseQuery();
+        $query->where((new Types\Integer('id'))->equal($id));
 
         return $this->fetchOne($query);
+    }
+
+    public function findFromEmail($email)
+    {
+    	$query = $this->getBaseQuery();
+    	$query->where((new Types\String('email'))->equal($email));
+
+    	return $this->fetchOne($query);
+    }
+
+    private function getBaseQuery()
+    {
+    	$query = (new Queries\Select())->setEscaper(new SimpleEscaper())
+    		->select(array('id', 'email', 'password', 'nom', 'prenom', 'adresse', 'code_postal', 'ville'))
+    		->from(self::DB_NAME);
+
+    	return $query;
     }
 
     public function getFields()
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
+        	'email' => new Fields\NotNullable(new Fields\String('email')),
+        	'password' => new Fields\NotNullable(new Fields\String('password')),
             'nom' => new Fields\NotNullable(new Fields\String('nom')),
             'prenom' => new Fields\NotNullable(new Fields\String('prenom')),
             'adresse' => new Fields\NotNullable(new Fields\String('adresse')),
