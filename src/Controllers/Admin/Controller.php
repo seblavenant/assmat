@@ -16,6 +16,6 @@ class Controller
 
     public function indexAction()
     {
-        return new Response($this->twig->render('home.html.twig'));
+        return new Response($this->twig->render('admin/dashboard.html.twig'));
     }
 }
