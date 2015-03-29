@@ -48,6 +48,9 @@ class Application  extends AbstractApplication
         $this['twig.path.manager']->addPath(array(
             $this['root.path'] . 'views/',
         ));
+        $this['twig']->addFunction(new \Twig_SimpleFunction('md5', function($value) {
+            return md5($value);
+        }));
     }
 
     private function initializeSecurity()
