@@ -38,9 +38,6 @@ h1, .h1, h2, .h2, h3, .h3 {
   top:0;
   left: 0;
   width:100%;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
   z-index: 2000;
 }
 .body-expanded .navbar {
@@ -133,9 +130,6 @@ a.show-sidebar:hover {
   float: none;
   margin: 0;
   border: 0;
-  -webkit-border-radius: 0 4px 4px 0;
-  -moz-border-radius: 0 4px 4px 0;
-  border-radius: 0 4px 4px 0;
   padding: 0;
   background: #6AA6D6 0 0 repeat;
   box-shadow: none;
@@ -150,16 +144,6 @@ a.show-sidebar:hover {
 .main-menu .dropdown-menu > li > a {
   padding:9px 15px 9px 40px;
   color:#f0f0f0;
-}
-.main-menu .dropdown-menu > li:first-child > a {
-  -webkit-border-radius: 0 4px 0 0;
-  -moz-border-radius: 0 4px 0 0;
-  border-radius: 0 4px 0 0;
-}
-.main-menu .dropdown-menu > li:last-child > a {
-  -webkit-border-radius: 0 0 4px 0;
-  -moz-border-radius: 0 0 4px 0;
-  border-radius: 0 0 4px 0;
 }
 #top-panel {
   line-height: 50px;
@@ -179,10 +163,6 @@ a.show-sidebar:hover {
   width: 80%;
   background: #dfdfdf;
   border: 1px solid #C7C7C7;
-  text-shadow:0 1px 1px #EEE;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
   color: #686868;
   line-height: 1em;
   height: 30px;
@@ -235,11 +215,6 @@ a.show-sidebar:hover {
   color: #7BC5D3;
   line-height: 1em;
   vertical-align: top;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
   -webkit-transition: 0.2s;
   -moz-transition: 0.2s;
   -o-transition: 0.2s;
@@ -312,24 +287,14 @@ a.show-sidebar:hover {
   z-index: 1999;
   position: relative;
   border: 1px solid #f8f8f8;
-  box-shadow: 0 0 4px #D8D8D8;
   background: transparent;
   margin-bottom: 20px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
 }
 .full-content .box {
   border: 0;
   margin-bottom: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
 }
 .box-header {
-  -webkit-border-radius: 3px 3px 0 0;
-  -moz-border-radius: 3px 3px 0 0;
-  border-radius: 3px 3px 0 0;
   color: #363636;
   font-size: 16px;
   position:relative;
@@ -368,9 +333,6 @@ a.show-sidebar:hover {
 }
 .box-content {
   position: relative;
-  -webkit-border-radius: 0 0 3px 3px;
-  -moz-border-radius: 0 0 3px 3px;
-  border-radius: 0 0 3px 3px;
   padding: 15px;
   background: #FCFCFC;
 }
@@ -532,9 +494,6 @@ ul.DTTT_dropdown.dropdown-menu {
   padding: 0;
   border: 0;
   margin: 0;
-  -webkit-border-radius: 0 0 4px 4px;
-  -moz-border-radius: 0 0 4px 4px;
-  border-radius: 0 0 4px 4px;
   min-width: 157px;
 }
 ul.DTTT_dropdown.dropdown-menu li {
@@ -545,16 +504,6 @@ ul.DTTT_dropdown.dropdown-menu > li > a {
   display: block;
   padding: 5px 10px !important;
   color: #f0f0f0 !important;
-}
-ul.DTTT_dropdown.dropdown-menu > li:first-child > a {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-}
-ul.DTTT_dropdown.dropdown-menu > li:last-child > a {
-  -webkit-border-radius: 0 0 4px 4px;
-  -moz-border-radius: 0 0 4px 4px;
-  border-radius: 0 0 4px 4px;
 }
 ul.DTTT_dropdown.dropdown-menu > li:hover > a {
   background:rgba(0, 0, 0, 0.3);
@@ -571,15 +520,10 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
   box-sizing:border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-appearance: none;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
   -webkit-transition: 0.2s;
   -moz-transition: 0.2s;
   -o-transition: 0.2s;
@@ -601,9 +545,6 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
 .breadcrumb {
   padding: 0 15px;
   background: none;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
   margin: 0;
 }
 .breadcrumb > li > a {
@@ -677,9 +618,6 @@ td.beauty-hover {
   border-right:1px solid #DBDBDB;
 }
 .DTTT.btn-group a {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
   line-height: 1em;
   font-size: 14px;
   font-weight: bold;
@@ -717,9 +655,6 @@ td.beauty-hover {
   text-align: center;
   font-size: 60px;
   color: rgba(0, 0, 0, 0.8);
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
 }
 .well pre {
   padding: 0;
@@ -753,9 +688,6 @@ td.beauty-hover {
   line-height: 24px;
   margin: 0 0 10px 0;
   padding: 0 10px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
   -moz-user-select: none;
   -webkit-user-select: none;
   outline: none !important;
