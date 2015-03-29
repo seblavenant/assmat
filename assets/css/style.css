@@ -33,6 +33,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 .navbar {
   margin: 0;
   border: 0;
+  border-bottom: 1px solid #525252;
   position: fixed;
   top:0;
   left: 0;
@@ -40,7 +41,6 @@ h1, .h1, h2, .h2, h3, .h3 {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  box-shadow: 0 1px 2px #272727;
   z-index: 2000;
 }
 .body-expanded .navbar {
@@ -73,7 +73,6 @@ a.show-sidebar:hover {
   position: relative;
   z-index: 10;
   background: #ebebeb;
-  box-shadow: 0 0 6px #131313;
   padding-bottom: 3000px !important;
   margin-bottom: -2980px !important;
   overflow: hidden;
