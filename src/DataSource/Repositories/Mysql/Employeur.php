@@ -20,23 +20,40 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
         DB_NAME = 'employeur';
 
     private
-        $contactRepository;
+        $contactRepository,
+        $employeRepository;
 
-    public function __construct(Connection $db, Repositories\Contact $contactRepository)
+    public function __construct(Connection $db, Repositories\Contact $contactRepository, Repositories\Employe $employeRepository)
     {
         parent::__construct($db);
 
         $this->contactRepository = $contactRepository;
+        $this->employeRepository = $employeRepository;
     }
 
     public function find($id)
     {
-        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'paje_emploi_id', 'contact_id'))
-            ->from(self::DB_NAME)
-            ->where((new Types\Integer('id'))->equal($id));
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Integer('id'))->equal($id));
 
        return $this->fetchOne($query);
+    }
+
+    public function findFromContact($contactId)
+    {
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Integer('contact_id'))->equal($contactId));
+
+        return $this->fetchOne($query);
+    }
+
+    private function getBaseQuery()
+    {
+        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
+            ->select(array('id', 'paje_emploi_id', 'contact_id'))
+            ->from(self::DB_NAME);
+
+        return $query;
     }
 
     public function getFields()
@@ -52,6 +69,10 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
     {
         $dto->set('contact', function() use($dto) {
             return $this->contactRepository->find($dto->contactId);
+        });
+
+        $dto->set('employes', function() use($dto) {
+            return $this->employeRepository->findFromEmployeur($dto->id);
         });
 
         return new Domains\Employeur($dto);

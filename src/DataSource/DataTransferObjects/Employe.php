@@ -16,7 +16,7 @@ class Employe extends Related
     {
         parent::__construct(array(
             'contact',
-            'contrats'
+            'contrats',
         ));
     }
 }

@@ -4,7 +4,7 @@ namespace Assmat\Controllers\Admin;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class Controller
+class Admin
 {
     private
         $twig;

@@ -83,7 +83,7 @@ class Application  extends AbstractApplication
     private function initializeRepositories()
     {
         $this['repository.employeur'] = function($c) {
-            return new Repositories\Mysql\Employeur($c['db.default'], $c['repository.contact']);
+            return new Repositories\Mysql\Employeur($c['db.default'], $c['repository.contact'], $c['repository.employe']);
         };
 
         $this['repository.employe'] = function($c) {

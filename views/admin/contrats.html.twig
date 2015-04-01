@@ -1,0 +1,24 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div id="breadcrumb" class="col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
+                <li>Mes contrats</li>
+            </ol>
+        </div>
+    </div>
+    
+    <ul>
+    {% for employe in employes %}
+        <li>{{ employe.contact.prenom }} {{ employe.contact.nom }} : 
+            <ul>
+            {% for contrat in employe.contrats %}
+                <li><a href="{{ path('admin_contrats_read', { id : contrat.id }) }}">Contrat {{ contrat.id }}</a></li>
+            {% endfor %}
+            </ul>
+    {% endfor %}
+    </ul>
+    
+{% endblock %}
