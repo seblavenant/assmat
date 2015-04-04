@@ -16,7 +16,7 @@
          %}
         <link href="/{{ asset_url }}" type="text/css" rel="stylesheet" />
         {% endstylesheets %}
-        
+
         <!--<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">-->
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
@@ -25,7 +25,7 @@
                 <script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
                 <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
         <![endif]-->
-        
+
         {% block specificStylesheets %}{% endblock specificStylesheets %}
     </head>
 <body>
@@ -41,6 +41,8 @@
         '../assets/plugins/tinymce/jquery.tinymce.min.js'
         '../assets/js/main.js'
         '../assets/js/devoops.js'
+        '../assets/plugins/moment/moment.min.js'
+        '../assets/plugins/fullcalendar/fullcalendar.js'
     %}
     <script type="text/javascript" src="/{{ asset_url }}"></script>
     {% endjavascripts %}

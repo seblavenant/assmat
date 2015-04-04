@@ -14,4 +14,77 @@
 
     {{ form_widget(bulletinForm) }}
 
+<div class="row full-calendar">
+    <div class="col-sm-3">
+        <div id="external-events">
+            <h4 class="page-header" id="events-templates-header">Evénements</h4>
+            <div class="external-event">Absence payée</div>
+            <div class="external-event">Absence non payée</div>
+            <div class="external-event">Congé payé</div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div id="calendar"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block specificsJavascripts %}
+<script>
+$(document).ready(function()
+{
+    $('#external-events div.external-event').each(function()
+    {
+        $(this).data('eventObject', {
+            title: $.trim($(this).text())
+        });
+        $(this).draggable({
+            zIndex: 999,
+            revert: true,
+            revertDuration: 0
+        });
+    });
+
+    var calendar = $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'agendaWeek'
+        },
+        defaultView: 'agendaWeek',
+        selectable: true,
+        selectHelper: true,
+        unselectAuto: true,
+        select: function(start, end, allDay) {
+            calendar.fullCalendar('renderEvent',
+                {
+                    title: '',
+                    description: '',
+                    start: start,
+                    end: end,
+                },
+                true
+            );
+        },
+        editable: true,
+        droppable: true,
+        drop: function(date, allDay) {
+            var originalEventObject = $(this).data('eventObject');
+            var copiedEventObject = $.extend({}, originalEventObject);
+            copiedEventObject.start = date;
+            copiedEventObject.allDay = allDay;
+            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+        },
+        eventClick: function(calEvent, jsEvent, view) {
+            if(confirm('Etes vous sur de vouloir supprimer cet événement ?'))
+            {
+                calendar.fullCalendar('removeEvents' , function(ev){
+                    return (ev._id == calEvent._id);
+                });
+            };
+        }
+    });
+});
+</script>
 {% endblock %}
