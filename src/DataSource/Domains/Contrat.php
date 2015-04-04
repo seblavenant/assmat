@@ -19,6 +19,11 @@ class Contrat
         return $this->fields->id;
     }
 
+    public function getNom()
+    {
+        return $this->fields->nom;
+    }
+
     public function getEmploye()
     {
         return $this->fields->load('employe');

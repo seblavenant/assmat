@@ -8,6 +8,7 @@ class Contrat extends Related
 {
     public
         $id,
+        $nom,
         $employeId,
         $baseHeure,
         $indemnites,
