@@ -10,7 +10,6 @@
             </ol>
         </div>
     </div>
-
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -26,7 +25,7 @@
                             <tr>
                                 <td>{{ bulletin.annee }}</td>
                                 <td>{{ bulletin.mois }}</td>
-                                <td><a href="{{ path('admin_bulletins_read', { id : bulletin.id }) }}"<i class="fa fa-file" /></td>
+                                <td><a href="{{ path('admin_bulletins_read', { id : bulletin.id }) }}"><i class="fa fa-file" /></a></td>
                             </tr>
                         {% endfor %}
                         </tbody>

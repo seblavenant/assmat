@@ -9,13 +9,15 @@
             </ol>
         </div>
     </div>
-    
+
     {% for employe in employes %}
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
                     <div clas="box-header">
-                        <div class="box-name"><i class="fa fa-user"></i> {{ employe.contact.prenom | capitalize }} {{ employe.contact.nom | upper }}</div>
+                        <div class="box-name">
+                            <i class="fa fa-user"></i> {{ employe.contact.prenom | capitalize }} {{ employe.contact.nom | upper }}
+                        </div>
                     </div>
                     <div class="box-content">
                         <table class="table">
@@ -29,7 +31,10 @@
                                 <tr>
                                     <td><a href="{{ path('admin_contrats_read', { id : contrat.id }) }}">{{ contrat.id }}</a></td>
                                     <td>{{ contrat.nom }}</td>
-                                    <td><a href="{{ path('admin_contrats_bulletins', { contratId : contrat.id }) }}"><i class="fa fa-list"></i></td>
+                                    <td>
+                                        <a href="{{ path('admin_bulletins', { contratId : contrat.id }) }}"><i class="fa fa-list"></i></a>
+                                        <a href="{{ path('admin_bulletins_new', { contratId : contrat.id }) }}"><i class="fa fa-plus-square-o"></i></a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -39,5 +44,5 @@
             </div>
         </div>
     {% endfor %}
-    
+
 {% endblock %}

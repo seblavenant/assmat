@@ -2,21 +2,20 @@
 
 namespace Assmat;
 
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider as SilexProvider;
+use Spear\Silex\Provider as SpearProvider;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local;
 use Puzzle\Configuration;
-use Silex\Provider\UrlGeneratorServiceProvider;
 
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains;
 use Herrera\Pdo\PdoServiceProvider;
-use Silex\Provider\SessionServiceProvider;
 use Spear\Silex\Application\AbstractApplication;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services;
+
 
 class Application  extends AbstractApplication
 {
@@ -29,11 +28,15 @@ class Application  extends AbstractApplication
 
     protected function registerProviders()
     {
-        $this->register(new SessionServiceProvider());
-        $this->register(new UrlGeneratorServiceProvider());
-        $this->register(new \Spear\Silex\Provider\DBAL());
-        $this->register(new \Spear\Silex\Provider\Twig());
-        $this->register(new \Spear\Silex\Provider\AsseticServiceProvider());
+        $this->register(new SilexProvider\SessionServiceProvider());
+        $this->register(new SilexProvider\UrlGeneratorServiceProvider());
+        $this->register(new SilexProvider\FormServiceProvider());
+        $this->register(new SilexProvider\TranslationServiceProvider(), array(
+            'translator.messages' => array(),
+        ));
+        $this->register(new SpearProvider\DBAL());
+        $this->register(new SpearProvider\Twig());
+        $this->register(new SpearProvider\AsseticServiceProvider());
     }
 
     protected function mountControllerProviders()
