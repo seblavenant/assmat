@@ -11,6 +11,29 @@
         </div>
     </div>
 
-    {{ dump(bulletins) }}
-    
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <th>Année</th>
+                            <th>Mois</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                        {% for bulletin in bulletins %}
+                            <tr>
+                                <td>{{ bulletin.annee }}</td>
+                                <td>{{ bulletin.mois }}</td>
+                                <td><a href="{{ path('admin_bulletins_read', { id : bulletin.id }) }}"<i class="fa fa-file" /></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

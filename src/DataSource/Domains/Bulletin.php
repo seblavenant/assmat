@@ -19,6 +19,16 @@ class Bulletin
         return $this->fields->id;
     }
 
+    public function getAnnee()
+    {
+        return $this->fields->annee;
+    }
+
+    public function getMois()
+    {
+        return $this->fields->mois;
+    }
+
     public function getContrats()
     {
         return $this->fields->load('contrats');

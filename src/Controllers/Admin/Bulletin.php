@@ -22,8 +22,17 @@ class Bulletin
     {
         $bulletins = $this->bulletinRepository->findFromContrat($contratId);
 
-        return new Response($this->twig->render('admin/bulletins.html.twig', array(
+        return new Response($this->twig->render('admin/bulletins/list.html.twig', array(
             'bulletins' => $bulletins,
+        )));
+    }
+
+    public function readAction($id)
+    {
+        $bulletin = $this->bulletinRepository->find($id);
+
+        return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
+            'bulletin' => $bulletin,
         )));
     }
 }

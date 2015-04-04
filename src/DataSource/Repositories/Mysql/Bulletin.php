@@ -9,6 +9,7 @@ use Assmat\DataSource\Repositories;
 use Muffin\Queries;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
+use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
@@ -38,7 +39,9 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'mois', 'annee'))
-            ->from(self::DB_NAME);
+            ->from(self::DB_NAME)
+            ->orderBy('annee', OrderBy::DESC)
+            ->orderBy('mois', OrderBy::DESC);
 
         return $query;
     }

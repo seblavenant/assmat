@@ -29,7 +29,7 @@ class Contrat
 
         $employes = $employeur->getEmployes();
 
-        return new Response($this->twig->render('admin/contrats.html.twig', array(
+        return new Response($this->twig->render('admin/contrats/list.html.twig', array(
             'employes' => $employes,
         )));
     }

@@ -15,7 +15,7 @@ class Provider implements ControllerProviderInterface
 
         $this->initializeAdminControllers($controllers, $app);
         $this->initializeContratsControllers($controllers, $app);
-        $this->initializeSalairesControllers($controllers, $app);
+        $this->initializeBulletinsControllers($controllers, $app);
 
         return $controllers;
     }
@@ -47,7 +47,7 @@ class Provider implements ControllerProviderInterface
         return $controllers;
     }
 
-    private function initializeSalairesControllers(ControllerCollection $controllers, Application $app)
+    private function initializeBulletinsControllers(ControllerCollection $controllers, Application $app)
     {
         $app['bulletin.controller'] = $app->share(function() use($app) {
             return new Bulletin($app['twig'], $app['repository.bulletin']);
@@ -55,6 +55,9 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/contrats/{contratId}/bulletins', 'bulletin.controller:indexAction')
                     ->bind('admin_contrats_bulletins');
+
+        $controllers->get('/bulletins/{id}', 'bulletin.controller:readAction')
+                    ->bind('admin_bulletins_read');
 
         return $controllers;
     }
