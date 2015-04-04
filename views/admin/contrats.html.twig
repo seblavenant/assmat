@@ -10,15 +10,34 @@
         </div>
     </div>
     
-    <ul>
     {% for employe in employes %}
-        <li>{{ employe.contact.prenom }} {{ employe.contact.nom }} : 
-            <ul>
-            {% for contrat in employe.contrats %}
-                <li><a href="{{ path('admin_contrats_read', { id : contrat.id }) }}">Contrat {{ contrat.id }}</a></li>
-            {% endfor %}
-            </ul>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div clas="box-header">
+                        <div class="box-name"><i class="fa fa-user"></i> {{ employe.contact.prenom | capitalize }} {{ employe.contact.nom | upper }}</div>
+                    </div>
+                    <div class="box-content">
+                        <table class="table">
+                            <thead>
+                                <th>Id</th>
+                                <th>Nom du contrat</td>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                            {% for contrat in employe.contrats %}
+                                <tr>
+                                    <td><a href="{{ path('admin_contrats_read', { id : contrat.id }) }}">{{ contrat.id }}</a></td>
+                                    <td>{{ contrat.nom }}</td>
+                                    <td><a href="{{ path('admin_contrats_bulletins', { contratId : contrat.id }) }}"><i class="fa fa-list"></i></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-    </ul>
     
 {% endblock %}

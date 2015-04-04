@@ -15,6 +15,7 @@ class Provider implements ControllerProviderInterface
 
         $this->initializeAdminControllers($controllers, $app);
         $this->initializeContratsControllers($controllers, $app);
+        $this->initializeSalairesControllers($controllers, $app);
 
         return $controllers;
     }
@@ -33,15 +34,27 @@ class Provider implements ControllerProviderInterface
 
     private function initializeContratsControllers(ControllerCollection $controllers, Application $app)
     {
-        $app['contrats.controller'] = $app->share(function() use($app) {
+        $app['contrat.controller'] = $app->share(function() use($app) {
             return new Contrat($app['twig'], $app['security'], $app['repository.employeur'], $app['repository.contrat']);
         });
 
-        $controllers->get('/contrats', 'contrats.controller:indexAction')
+        $controllers->get('/contrats', 'contrat.controller:indexAction')
                     ->bind('admin_contrats');
 
-        $controllers->get('/contrats/{id}', 'contrats.controller:readAction')
+        $controllers->get('/contrats/{id}', 'contrat.controller:readAction')
                     ->bind('admin_contrats_read');
+
+        return $controllers;
+    }
+
+    private function initializeSalairesControllers(ControllerCollection $controllers, Application $app)
+    {
+        $app['bulletin.controller'] = $app->share(function() use($app) {
+            return new Bulletin($app['twig'], $app['repository.bulletin']);
+        });
+
+        $controllers->get('/contrats/{contratId}/bulletins', 'bulletin.controller:indexAction')
+                    ->bind('admin_contrats_bulletins');
 
         return $controllers;
     }

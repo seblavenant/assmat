@@ -1,0 +1,16 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div id="breadcrumb" class="col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
+                <li><a href="{{ path('admin_contrats') }}">Mes contrats</a></li>
+                <li>Bulletins</li>
+            </ol>
+        </div>
+    </div>
+
+    {{ dump(bulletins) }}
+    
+{% endblock %}
