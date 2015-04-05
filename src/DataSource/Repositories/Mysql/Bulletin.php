@@ -27,6 +27,14 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         return $this->fetchOne($query);
     }
 
+    public function findFromContrat($contratId)
+    {
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Integer('contrat_id'))->equal($contratId));
+
+        return $this->fetchAll($query);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
