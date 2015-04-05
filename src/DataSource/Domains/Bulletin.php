@@ -28,9 +28,4 @@ class Bulletin
     {
         return $this->fields->mois;
     }
-
-    public function getContrats()
-    {
-        return $this->fields->load('contrats');
-    }
 }

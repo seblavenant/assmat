@@ -104,5 +104,9 @@ class Application  extends AbstractApplication
         $this['repository.bulletin'] = function($c) {
             return new Repositories\Mysql\Bulletin($c['db.default']);
         };
+
+        $this['repository.evenement'] = function($c) {
+            return new Repositories\Mysql\Evenement($c['db.default']);
+        };
     }
 }

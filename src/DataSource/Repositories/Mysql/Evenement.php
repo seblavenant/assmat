@@ -14,10 +14,10 @@ use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
 
-class Bulletin extends AbstractMysql implements Repositories\Bulletin
+class Evenement extends AbstractMysql implements Repositories\Evenement
 {
     const
-        DB_NAME = 'bulletin';
+        DB_NAME = 'evenement';
 
     public function find($id)
     {
@@ -27,13 +27,21 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         return $this->fetchOne($query);
     }
 
+    public function findFromContrat($contratId)
+    {
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Integer('contrat_id'))->equal($contratId));
+
+        return $this->fetchAll($query);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'mois', 'annee'))
+            ->select(array('id', 'date', 'heure_debut', 'heure_fin', 'type'))
             ->from(self::DB_NAME)
-            ->orderBy('annee', OrderBy::DESC)
-            ->orderBy('mois', OrderBy::DESC);
+            ->orderBy('date', OrderBy::DESC)
+            ->orderBy('heure_debut', OrderBy::DESC);
 
         return $query;
     }
@@ -42,18 +50,20 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-            'mois' => new Fields\NotNullable(new Fields\Integer('mois')),
-            'annee' => new Fields\NotNullable(new Fields\Integer('annee')),
+            'date' => new Fields\NotNullable(new Fields\DateTime('date', 'Y-m-d')),
+            'heureDebut' => new Fields\NotNullable(new Fields\DateTime('heure_debut', 'H:i:s')),
+            'heureFin' => new Fields\NotNullable(new Fields\DateTime('heure_fin', 'H:i:s')),
+            'type' => new Fields\NotNullable(new Fields\Integer('type')),
         );
     }
 
     public function getDomain(DataTransferObject $dto)
     {
-        return new Domains\Bulletin($dto);
+        return new Domains\Evenement($dto);
     }
 
     public function getDTO()
     {
-        return new DTO\Bulletin();
+        return new DTO\Evenement();
     }
 }

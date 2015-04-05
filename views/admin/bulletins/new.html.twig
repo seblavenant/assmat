@@ -47,6 +47,14 @@ $(document).ready(function()
     });
 
     var calendar = $('#calendar').fullCalendar({
+        events: [
+            {% for evenement in evenements %}
+            {
+                start: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureDebut | date('H:i:s') }}',
+                end: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureFin | date('H:i:s') }}'
+            },
+            {% endfor %}
+        ],
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -66,6 +74,9 @@ $(document).ready(function()
                 },
                 true
             );
+        },
+        eventDrop: function(event, delta, revertFunc) {
+            console.log(event.source.events[0]);
         },
         editable: true,
         droppable: true,

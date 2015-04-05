@@ -13,13 +13,15 @@ class Bulletin
     private
         $twig,
         $formFactory,
-        $bulletinRepository;
+        $bulletinRepository,
+        $evenementRepository;
 
-    public function __construct(\Twig_Environment $twig, FormFactoryInterface $formFactory, Repositories\Bulletin $bulletinRepository)
+    public function __construct(\Twig_Environment $twig, FormFactoryInterface $formFactory, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository)
     {
         $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->bulletinRepository = $bulletinRepository;
+        $this->evenementRepository = $evenementRepository;
     }
 
     public function indexAction($contratId)
@@ -43,10 +45,12 @@ class Bulletin
     public function newAction($contratId)
     {
         $bulletinForm = $this->formFactory->create(new Forms\Bulletin());
+        $evenements = $this->evenementRepository->findFromContrat($contratId);
 
         return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
             'bulletinForm' => $bulletinForm->createView(),
             'contratId' => $contratId,
+            'evenements' => $evenements,
         )));
     }
 }
