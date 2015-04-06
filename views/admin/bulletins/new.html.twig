@@ -57,23 +57,37 @@ $(document).ready(function()
         ],
         header: {
             left: 'prev,next today',
-            center: 'title',
-            right: 'agendaWeek'
+            center: '',
+            right: ''
         },
         defaultView: 'agendaWeek',
         selectable: true,
+        lang: 'fr',
         selectHelper: true,
         unselectAuto: true,
         select: function(start, end, allDay) {
-            calendar.fullCalendar('renderEvent',
-                {
+
+            var eventData = {
                     title: '',
                     description: '',
-                    start: start,
-                    end: end,
-                },
-                true
-            );
+                    start: start.format('YYYY-MM-DD HH:mm:ss'),
+                    end: end.format('YYYY-MM-DD HH:mm:ss')
+                };
+
+            $.ajax({
+                method: 'POST',
+                url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
+                data: eventData,
+            })
+            .success(function(msg)
+            {
+                calendar.fullCalendar('renderEvent', eventData, true);
+            })
+            .error(function(Xhr, textStatus)
+            {
+                console.log('error', Xhr, textStatus);
+            })
+            ;
         },
         eventDrop: function(event, delta, revertFunc) {
             console.log(event.source.events[0]);

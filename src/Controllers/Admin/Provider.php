@@ -16,6 +16,7 @@ class Provider implements ControllerProviderInterface
         $this->initializeAdminControllers($controllers, $app);
         $this->initializeContratsControllers($controllers, $app);
         $this->initializeBulletinsControllers($controllers, $app);
+        $this->initializeEvenementControllers($controllers, $app);
 
         return $controllers;
     }
@@ -63,5 +64,16 @@ class Provider implements ControllerProviderInterface
                     ->bind('admin_bulletins_new');
 
         return $controllers;
+    }
+
+    private function initializeEvenementControllers(ControllerCollection $controllers, Application $app)
+    {
+        $app['evenement.controller'] = $app->share(function() use($app) {
+            return new Evenement($app['twig'], $app['request'], $app['form.factory'], $app['repository.evenement']);
+        });
+
+        $controllers->get('/contrats/{contratId}/evenement/', 'evenement.controller:setAction')
+                    ->method('POST')
+                    ->bind('admin_evenement_set');
     }
 }
