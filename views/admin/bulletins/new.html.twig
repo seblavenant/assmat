@@ -101,6 +101,10 @@ $(document).ready(function()
             console.log('eventDrop');
             console.log(event.source.events[0]);
         },
+        eventResize: function(event, delta, revertFunc) {
+            console.log('eventResize');
+            console.log(event.source.events[0]);
+        },
         drop: function(date, allDay) {
             console.log('drop');
             var originalEventObject = $(this).data('eventObject');
