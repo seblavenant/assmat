@@ -8,7 +8,7 @@ use Doctrine\DBAL\Driver\Connection;
 
 class AbstractMysql
 {
-    private
+    protected
         $db;
 
     public function __construct(Connection $db)

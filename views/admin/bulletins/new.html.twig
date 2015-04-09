@@ -63,25 +63,33 @@ $(document).ready(function()
         defaultView: 'agendaWeek',
         selectable: true,
         lang: 'fr',
+        editable: true,
+        droppable: true,
         selectHelper: true,
         unselectAuto: true,
         select: function(start, end, allDay) {
-
-            var eventData = {
-                    title: '',
-                    description: '',
-                    start: start.format('YYYY-MM-DD HH:mm:ss'),
-                    end: end.format('YYYY-MM-DD HH:mm:ss')
-                };
-
+            console.log('select');
             $.ajax({
                 method: 'POST',
                 url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
-                data: eventData,
+                data: {
+                    evenement: {
+                        date : start.format('YYYY-MM-DD'),
+                        heureDebut : start.format('HH:mm'),
+                        heureFin : end.format('HH:mm'),
+                        contratId : '{{ contratId }}',
+                        type : 1
+                    }
+                }
             })
             .success(function(msg)
             {
-                calendar.fullCalendar('renderEvent', eventData, true);
+                calendar.fullCalendar('renderEvent', {
+                    title: '',
+                    description: '',
+                    start: start.format('YYYY-MM-DD HH:mm:ss'),
+                    end: end.format('YYYY-MM-DD HH:mm:ss'),
+                }, true);
             })
             .error(function(Xhr, textStatus)
             {
@@ -90,11 +98,11 @@ $(document).ready(function()
             ;
         },
         eventDrop: function(event, delta, revertFunc) {
+            console.log('eventDrop');
             console.log(event.source.events[0]);
         },
-        editable: true,
-        droppable: true,
         drop: function(date, allDay) {
+            console.log('drop');
             var originalEventObject = $(this).data('eventObject');
             var copiedEventObject = $.extend({}, originalEventObject);
             copiedEventObject.start = date;
@@ -102,6 +110,7 @@ $(document).ready(function()
             $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
         },
         eventClick: function(calEvent, jsEvent, view) {
+            console.log('eventClick');
             if(confirm('Etes vous sur de vouloir supprimer cet événement ?'))
             {
                 calendar.fullCalendar('removeEvents' , function(ev){

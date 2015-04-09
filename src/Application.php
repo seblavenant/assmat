@@ -31,9 +31,7 @@ class Application  extends AbstractApplication
         $this->register(new SilexProvider\SessionServiceProvider());
         $this->register(new SilexProvider\UrlGeneratorServiceProvider());
         $this->register(new SilexProvider\FormServiceProvider());
-        $this->register(new SilexProvider\TranslationServiceProvider(), array(
-            'translator.messages' => array(),
-        ));
+        $this->register(new SilexProvider\TranslationServiceProvider());
         $this->register(new SpearProvider\DBAL());
         $this->register(new SpearProvider\Twig());
         $this->register(new SpearProvider\AsseticServiceProvider());

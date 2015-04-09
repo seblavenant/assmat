@@ -38,4 +38,9 @@ class Evenement
     {
         return $this->fields->type;
     }
+
+    public function getContratId()
+    {
+        return $this->fields->contratId;
+    }
 }

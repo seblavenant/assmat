@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Forms;
 use Symfony\Component\HttpFoundation\Request;
+use Assmat\DataSource\DataTransferObjects as DTO;
 
 class Evenement
 {
@@ -27,6 +28,31 @@ class Evenement
 
     public function setAction()
     {
+        $evenementForm = $this->formFactory->create(new Forms\Evenement());
+
+        $evenementForm->handleRequest($this->request);
+
+        if(! $evenementForm->isValid())
+        {
+            return new JsonResponse(array('error' => $evenementForm->getErrors(true)), 400);
+        }
+
+        $evenementDTO = new DTO\Evenement();
+        $evenementDTO->date = $evenementForm->get('date')->getData();
+        $evenementDTO->heureDebut = $evenementForm->get('heureDebut')->getData();
+        $evenementDTO->heureFin = $evenementForm->get('heureFin')->getData();
+        $evenementDTO->contratId = $evenementForm->get('contratId')->getData();
+        $evenementDTO->type = 1;
+
+        try
+        {
+            $this->evenementRepository->persist($evenementDTO);
+        }
+        catch(\Exception $e)
+        {
+            return new JsonResponse(array('error' => $e->getMessage(), 400));
+        }
+
         return new JsonResponse(array('ok'));
     }
 }

@@ -11,5 +11,6 @@ class Evenement implements DataTransferObject
         $date,
         $heureDebut,
         $heureFin,
-        $type;
+        $type,
+        $contratId;
 }

@@ -3,7 +3,7 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Assmat\DataSource\Domains;
-use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\DataSource\DataTransferObjects;
 use Assmat\DataSource\Repositories;
 
 use Muffin\Queries;
@@ -11,13 +11,14 @@ use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
-use Spear\Silex\Persistence\DataTransferObject;
+use Spear\Silex\Persistence\DataTransferObject as DTO;
 use Doctrine\DBAL\Driver\Connection;
+use Muffin\QueryBuilder;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
     const
-        DB_NAME = 'evenement';
+        TABLE_NAME = 'evenement';
 
     public function find($id)
     {
@@ -35,11 +36,42 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         return $this->fetchAll($query);
     }
 
+    public function persist(DTO $evenementDTO)
+    {
+        if($evenementDTO->id !== null)
+        {
+            return $this->update($evenementDTO);
+        }
+
+        return $this->create($evenementDTO);
+    }
+
+    private function create(DTO $evenementDTO)
+    {
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'date' => $evenementDTO->date,
+                'heure_debut' => $evenementDTO->heureDebut,
+                'heure_fin' => $evenementDTO->heureFin,
+                'type' => $evenementDTO->type,
+                'contrat_id' => $evenementDTO->contratId,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT
+            )
+        );
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'date', 'heure_debut', 'heure_fin', 'type'))
-            ->from(self::DB_NAME)
+            ->from(self::TABLE_NAME)
             ->orderBy('date', OrderBy::DESC)
             ->orderBy('heure_debut', OrderBy::DESC);
 
@@ -57,13 +89,13 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         );
     }
 
-    public function getDomain(DataTransferObject $dto)
+    public function getDomain(DTO $dto)
     {
         return new Domains\Evenement($dto);
     }
 
     public function getDTO()
     {
-        return new DTO\Evenement();
+        return new DataTransferObjects\Evenement();
     }
 }
