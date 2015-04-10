@@ -75,5 +75,8 @@ class Provider implements ControllerProviderInterface
         $controllers->get('/contrats/{contratId}/evenement/', 'evenement.controller:setAction')
                     ->method('POST')
                     ->bind('admin_evenement_set');
+        $controllers->get('/contrats/{contratId}/evenement/', 'evenement.controller:deleteAction')
+                    ->method('DELETE')
+                    ->bind('admin_evenement_delete');
     }
 }

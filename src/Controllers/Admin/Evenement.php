@@ -55,4 +55,13 @@ class Evenement
 
         return new JsonResponse(array('ok'));
     }
+
+    public function deleteAction()
+    {
+        $evenement = $this->evenementRepository->findFromDate($this->request->get('date'));
+
+        $this->evenementRepository->delete($evenement->getId());
+
+        return new JsonResponse(array('ok'));
+    }
 }

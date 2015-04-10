@@ -86,6 +86,14 @@ $(document).ready(function()
             })
             .success(function(msg)
             {
+                calendar.fullCalendar('clientEvents', function(event)
+                {
+                    if(start.format('YYYY-MM-DD') == event.start.format('YYYY-MM-DD'))
+                    {
+                        calendar.fullCalendar( 'removeEvents', event._id );
+                    }
+                });
+
                 calendar.fullCalendar('renderEvent', {
                     title: '',
                     description: '',
@@ -177,9 +185,17 @@ $(document).ready(function()
             console.log('eventClick');
             if(confirm('Etes vous sur de vouloir supprimer cet événement ?'))
             {
-                calendar.fullCalendar('removeEvents' , function(ev){
-                    return (ev._id == calEvent._id);
-                });
+                $.ajax({
+                    method: 'DELETE',
+                    url: '{{ path('admin_evenement_delete', {contratId: contratId}) }}',
+                    data: {
+                        date : calEvent.start.format('YYYY-MM-DD'),
+                    }
+                })
+                .success(function(msg)
+                {
+                	calendar.fullCalendar( 'removeEvents', calEvent._id );
+                })
             };
         }
     });

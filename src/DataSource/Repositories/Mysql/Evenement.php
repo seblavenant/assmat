@@ -37,14 +37,12 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         return $this->fetchAll($query);
     }
 
-    public function persist(DTO $evenementDTO)
+    public function findFromDate($date)
     {
-        if($evenementDTO->id !== null)
-        {
-            return $this->update($evenementDTO);
-        }
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Datetime('date'))->equal($date));
 
-        return $this->create($evenementDTO);
+        return $this->fetchOne($query);
     }
 
     public function persist(DTO $evenementDTO)
@@ -70,6 +68,11 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
                 \PDO::PARAM_INT,
             )
         );
+    }
+
+    public function delete($id)
+    {
+        $this->db->delete(self::TABLE_NAME, array('id' => $id));
     }
 
     private function getBaseQuery()
