@@ -179,7 +179,38 @@ $(document).ready(function()
             var copiedEventObject = $.extend({}, originalEventObject);
             copiedEventObject.start = date;
             copiedEventObject.allDay = allDay;
-            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+            $.ajax({
+                method: 'POST',
+                url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
+                data: {
+                    evenement: {
+                        date : date.format('YYYY-MM-DD'),
+                        contratId : '{{ contratId }}',
+                        type : 2
+                    }
+                }
+            })
+            .success(function(msg)
+            {
+                calendar.fullCalendar('clientEvents', function(event)
+                {
+                    if(date.format('YYYY-MM-DD') == event.start.format('YYYY-MM-DD'))
+                    {
+                        calendar.fullCalendar( 'removeEvents', event._id );
+                    }
+                });
+
+                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+            })
+            .error(function(Xhr, textStatus)
+            {
+                calendar.fullCalendar( 'unselect' )
+                console.log('error', Xhr, textStatus);
+            })
+            ;
+
+
         },
         eventClick: function(calEvent, jsEvent, view) {
             console.log('eventClick');
