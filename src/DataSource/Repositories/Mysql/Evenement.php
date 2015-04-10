@@ -14,6 +14,7 @@ use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
 use Doctrine\DBAL\Driver\Connection;
 use Muffin\QueryBuilder;
+use Muffin\Muffin;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
@@ -46,23 +47,27 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         return $this->create($evenementDTO);
     }
 
-    private function create(DTO $evenementDTO)
+    public function persist(DTO $evenementDTO)
     {
-        $this->db->insert(
-            self::TABLE_NAME,
+        $this->db->executeQuery('
+            INSERT INTO evenement (date, heure_debut, heure_fin, type, contrat_id)
+            VALUES (:date, :heureDebut, :heureFin, :type, :contratId)
+            ON DUPLICATE KEY UPDATE
+            date = :date, heure_debut = :heureDebut, heure_fin = :heureFin, type = :type, contrat_id = :contratId
+            ',
             array(
                 'date' => $evenementDTO->date,
-                'heure_debut' => $evenementDTO->heureDebut,
-                'heure_fin' => $evenementDTO->heureFin,
+                'heureDebut' => $evenementDTO->heureDebut,
+                'heureFin' => $evenementDTO->heureFin,
                 'type' => $evenementDTO->type,
-                'contrat_id' => $evenementDTO->contratId,
+                'contratId' => $evenementDTO->contratId,
             ),
             array(
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_INT,
-                \PDO::PARAM_INT
+                \PDO::PARAM_INT,
             )
         );
     }
