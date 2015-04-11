@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Forms;
+use Symfony\Component\HttpFoundation\Request;
 
 class Bulletin
 {
@@ -16,9 +17,10 @@ class Bulletin
         $bulletinRepository,
         $evenementRepository;
 
-    public function __construct(\Twig_Environment $twig, FormFactoryInterface $formFactory, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, FormFactoryInterface $formFactory, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository)
     {
         $this->twig = $twig;
+        $this->request = $request;
         $this->formFactory = $formFactory;
         $this->bulletinRepository = $bulletinRepository;
         $this->evenementRepository = $evenementRepository;
@@ -44,6 +46,8 @@ class Bulletin
 
     public function newAction($contratId)
     {
+        $this->validateRangeDateParams();
+
         $bulletinForm = $this->formFactory->create(new Forms\Bulletin());
         $evenements = $this->evenementRepository->findFromContrat($contratId);
 
@@ -51,6 +55,22 @@ class Bulletin
             'bulletinForm' => $bulletinForm->createView(),
             'contratId' => $contratId,
             'evenements' => $evenements,
+            'mois' => $this->request->get('mois'),
+            'annee' => $this->request->get('annee'),
         )));
+    }
+
+    private function validateRangeDateParams()
+    {
+        if(! in_array((int) $this->request->get('mois'), range(1, 12)))
+        {
+            throw new \Exception('Le mois ' . $this->request->get('mois') . ' est invalide !');
+        }
+
+        if((int) $this->request->get('annee') < 2000)
+        {
+            throw new \Exception('L\'année ' . $this->request->get('annee') . ' est invalide !');
+        }
+
     }
 }

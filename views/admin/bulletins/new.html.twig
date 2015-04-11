@@ -69,6 +69,13 @@ $(document).ready(function()
         droppable: true,
         select: function(start, end, allDay)
         {
+            if(start < moment('{{ annee }}-{{ mois }}-01') || end > moment('{{ annee }}-{{ mois }}-31'))
+            {
+                console.log('invalid range');
+                calendar.fullCalendar('unselect');
+                return;
+            }
+
             console.log('select');
             $.ajax({
                 method: 'POST',
@@ -102,7 +109,7 @@ $(document).ready(function()
             })
             .error(function(Xhr, textStatus)
             {
-                calendar.fullCalendar( 'unselect' )
+                calendar.fullCalendar('unselect');
             })
             ;
         },
@@ -166,6 +173,14 @@ $(document).ready(function()
         drop: function(date, allDay)
         {
             console.log('drop');
+
+            if(date < moment('{{ annee }}-{{ mois }}-01') || date > moment('{{ annee }}-{{ mois }}-31'))
+            {
+                console.log('invalid range');
+                calendar.fullCalendar('unselect');
+                return;
+            }
+
             var originalEventObject = $(this).data('eventObject');
             var copiedEventObject = $.extend({}, originalEventObject);
             copiedEventObject.start = date;
