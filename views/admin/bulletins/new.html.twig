@@ -67,9 +67,8 @@ $(document).ready(function()
         lang: 'fr',
         editable: true,
         droppable: true,
-        selectHelper: true,
-        unselectAuto: true,
-        select: function(start, end, allDay) {
+        select: function(start, end, allDay)
+        {
             console.log('select');
             $.ajax({
                 method: 'POST',
@@ -104,14 +103,16 @@ $(document).ready(function()
             .error(function(Xhr, textStatus)
             {
                 calendar.fullCalendar( 'unselect' )
-                console.log('error', Xhr, textStatus);
             })
             ;
         },
-        eventDrop: function(event, delta, revertFunc) {
+        eventDrop: function(event, delta, revertFunc)
+        {
             console.log('eventDrop');
-
-            var originalEvent = event;
+            if(event.start.format('YYYY-MM-DD') != moment(event.start._i).format('YYYY-MM-DD'))
+            {
+                revertFunc();
+            }
 
             $.ajax({
                 method: 'POST',
@@ -132,17 +133,12 @@ $(document).ready(function()
             })
             .error(function(Xhr, textStatus)
             {
-                calendar.fullCalendar('clientEvents', function(event)
-                {
-                    if(originalEvent.start.format('YYYY-MM-DD') == event.start.format('YYYY-MM-DD'))
-                    {
-                        calendar.fullCalendar( 'removeEvents', event._id );
-                    }
-                });
+                revertFunc();
             })
             ;
         },
-        eventResize: function(event, delta, revertFunc) {
+        eventResize: function(event, delta, revertFunc)
+        {
             console.log('eventResize');
             $.ajax({
                 method: 'POST',
@@ -163,17 +159,12 @@ $(document).ready(function()
             })
             .error(function(Xhr, textStatus)
             {
-                calendar.fullCalendar('unselect');
-                calendar.fullCalendar('renderEvent', {
-                    title: '',
-                    description: '',
-                    start: moment(event.source.events[0].start).format('YYYY-MM-DD HH:mm:ss'),
-                    end: moment(event.source.events[0].end).format('YYYY-MM-DD HH:mm:ss'),
-                }, true);
+                revertFunc();
             })
             ;
         },
-        drop: function(date, allDay) {
+        drop: function(date, allDay)
+        {
             console.log('drop');
             var originalEventObject = $(this).data('eventObject');
             var copiedEventObject = $.extend({}, originalEventObject);
@@ -206,13 +197,11 @@ $(document).ready(function()
             .error(function(Xhr, textStatus)
             {
                 calendar.fullCalendar( 'unselect' )
-                console.log('error', Xhr, textStatus);
             })
             ;
-
-
         },
-        eventClick: function(calEvent, jsEvent, view) {
+        eventClick: function(calEvent, jsEvent, view)
+        {
             console.log('eventClick');
             if(confirm('Etes vous sur de vouloir supprimer cet événement ?'))
             {
@@ -225,7 +214,7 @@ $(document).ready(function()
                 })
                 .success(function(msg)
                 {
-                	calendar.fullCalendar( 'removeEvents', calEvent._id );
+                    calendar.fullCalendar( 'removeEvents', calEvent._id );
                 })
             };
         }
