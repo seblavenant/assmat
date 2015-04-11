@@ -57,6 +57,7 @@ $(document).ready(function()
             },
             {% endfor %}
         ],
+        defaultDate: moment('{{ annee }}-{{ mois }}-01'),
         header: {
             left: 'prev,next today',
             center: '',
