@@ -7,13 +7,12 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 class ContactUser implements AdvancedUserInterface
 {
-	private
-		$contact,
-		$enabled,
-    	$accountNonExpired,
-    	$credentialsNonExpired,
-    	$accountNonLocked,
-    	$roles;
+    private
+        $contact,
+        $enabled,
+        $accountNonExpired,
+        $credentialsNonExpired,
+        $accountNonLocked;
 
     public function __construct(Domains\Contact $contact, $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
     {
@@ -31,17 +30,17 @@ class ContactUser implements AdvancedUserInterface
 
     public function getContact()
     {
-    	return $this->contact;
+        return $this->contact;
     }
 
     public function getRoles()
     {
-    	return array('ROLE_ADMIN');
+        return array('ROLE_ADMIN');
     }
 
     public function getPassword()
     {
-    	return $this->contact->getPassword();
+        return $this->contact->getPassword();
     }
 
     public function getSalt()
@@ -50,27 +49,27 @@ class ContactUser implements AdvancedUserInterface
 
     public function getUsername()
     {
-    	return $this->contact->getEmail();
+        return $this->contact->getEmail();
     }
 
     public function isAccountNonExpired()
     {
-    	return $this->accountNonExpired;
+        return $this->accountNonExpired;
     }
 
     public function isAccountNonLocked()
     {
-    	return $this->accountNonLocked;
+        return $this->accountNonLocked;
     }
 
     public function isCredentialsNonExpired()
     {
-    	return $this->credentialsNonExpired;
+        return $this->credentialsNonExpired;
     }
 
     public function isEnabled()
     {
-    	return $this->enabled;
+        return $this->enabled;
     }
 
     public function eraseCredentials()
