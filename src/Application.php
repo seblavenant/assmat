@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services;
 
 
-class Application  extends AbstractApplication
+class Application extends AbstractApplication
 {
     protected function initializeServices()
     {
