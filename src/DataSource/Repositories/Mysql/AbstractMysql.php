@@ -5,8 +5,9 @@ namespace Assmat\DataSource\Repositories\Mysql;
 use Muffin\Query;
 use Spear\Silex\Persistence\DTOHydrators;
 use Doctrine\DBAL\Driver\Connection;
+use Spear\Silex\Persistence\DataTransferObject;
 
-class AbstractMysql
+abstract class AbstractMysql
 {
     protected
         $db;
@@ -15,6 +16,12 @@ class AbstractMysql
     {
         $this->db = $db;
     }
+
+    abstract public function getDomain(DataTransferObject $dto);
+
+    abstract public function getFields();
+
+    abstract public function getDTO();
 
     protected function fetchOne(Query $query)
     {
