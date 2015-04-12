@@ -64,4 +64,17 @@ class Evenement
 
         return new JsonResponse(array('ok'));
     }
+
+    private function validateRangeDateParams()
+    {
+        if(! in_array((int) $this->request->get('mois'), range(1, 12)))
+        {
+            throw new \Exception('Le mois ' . $this->request->get('mois') . ' est invalide !');
+        }
+
+        if((int) $this->request->get('annee') < 2000)
+        {
+            throw new \Exception('L\'année ' . $this->request->get('annee') . ' est invalide !');
+        }
+    }
 }
