@@ -3,6 +3,7 @@
 namespace Assmat\Controllers\Admin;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Assmat\DataSource\Repositories;
@@ -24,6 +25,21 @@ class Evenement
         $this->request = $request;
         $this->formFactory = $formFactory;
         $this->evenementRepository = $evenementRepository;
+    }
+
+    public function listAction($contratId)
+    {
+        $this->validateRangeDateParams();
+
+        $bulletinForm = $this->formFactory->create(new Forms\Bulletin($this->request));
+        $evenements = $this->evenementRepository->findFromContrat($contratId);
+
+        return new Response($this->twig->render('admin/evenements/list.html.twig', array(
+            'contratId' => $contratId,
+            'evenements' => $evenements,
+            'mois' => $this->request->get('mois'),
+            'annee' => $this->request->get('annee'),
+        )));
     }
 
     public function setAction()

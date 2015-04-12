@@ -72,11 +72,15 @@ class Provider implements ControllerProviderInterface
             return new Evenement($app['twig'], $app['request'], $app['form.factory'], $app['repository.evenement']);
         });
 
-        $controllers->get('/contrats/{contratId}/evenement/', 'evenement.controller:setAction')
+        $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:setAction')
                     ->method('POST')
-                    ->bind('admin_evenement_set');
-        $controllers->get('/contrats/{contratId}/evenement/', 'evenement.controller:deleteAction')
+                    ->bind('admin_evenements_set');
+
+        $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:deleteAction')
                     ->method('DELETE')
-                    ->bind('admin_evenement_delete');
+                    ->bind('admin_evenements_delete');
+
+        $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:listAction')
+                    ->bind('admin_evenements_list');
     }
 }

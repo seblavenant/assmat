@@ -33,7 +33,7 @@
                                     <td>{{ contrat.nom }}</td>
                                     <td>
                                         <a href="{{ path('admin_bulletins', { contratId : contrat.id }) }}"><i class="fa fa-list"></i></a>
-                                        <a href="{{ path('admin_bulletins_new', { contratId : contrat.id , mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-plus-square-o"></i></a>
+                                        <a href="{{ path('admin_evenements_list', { contratId : contrat.id , mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-plus-square-o"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

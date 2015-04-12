@@ -121,7 +121,7 @@ $(document).ready(function()
             console.log('select');
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
                 data: {
                     evenement: {
                         date : start.format('YYYY-MM-DD'),
@@ -165,7 +165,7 @@ $(document).ready(function()
 
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
                 data: {
                     evenement: {
                         date : event.start.format('YYYY-MM-DD'),
@@ -191,7 +191,7 @@ $(document).ready(function()
             console.log('eventResize');
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
                 data: {
                     evenement: {
                         date : event.start.format('YYYY-MM-DD'),
@@ -230,7 +230,7 @@ $(document).ready(function()
 
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenement_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
                 data: {
                     evenement: {
                         date : date.format('YYYY-MM-DD'),
@@ -264,7 +264,7 @@ $(document).ready(function()
             {
                 $.ajax({
                     method: 'DELETE',
-                    url: '{{ path('admin_evenement_delete', {contratId: contratId}) }}',
+                    url: '{{ path('admin_evenements_delete', {contratId: contratId}) }}',
                     data: {
                         date : calEvent.start.format('YYYY-MM-DD'),
                     }
