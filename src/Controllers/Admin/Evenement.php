@@ -31,7 +31,6 @@ class Evenement
     {
         $this->validateRangeDateParams();
 
-        $bulletinForm = $this->formFactory->create(new Forms\Bulletin($this->request));
         $evenements = $this->evenementRepository->findFromContrat($contratId);
 
         return new Response($this->twig->render('admin/evenements/list.html.twig', array(
