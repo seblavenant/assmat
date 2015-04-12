@@ -47,7 +47,7 @@ class Evenement
 
         $evenementForm->handleRequest($this->request);
 
-        if(! $evenementForm->isValid())
+        if(!$evenementForm->isValid())
         {
             return new JsonResponse(array('error' => $evenementForm->getErrors(true)), 400);
         }
@@ -57,7 +57,7 @@ class Evenement
         $evenementDTO->heureDebut = $evenementForm->get('heureDebut')->getData();
         $evenementDTO->heureFin = $evenementForm->get('heureFin')->getData();
         $evenementDTO->contratId = $evenementForm->get('contratId')->getData();
-        $evenementDTO->type =  $evenementForm->get('type')->getData();
+        $evenementDTO->type = $evenementForm->get('type')->getData();
 
         try
         {
@@ -82,7 +82,7 @@ class Evenement
 
     private function validateRangeDateParams()
     {
-        if(! in_array((int) $this->request->get('mois'), range(1, 12)))
+        if(!in_array((int) $this->request->get('mois'), range(1, 12)))
         {
             throw new \Exception('Le mois ' . $this->request->get('mois') . ' est invalide !');
         }

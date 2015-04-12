@@ -12,7 +12,7 @@ use Assmat\DataSource\Domains;
 class UserProvider implements UserProviderInterface
 {
     private
-    	$contactRepositories;
+        $contactRepositories;
 
     public function __construct(Repositories\Contact $contactRepositories)
     {
@@ -23,7 +23,7 @@ class UserProvider implements UserProviderInterface
     {
         $contact = $this->contactRepositories->findFromEmail($username);
 
-        if (! $contact instanceof Domains\Contact)
+        if(!$contact instanceof Domains\Contact)
         {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
@@ -34,7 +34,7 @@ class UserProvider implements UserProviderInterface
 
     public function refreshUser(UserInterface $user)
     {
-        if (! $user instanceof UserInterface)
+        if(!$user instanceof UserInterface)
         {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }

@@ -36,7 +36,7 @@ class Employe extends AbstractMysql implements Repositories\Employe
         $query = $this->getBaseQuery();
         $query->where((new Types\Integer('id'))->equal($id));
 
-       return $this->fetchOne($query);
+        return $this->fetchOne($query);
     }
 
     public function findFromEmployeur($employeurId)

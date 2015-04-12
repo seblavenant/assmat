@@ -66,13 +66,13 @@ class Application extends AbstractApplication
                 'pattern' => '^/admin',
                 'form' => array('login_path' => '/user/login', 'check_path' => '/admin/login_check'),
                 'logout' => array('logout_path' => '/admin/logout'),
-                'users' => $this->share(function () {
+                'users' => $this->share(function() {
                     return new Services\Security\UserProvider($this['repository.contact']);
                 }),
             ),
         );
 
-        $this->get('/user/login', function(Request $request){
+        $this->get('/user/login', function(Request $request) {
             return $this['twig']->render('user/login_form.html.twig', array(
                 'error'         => $this['security.last_error']($request),
                 'last_username' => $this['session']->get('_security.last_username'),
