@@ -57,6 +57,11 @@ abstract class AbstractMysql
     {
         $dto = $this->buildDTOObject($record);
 
+        if(! $dto instanceof DataTransferObject)
+        {
+            throw new \Exception('invalid DTO builded !');
+        }
+
         return $this->getDomain($dto);
     }
 
