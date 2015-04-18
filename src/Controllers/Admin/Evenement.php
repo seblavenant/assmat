@@ -74,9 +74,14 @@ class Evenement
 
     public function deleteAction()
     {
-        $evenement = $this->evenementRepository->findFromDate($this->request->get('date'));
-
-        $this->evenementRepository->delete($evenement->getId());
+        try {
+            $evenement = $this->evenementRepository->findOneFromContratAndDay($this->request->get('contratId'), new \DateTime($this->request->get('date')));
+            $this->evenementRepository->delete($evenement->getId());
+        }
+        catch(\Exception $e)
+        {
+            return new JsonResponse(array('error' => $e->getMessage(), 400));
+        }
 
         return new JsonResponse(array('ok'));
     }
