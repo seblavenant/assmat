@@ -43,4 +43,9 @@ class Evenement
     {
         return $this->fields->contratId;
     }
+
+    public function getDuration()
+    {
+        return $this->fields->heureDebut->diff($this->fields->heureFin);
+    }
 }

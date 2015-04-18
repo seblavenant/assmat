@@ -10,6 +10,7 @@ use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\Services\Evenements\Periods;
 
 class Evenement
 {
@@ -31,7 +32,7 @@ class Evenement
     {
         $this->validateRangeDateParams();
 
-        $evenements = $this->evenementRepository->findFromContrat($contratId);
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId);
 
         return new Response($this->twig->render('admin/evenements/list.html.twig', array(
             'contratId' => $contratId,

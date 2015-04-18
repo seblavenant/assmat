@@ -15,6 +15,7 @@ use Spear\Silex\Persistence\DataTransferObject as DTO;
 use Doctrine\DBAL\Driver\Connection;
 use Muffin\QueryBuilder;
 use Muffin\Muffin;
+use Assmat\Services\Evenements\Periods\Period;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
@@ -29,20 +30,38 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         return $this->fetchOne($query);
     }
 
-    public function findFromContrat($contratId)
+    public function findOneFromContratAndDay($contratId, \DateTime $date = null)
     {
-        $query = $this->getBaseQuery();
-        $query->where((new Types\Integer('contrat_id'))->equal($contratId));
+        $query = $this->getQueryFromContrat($contratId, new \Assmat\Services\Evenements\Periods\Day($date));
+
+        return $this->fetchOne($query);
+    }
+
+    public function findAllFromContrat($contratId, Period $period = null)
+    {
+        $query = $this->getQueryFromContrat($contratId, $period);
 
         return $this->fetchAll($query);
     }
 
-    public function findFromDate($date)
+    private function getQueryFromContrat($contratId, Period $period = null)
     {
         $query = $this->getBaseQuery();
-        $query->where((new Types\Datetime('date'))->equal($date));
+        $query->where((new Types\Integer('contrat_id'))->equal($contratId));
 
-        return $this->fetchOne($query);
+        if($period instanceof Period)
+        {
+            $this->getDateQuery($query, $period);
+        }
+
+        return $query;
+    }
+
+    public function getDateQuery($query, $period)
+    {
+        $query->where((new Types\Datetime('date'))->like($period->getPeriod() . '%'));
+
+        return $query;
     }
 
     public function persist(DTO $evenementDTO)

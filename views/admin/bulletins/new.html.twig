@@ -1,0 +1,58 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div id="breadcrumb" class="col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
+                <li><a href="{{ path('admin_contrats') }}">Mes contrats</a></li>
+                <li><a href="{{ path('admin_contrats_read', {id : contratId}) }}">Contrat {{ contratId }}</a></li>
+                <li><a href="{{ path('admin_bulletins', {contratId : contratId}) }}">Bulletins</a></li>
+                <li><a href="{{ path('admin_bulletins_new', {contratId : contratId}) }}">Nouveau</a></li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div id="actions" class="box-content">
+                    <a href="{{ path('admin_evenements_list', { contratId : contratId, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i> Voir le planning</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i>Détails des heures du mois
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <th>Date</td>
+                            <th>Type</th>
+                            <th>Heure début</th>
+                            <th>Heure fin</th>
+                            <th>Durée</th>
+                        </thead>
+                        <tbody>
+                            {% for evenement in evenements  %}
+                            <tr>
+                                <td>{{ evenement.date | date('Y-m-d') }}</td>
+                                <td>{{ evenement.type }}</td>
+                                <td>{{ evenement.heureDebut | date('h:i') }}</td>
+                                <td>{{ evenement.heureFin | date('h:i') }}</td>
+                                <td>{{ evenement.duration | date('%H') }}h{{ evenement.duration | date('%I') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
