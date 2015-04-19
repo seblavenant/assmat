@@ -6,9 +6,9 @@
             <ol class="breadcrumb">
                 <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
                 <li><a href="{{ path('admin_contrats') }}">Mes contrats</a></li>
-                <li><a href="{{ path('admin_contrats_read', {id : contratId}) }}">Contrat {{ contratId }}</a></li>
-                <li><a href="{{ path('admin_bulletins', {contratId : contratId}) }}">Bulletins</a></li>
-                <li><a href="{{ path('admin_bulletins_new', {contratId : contratId}) }}">Nouveau</a></li>
+                <li><a href="{{ path('admin_contrats_read', {id : contrat.id}) }}">Contrat {{ contrat.id }}</a></li>
+                <li><a href="{{ path('admin_bulletins', {contratId : contrat.id}) }}">Bulletins</a></li>
+                <li>>Nouveau</li>
             </ol>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div id="actions" class="box-content">
-                    <a href="{{ path('admin_evenements_list', { contratId : contratId, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i> Voir le planning</a>
+                    <a href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i> Voir le planning</a>
                 </div>
             </div>
         </div>
@@ -50,6 +50,27 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i>****
+                    </div>
+                    <div class="box-icons">
+                        <a class="collapse-link" data-toggle="collapse">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <ul>
+                        <li>Salaire de base : {{ contrat.baseHeure }} €</li>
+                    </ul>
                 </div>
             </div>
         </div>

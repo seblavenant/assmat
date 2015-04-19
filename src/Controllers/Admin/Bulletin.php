@@ -14,14 +14,16 @@ class Bulletin
         $twig,
         $request,
         $bulletinRepository,
-        $evenementRepository;
+        $evenementRepository,
+        $contratRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->bulletinRepository = $bulletinRepository;
         $this->evenementRepository = $evenementRepository;
+        $this->contratRepository = $contratRepository;
     }
 
     public function indexAction($contratId)
@@ -36,10 +38,11 @@ class Bulletin
 
     public function newAction($contratId)
     {
+        $contrat = $this->contratRepository->find($contratId);
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Evenements\Periods\Month(new \DateTime()));
 
         return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
-            'contratId' => $contratId,
+            'contrat' => $contrat,
             'evenements' => $evenements,
         )));
     }

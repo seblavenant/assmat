@@ -29,6 +29,11 @@ class Contrat
         return $this->fields->load('employe');
     }
 
+    public function getBaseHeure()
+    {
+        return $this->fields->baseHeure;
+    }
+
     public function getBulletins()
     {
         return $this->fields->load('bulletins');

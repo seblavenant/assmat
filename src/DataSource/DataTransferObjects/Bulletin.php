@@ -9,5 +9,6 @@ class Bulletin implements DataTransferObject
     public
         $id,
         $mois,
-        $annee;
+        $annee,
+        $contratId;
 }
