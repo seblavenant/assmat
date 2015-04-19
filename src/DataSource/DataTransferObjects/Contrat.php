@@ -2,9 +2,9 @@
 
 namespace Assmat\DataSource\DataTransferObjects;
 
-use Spear\Silex\Persistence\DataTransferObjects\Related;
+use Spear\Silex\Persistence\DataTransferObject;
 
-class Contrat extends Related
+class Contrat implements DataTransferObject
 {
     public
         $id,
@@ -13,11 +13,4 @@ class Contrat extends Related
         $baseHeure,
         $indemnites,
         $type;
-
-    public function __construct()
-    {
-        parent::__construct(array(
-            'bulletins',
-        ));
-    }
 }

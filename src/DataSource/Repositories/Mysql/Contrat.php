@@ -18,16 +18,6 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     const
         DB_NAME = 'contrat';
 
-    private
-        $bulletinRepository;
-
-    public function __construct(Connection $db, Repositories\Bulletin $bulletinRepository)
-    {
-        parent::__construct($db);
-
-        $this->bulletinRepository = $bulletinRepository;
-    }
-
     public function find($id)
     {
         $query = $this->getBaseQuery();
@@ -66,10 +56,6 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
 
     public function getDomain(DataTransferObject $dto)
     {
-        $dto->set('bulletins', function() use($dto) {
-            return $this->bulletinRepository->findFromContrat($dto->id);
-        });
-
         return new Domains\Contrat($dto);
     }
 
