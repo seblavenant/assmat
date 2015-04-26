@@ -9,7 +9,6 @@ use Assmat\DataSource\Repositories;
 class Builder
 {
     private
-        $lignes,
         $ligneRepository;
 
     public function __construct(Repositories\Ligne $ligneRepository)
