@@ -28,4 +28,14 @@ class Bulletin
     {
         return $this->fields->mois;
     }
+
+    public function getLignes()
+    {
+        return $this->fields->load('lignes');
+    }
+
+    public function getEvenements()
+    {
+        return $this->fields->load('evenements');
+    }
 }

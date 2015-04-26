@@ -5,6 +5,9 @@ namespace Assmat\DataSource\Repositories\Mysql;
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
+use Assmat\Services\Lignes;
+use Assmat\Services\Evenements;
+
 
 use Muffin\Queries;
 use Muffin\Types;
@@ -18,6 +21,16 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
 {
     const
         DB_NAME = 'bulletin';
+
+    private
+        $evenementsRepository;
+
+    public function __construct(Connection $db, Repositories\Evenement $evenementRepository)
+    {
+        parent::__construct($db);
+
+        $this->evenementsRepository = $evenementRepository;
+    }
 
     public function find($id)
     {
@@ -57,6 +70,14 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
 
     public function getDomain(DataTransferObject $dto)
     {
+        $dto->set('evenements', function() use($dto) {
+            return $this->evenementRepository->findAllFromContrat($dto->contratId, new Evenements\Periods\Month(new \DateTime($dto->anne . '-' . $dto->mois)));
+        });
+
+        $dto->set('lignes', function() use($dto) {
+            return (new Repositories\Memory\Ligne())->findAll();
+        });
+
         return new Domains\Bulletin($dto);
     }
 
