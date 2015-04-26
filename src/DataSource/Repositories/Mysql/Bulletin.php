@@ -75,7 +75,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         });
 
         $dto->set('lignes', function() use($dto) {
-            return (new Repositories\Memory\Ligne())->findAll();
+
         });
 
         return new Domains\Bulletin($dto);
