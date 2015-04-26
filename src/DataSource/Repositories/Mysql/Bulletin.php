@@ -23,13 +23,13 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         DB_NAME = 'bulletin';
 
     private
-        $evenementsRepository;
+        $evenementRepository;
 
     public function __construct(Connection $db, Repositories\Evenement $evenementRepository)
     {
         parent::__construct($db);
 
-        $this->evenementsRepository = $evenementRepository;
+        $this->evenementRepository = $evenementRepository;
     }
 
     public function find($id)
