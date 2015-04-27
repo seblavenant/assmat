@@ -4,13 +4,11 @@ namespace Assmat\Controllers\Admin;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\DataSource\DataTransferObjects as DTO;
-use Assmat\Services\Evenements\Periods;
 
 class Evenement
 {
@@ -74,7 +72,8 @@ class Evenement
 
     public function deleteAction()
     {
-        try {
+        try
+        {
             $evenement = $this->evenementRepository->findOneFromContratAndDay($this->request->get('contratId'), new \DateTime($this->request->get('date')));
             $this->evenementRepository->delete($evenement->getId());
         }

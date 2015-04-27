@@ -4,13 +4,7 @@ namespace Assmat;
 
 use Silex\Provider as SilexProvider;
 use Spear\Silex\Provider as SpearProvider;
-use Gaufrette\Filesystem;
-use Gaufrette\Adapter\Local;
-use Puzzle\Configuration;
-
 use Assmat\DataSource\Repositories;
-use Assmat\DataSource\Domains;
-use Herrera\Pdo\PdoServiceProvider;
 use Spear\Silex\Application\AbstractApplication;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\HttpFoundation\Request;

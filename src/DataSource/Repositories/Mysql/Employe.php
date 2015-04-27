@@ -8,9 +8,7 @@ use Assmat\DataSource\Repositories;
 use Muffin\Queries;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
-
 use Spear\Silex\Persistence\Fields;
-use Spear\Silex\Persistence\DTOHydrators;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
 
