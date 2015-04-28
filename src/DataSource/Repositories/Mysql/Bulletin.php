@@ -5,10 +5,7 @@ namespace Assmat\DataSource\Repositories\Mysql;
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
-use Assmat\Services\Lignes;
 use Assmat\Services\Evenements;
-
-
 use Muffin\Queries;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;

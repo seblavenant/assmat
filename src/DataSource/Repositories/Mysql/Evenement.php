@@ -5,16 +5,12 @@ namespace Assmat\DataSource\Repositories\Mysql;
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects;
 use Assmat\DataSource\Repositories;
-
 use Muffin\Queries;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
-use Doctrine\DBAL\Driver\Connection;
-use Muffin\QueryBuilder;
-use Muffin\Muffin;
 use Assmat\Services\Evenements\Periods\Period;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
