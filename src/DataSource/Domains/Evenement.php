@@ -34,18 +34,18 @@ class Evenement
         return $this->fields->heureFin;
     }
 
-    public function getType()
-    {
-        return $this->fields->type;
-    }
-
     public function getContratId()
     {
         return $this->fields->contratId;
     }
 
-    public function getDuration()
+    public function getDuree()
     {
         return $this->fields->heureDebut->diff($this->fields->heureFin);
+    }
+
+    public function getTypeId()
+    {
+        return $this->fields->typeId;
     }
 }

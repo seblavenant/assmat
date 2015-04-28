@@ -38,4 +38,9 @@ class Bulletin
     {
         return $this->fields->load('evenements');
     }
+
+    public function getContrat()
+    {
+        return $this->fields->load('contrat');
+    }
 }

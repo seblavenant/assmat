@@ -16,6 +16,7 @@ class Bulletin extends Related
     {
         parent::__construct(array(
             'evenements',
+            'contrat',
         ));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Assmat\DataSource\DataTransferObjects;
 
+use Doctrine\DBAL\Driver\Connection;
 use Spear\Silex\Persistence\DataTransferObject;
 
 class Evenement implements DataTransferObject
@@ -11,6 +12,6 @@ class Evenement implements DataTransferObject
         $date,
         $heureDebut,
         $heureFin,
-        $type,
+        $typeId,
         $contratId;
 }

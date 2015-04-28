@@ -67,16 +67,16 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     public function persist(DTO $evenementDTO)
     {
         $this->db->executeQuery('
-            INSERT INTO evenement (date, heure_debut, heure_fin, type, contrat_id)
-            VALUES (:date, :heureDebut, :heureFin, :type, :contratId)
+            INSERT INTO evenement (date, heure_debut, heure_fin, type_id, contrat_id)
+            VALUES (:date, :heureDebut, :heureFin, :typeId, :contratId)
             ON DUPLICATE KEY UPDATE
-            date = :date, heure_debut = :heureDebut, heure_fin = :heureFin, type = :type, contrat_id = :contratId
+            date = :date, heure_debut = :heureDebut, heure_fin = :heureFin, type_id = :typeId, contrat_id = :contratId
             ',
             array(
                 'date' => $evenementDTO->date,
                 'heureDebut' => $evenementDTO->heureDebut,
                 'heureFin' => $evenementDTO->heureFin,
-                'type' => $evenementDTO->type,
+                'typeId' => $evenementDTO->typeId,
                 'contratId' => $evenementDTO->contratId,
             ),
             array(
@@ -112,7 +112,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
             'date' => new Fields\NotNullable(new Fields\DateTime('date', 'Y-m-d')),
             'heureDebut' => new Fields\NotNullable(new Fields\DateTime('heure_debut', 'H:i:s')),
             'heureFin' => new Fields\NotNullable(new Fields\DateTime('heure_fin', 'H:i:s')),
-            'type' => new Fields\NotNullable(new Fields\Integer('type')),
+            'typeId' => new Fields\NotNullable(new Fields\Integer('type_id')),
         );
     }
 

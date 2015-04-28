@@ -23,13 +23,15 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         DB_NAME = 'bulletin';
 
     private
-        $evenementRepository;
+        $evenementRepository,
+        $contratRepository;
 
-    public function __construct(Connection $db, Repositories\Evenement $evenementRepository)
+    public function __construct(Connection $db, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository)
     {
         parent::__construct($db);
 
         $this->evenementRepository = $evenementRepository;
+        $this->contratRepository = $contratRepository;
     }
 
     public function find($id)
@@ -74,8 +76,8 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
             return $this->evenementRepository->findAllFromContrat($dto->contratId, new Evenements\Periods\Month(new \DateTime($dto->anne . '-' . $dto->mois)));
         });
 
-        $dto->set('lignes', function() use($dto) {
-
+        $dto->set('contrat', function() use($dto) {
+            return $this->contratRepository->find($dto->contratId);
         });
 
         return new Domains\Bulletin($dto);
