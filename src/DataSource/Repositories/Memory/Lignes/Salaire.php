@@ -18,15 +18,20 @@ class Salaire
             foreach($bulletin->getEvenements() as $evenement)
             {
                 $contrat = $bulletin->getContrat();
+                $quantite = 0;
+                $valeur = 0;
 
                 switch($evenement->getTypeId())
                 {
                     case Constants\Evenements\Type::ACCUEIL :
-                        $ligneDTO->quantite = $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
-                        $ligneDTO->valeur = $contrat->getBaseHeure() * $ligneDTO->quantite;
+                        $quantite = $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
                         break;
-
+                    case Constants\Evenements\Type::CONGE_PAYE :
+                        $quantite = $contrat->getHeuresJour();
                 }
+
+                $ligneDTO->quantite += $quantite;
+                $ligneDTO->valeur += $contrat->getSalaireHoraire() * $quantite;
             }
         };
 
