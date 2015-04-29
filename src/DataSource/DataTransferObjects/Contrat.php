@@ -10,7 +10,9 @@ class Contrat implements DataTransferObject
         $id,
         $nom,
         $employeId,
-        $baseHeure,
+        $salaireHoraire,
+        $joursGarde,
+        $heuresHebdo,
         $indemnites,
         $type;
 }

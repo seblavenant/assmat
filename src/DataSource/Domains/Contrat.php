@@ -29,9 +29,24 @@ class Contrat
         return $this->fields->load('employe');
     }
 
-    public function getBaseHeure()
+    public function getSalaireHoraire()
     {
-        return $this->fields->baseHeure;
+        return $this->fields->salaireHoraire;
+    }
+
+    public function getJoursGarde()
+    {
+        return $this->fields->joursGarde;
+    }
+
+    public function getHeuresHebdo()
+    {
+        return $this->fields->heuresHebdo;
+    }
+
+    public function getHeuresJour()
+    {
+        return $this->fields->heuresHebdo / $this->fields->joursGarde;
     }
 
     public function getBulletins()
