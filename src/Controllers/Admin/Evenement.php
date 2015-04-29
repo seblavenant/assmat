@@ -56,7 +56,7 @@ class Evenement
         $evenementDTO->heureDebut = $evenementForm->get('heureDebut')->getData();
         $evenementDTO->heureFin = $evenementForm->get('heureFin')->getData();
         $evenementDTO->contratId = $evenementForm->get('contratId')->getData();
-        $evenementDTO->type = $evenementForm->get('type')->getData();
+        $evenementDTO->typeId = $evenementForm->get('typeId')->getData();
 
         try
         {
