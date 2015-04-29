@@ -42,7 +42,7 @@ class Ligne
             return $this->fields->quantite;
         }
 
-        return $this->hydrateFieldsFromBulletin($bulletin);
+        return $this->hydrateFromBulletin($bulletin);
     }
 
     public function getValeur(Domains\Bulletin $bulletin)
@@ -52,10 +52,10 @@ class Ligne
             return $this->fields->valeur;
         }
 
-        return $this->hydrateFieldsFromBulletin($bulletin);
+        return $this->hydrateFromBulletin($bulletin);
     }
 
-    private function hydrateFieldsFromBulletin(Domains\Bulletin $bulletin)
+    public function hydrateFromBulletin(Domains\Bulletin $bulletin)
     {
         $hydrateFromBulletinClosure = $this->fields->hydrateFromBulletinClosure;
         $hydrateFromBulletinClosure($bulletin);
