@@ -7,7 +7,8 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 class Bulletin
 {
     private
-        $fields;
+        $fields,
+        $salaire;
 
     public function __construct(DTO\Bulletin $bulletinDTO)
     {
