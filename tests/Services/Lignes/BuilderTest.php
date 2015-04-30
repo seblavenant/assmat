@@ -51,7 +51,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey(Constants\Lignes\Code::CSG_RDS, $lignes);
         $this->assertEquals(
-            42,
+            4.55,
             $lignes[Constants\Lignes\Code::CSG_RDS]->getValeur($bulletin),
             '#' . Constants\Lignes\Code::CSG_RDS . ' #getValeur'
         );

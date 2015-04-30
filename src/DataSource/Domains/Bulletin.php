@@ -43,4 +43,14 @@ class Bulletin
     {
         return $this->fields->load('contrat');
     }
+
+    public function setSalaire(Ligne $salaire)
+    {
+        $this->salaire = $salaire;
+    }
+
+    public function getSalaire()
+    {
+        return $this->salaire;
+    }
 }

@@ -18,7 +18,7 @@ class CsgRds
         $ligneDTO->type = Constants\Lignes\Type::RETENUE;
         $ligneDTO->taux = self::TAUX;
         $ligneDTO->hydrateFromBulletinClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
-            $ligneDTO->valeur = 42;
+            $ligneDTO->valeur = round($bulletin->getSalaire()->getValeur($bulletin) * 0.98 * $ligneDTO->taux / 100, 2);
         };
 
         return new Domains\Ligne($ligneDTO);
