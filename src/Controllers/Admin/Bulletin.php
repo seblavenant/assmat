@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Assmat\DataSource\Repositories;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services\Evenements;
+use Assmat\Services;
 
 class Bulletin
 {
@@ -43,6 +44,7 @@ class Bulletin
         return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
             'contrat' => $contrat,
             'evenements' => $evenements,
+            'bulletin' => (new Services\Bulletin\Builder(new Repositories\Memory\Ligne\Template()))->build($contrat, $evenements),
         )));
     }
 

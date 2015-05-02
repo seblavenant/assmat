@@ -8,10 +8,12 @@ class Ligne implements DataTransferObject
 {
     public
         $id,
-        $code,
+        $label,
         $type,
+        $action,
+        $context,
+        $base,
         $taux,
         $quantite,
-        $valeur,
-        $hydrateFromBulletinClosure;
+        $valeur;
 }

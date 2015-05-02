@@ -24,7 +24,7 @@ class Evenement extends AbstractType
                 'input' => 'string',
                 'widget' => 'single_text',
             ))
-            ->add('type')
+            ->add('typeId')
             ->add('contratId')
             ;
     }

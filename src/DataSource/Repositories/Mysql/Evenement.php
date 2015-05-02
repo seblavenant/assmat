@@ -93,7 +93,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'date', 'heure_debut', 'heure_fin', 'type'))
+            ->select(array('id', 'date', 'heure_debut', 'heure_fin', 'type_id'))
             ->from(self::TABLE_NAME)
             ->orderBy('date', OrderBy::DESC)
             ->orderBy('heure_debut', OrderBy::DESC);

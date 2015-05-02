@@ -2,9 +2,9 @@
 
 namespace Assmat\DataSource\Repositories;
 
-interface Ligne
+interface LigneTemplate
 {
     public function find($id);
 
-    public function findFromCodes(array $codes);
+    public function findAll();
 }

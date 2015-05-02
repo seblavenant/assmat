@@ -2,22 +2,22 @@
 
 namespace Assmat\Iterators\Filters\Lignes;
 
-class Code extends \FilterIterator
+class Type extends \FilterIterator
 {
     private
-        $codes;
+        $types;
 
-    public function __construct(\Iterator $iterator, array $codes)
+    public function __construct(\Iterator $iterator, array $types)
     {
         parent::__construct($iterator);
 
-        $this->codes = $codes;
+        $this->types = $types;
     }
 
     public function accept()
     {
         $ligne = $this->getInnerIterator()->current();
-        if(in_array($ligne->getCode(), $this->codes))
+        if(in_array($ligne->getType(), $this->types))
         {
             return true;
         }

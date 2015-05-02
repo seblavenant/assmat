@@ -47,10 +47,10 @@
                             {% for evenement in evenements  %}
                             <tr>
                                 <td>{{ evenement.date | date('Y-m-d') }}</td>
-                                <td>{{ evenement.type }}</td>
+                                <td>{{ evenement.typeId }}</td>
                                 <td>{{ evenement.heureDebut | date('h:i') }}</td>
                                 <td>{{ evenement.heureFin | date('h:i') }}</td>
-                                <td>{{ evenement.duration | date('%H') }}h{{ evenement.duration | date('%I') }}</td>
+                                <td>{{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -64,7 +64,7 @@
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>****
+                        <i class="fa fa-user"></i>Salaire net : {{ bulletin.salaireNet }} €
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -73,9 +73,26 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <ul>
-                        <li>Salaire de base : {{ contrat.baseHeure }} €</li>
-                    </ul>
+                    <table class="table">
+                        <thead>
+                            <th>Label</td>
+                            <th>Base</th>
+                            <th>Taux / Qté</th>
+                            <th>Gain</th>
+                            <th>Retenue</th>
+                        </thead>
+                        <tbody>
+                        {% for ligne in bulletin.lignes %}
+                            <tr>
+                                <td>{{ ligne.label }}</td>
+                                <td>{{ ligne.base }}</td>
+                                <td>{{ ligne.taux ? ligne.taux ~ '%' }}{{ ligne.quantite ? ligne.quantite }}</td>
+                                <td>{{ ligne.action == 1 ? ligne.valeur }}</td>
+                                <td>{{ ligne.action == 2 ? ligne.valeur }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

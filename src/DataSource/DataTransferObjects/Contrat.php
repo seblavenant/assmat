@@ -14,5 +14,5 @@ class Contrat implements DataTransferObject
         $joursGarde,
         $heuresHebdo,
         $indemnites,
-        $type;
+        $typeId;
 }

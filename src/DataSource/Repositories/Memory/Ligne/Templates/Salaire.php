@@ -1,6 +1,6 @@
 <?php
 
-namespace Assmat\DataSource\Repositories\Memory\Lignes;
+namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
@@ -11,9 +11,10 @@ class Salaire
     public function getDomain()
     {
         $ligneDTO = new DTO\Ligne();
-        $ligneDTO->code = Constants\Lignes\Code::SALAIRE;
-        $ligneDTO->type = Constants\Lignes\Type::GAIN;
-        $ligneDTO->hydrateFromBulletinClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
+        $ligneDTO->label = 'Salaire';
+        $ligneDTO->type = Constants\Lignes\Type::SALAIRE;
+        $ligneDTO->action = Constants\Lignes\Action::GAIN;
+        $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
             return $this->hydrateFromBulletin($ligneDTO, $bulletin);
         };
 
@@ -22,12 +23,14 @@ class Salaire
 
     private function hydrateFromBulletin($ligneDTO, $bulletin)
     {
+        $contrat = $bulletin->getContrat();
+        $base = $contrat->getSalaireHoraire();
+
         $heures = 0;
         $salaireBrut = 0;
 
         foreach($bulletin->getEvenements() as $evenement)
         {
-            $contrat = $bulletin->getContrat();
             $evenementHeures = 0;
 
             switch($evenement->getTypeId())
@@ -40,12 +43,11 @@ class Salaire
             }
 
             $heures += $evenementHeures;
-            $salaireBrut += $contrat->getSalaireHoraire() * $evenementHeures;
+            $salaireBrut +=  $base * $evenementHeures;
         }
 
+        $ligneDTO->base = $base;
         $ligneDTO->quantite = $heures;
         $ligneDTO->valeur = $salaireBrut;
-
-        $bulletin->setSalaire(new Domains\Ligne($ligneDTO));
     }
 }
