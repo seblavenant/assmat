@@ -57,10 +57,10 @@
                                     {{ evenement.heureFin | date('h:i') }}</td>
                                 {% endif %}
                                 <td>
-                                {% if(evenement.typeId != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
-                                    {{ formatDecimalToHour(contrat.heuresJour) }}
-                                {% else %}
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
                                     {{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}
+                                {% elseif(evenement.typeId != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::ABSENCE_NON_PAYEE')) %}
+                                    {{ formatDecimalToHour(contrat.heuresJour) }}
                                 {% endif %}
                                 </td>
                             </tr>

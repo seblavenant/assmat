@@ -36,10 +36,14 @@ class Salaire
             switch($evenement->getTypeId())
             {
                 case Constants\Evenements\Type::GARDE :
+                case Constants\Evenements\Type::ABSENCE_PAYEE;
                     $evenementHeures = $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
                     break;
                 case Constants\Evenements\Type::CONGE_PAYE :
                     $evenementHeures = $contrat->getHeuresJour();
+                    break;
+                case Constants\Evenements\Type::ABSENCE_NON_PAYEE;
+                    break;
             }
 
             $heures += $evenementHeures;
