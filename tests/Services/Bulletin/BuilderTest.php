@@ -44,7 +44,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $bulletin = $bulletinBuilder->build($contrat, $evenements);
 
         $builderValidator = new BuilderValidator($bulletin);
-        $builderValidator->assertCgsRds(4.55);
+        $builderValidator->assertCgsRds(4.56);
 //         $builderValidator->assertCgsDeductible(8.00);
         $builderValidator->assertSalaire(16, 160);
     }
