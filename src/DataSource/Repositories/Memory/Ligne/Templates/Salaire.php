@@ -35,7 +35,7 @@ class Salaire
 
             switch($evenement->getTypeId())
             {
-                case Constants\Evenements\Type::ACCUEIL :
+                case Constants\Evenements\Type::GARDE :
                     $evenementHeures = $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
                     break;
                 case Constants\Evenements\Type::CONGE_PAYE :

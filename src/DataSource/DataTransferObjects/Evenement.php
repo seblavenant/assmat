@@ -3,9 +3,9 @@
 namespace Assmat\DataSource\DataTransferObjects;
 
 use Doctrine\DBAL\Driver\Connection;
-use Spear\Silex\Persistence\DataTransferObject;
+use Spear\Silex\Persistence\DataTransferObjects\Related;
 
-class Evenement implements DataTransferObject
+class Evenement extends Related
 {
     public
         $id,
@@ -14,4 +14,11 @@ class Evenement implements DataTransferObject
         $heureFin,
         $typeId,
         $contratId;
+
+    public function __construct()
+    {
+        parent::__construct(array(
+            'type'
+        ));
+    }
 }

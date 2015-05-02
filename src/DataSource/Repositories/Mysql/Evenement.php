@@ -12,11 +12,22 @@ use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
 use Assmat\Services\Evenements\Periods\Period;
+use Doctrine\DBAL\Driver\Connection;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
     const
         TABLE_NAME = 'evenement';
+
+    private
+        $evenementTypeRepository;
+
+    public function __construct(Connection $db, Repositories\EvenementType $evenementTypeRepository)
+    {
+        parent::__construct($db);
+
+        $this->evenementTypeRepository = $evenementTypeRepository;
+    }
 
     public function find($id)
     {
@@ -114,6 +125,10 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
 
     public function getDomain(DTO $dto)
     {
+        $dto->set('type', function() use($dto) {
+            return $this->evenementTypeRepository->find($dto->typeId);
+        });
+
         return new Domains\Evenement($dto);
     }
 

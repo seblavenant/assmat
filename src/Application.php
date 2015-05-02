@@ -98,7 +98,11 @@ class Application extends AbstractApplication
         };
 
         $this['repository.evenement'] = function($c) {
-            return new Repositories\Mysql\Evenement($c['db.default']);
+            return new Repositories\Mysql\Evenement($c['db.default'], $c['repository.evenementType']);
+        };
+
+        $this['repository.evenementType'] = function($c) {
+            return new Repositories\Memory\Evenement\Type();
         };
     }
 }

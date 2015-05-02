@@ -34,7 +34,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="box-content" style="display: none;">
+                <div class="box-content">
                     <table class="table">
                         <thead>
                             <th>Date</td>
@@ -47,10 +47,22 @@
                             {% for evenement in evenements  %}
                             <tr>
                                 <td>{{ evenement.date | date('Y-m-d') }}</td>
-                                <td>{{ evenement.typeId }}</td>
-                                <td>{{ evenement.heureDebut | date('h:i') }}</td>
-                                <td>{{ evenement.heureFin | date('h:i') }}</td>
-                                <td>{{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}</td>
+                                <td>{{ evenement.type.label }}</td>
+                                <td>
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ evenement.heureDebut | date('h:i') }}</td>
+                                {% endif %}
+                                <td>
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ evenement.heureFin | date('h:i') }}</td>
+                                {% endif %}
+                                <td>
+                                {% if(evenement.typeId != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ formatDecimalToHour(contrat.heuresJour) }}
+                                {% else %}
+                                    {{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}
+                                {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>

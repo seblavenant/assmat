@@ -48,4 +48,9 @@ class Evenement
     {
         return $this->fields->typeId;
     }
+
+    public function getType()
+    {
+        return $this->fields->load('type');
+    }
 }

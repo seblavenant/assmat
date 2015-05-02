@@ -29,7 +29,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $evenementAccueil->date = new \DateTime($year . '-' . $month . '-01');
         $evenementAccueil->heureDebut = new \DateTime($year . '-' . $month . '-01 08:00');
         $evenementAccueil->heureFin = new \DateTime($year . '-' . $month . '-01 16:30');
-        $evenementAccueil->typeId = Constants\Evenements\Type::ACCUEIL;
+        $evenementAccueil->typeId = Constants\Evenements\Type::GARDE;
 
         $evenementCP = new DTO\Evenement();
         $evenementCP->date = new \DateTime($year . '-' . $month . '-02');
