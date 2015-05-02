@@ -92,7 +92,7 @@ $(document).ready(function()
             {
                 start: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureDebut | date('H:i:s') }}',
                 end: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureFin | date('H:i:s') }}',
-                title: '{% if evenement.type == 2 %}Congé payé{% endif %}',
+                title: '{% if evenement.typeId == 2 %}Congé payé{% endif %}',
                 allDay: {% if evenement.heureDebut | date('H:i') == '00:00' and evenement.heureFin | date('H:i') == '00:00' %}true{% else %}false{% endif %}
             },
             {% endfor %}
@@ -127,7 +127,7 @@ $(document).ready(function()
                         heureDebut : start.format('HH:mm'),
                         heureFin : end.format('HH:mm'),
                         contratId : '{{ contratId }}',
-                        type : 1
+                        typeId : 1
                     }
                 }
             })
@@ -171,7 +171,7 @@ $(document).ready(function()
                         heureDebut : event.start.format('HH:mm'),
                         heureFin : event.end.format('HH:mm'),
                         contratId : '{{ contratId }}',
-                        type : 1
+                        typeId : 1
                     }
                 }
             })
@@ -197,7 +197,7 @@ $(document).ready(function()
                         heureDebut : event.start.format('HH:mm'),
                         heureFin : event.end.format('HH:mm'),
                         contratId : '{{ contratId }}',
-                        type : 1
+                        typeId : 1
                     }
                 }
             })
@@ -234,7 +234,7 @@ $(document).ready(function()
                     evenement: {
                         date : date.format('YYYY-MM-DD'),
                         contratId : '{{ contratId }}',
-                        type : 2
+                        typeId : 2
                     }
                 }
             })
