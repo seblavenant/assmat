@@ -6,16 +6,16 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
 
-class CsgRds
+class CsgDeductible
 {
     const
-        TAUX = 2.9;
+        TAUX = 5.1;
 
     public function getDomain()
     {
         $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'CGS + RDS';
-        $ligneDTO->type = Constants\Lignes\Type::SECURITE_SOCIALE;
+        $ligneDTO->label = 'CGS Déductible';
+        $ligneDTO->type = Constants\Lignes\Type::CSG_RDS;
         $ligneDTO->action = Constants\Lignes\Action::RETENUE;
         $ligneDTO->context = Constants\Lignes\Context::COTISATION;
         $ligneDTO->taux = self::TAUX;

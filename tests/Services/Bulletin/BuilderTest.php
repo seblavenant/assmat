@@ -1,6 +1,8 @@
 <?php
 
-namespace Assmat\Services\Lignes;
+namespace Assmat\Services\Bulletin;
+
+require_once(__DIR__ . '/BuilderValidator.php');
 
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
@@ -8,6 +10,7 @@ use Assmat\Services\Lignes;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\Constants\Lignes\Code;
+use Assmat\Services\Bulletin;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,10 +19,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $month = '01';
         $year = '2015';
 
-        $contrat = new DTO\Contrat();
-        $contrat->salaireHoraire = 10;
-        $contrat->heuresHebdo = 30;
-        $contrat->joursGarde = 4;
+        $contratDTO = new DTO\Contrat();
+        $contratDTO->salaireHoraire = 10;
+        $contratDTO->heuresHebdo = 30;
+        $contratDTO->joursGarde = 4;
+        $contrat = new Domains\Contrat($contratDTO);
 
         $evenementAccueil = new DTO\Evenement();
         $evenementAccueil->date = new \DateTime($year . '-' . $month . '-01');
@@ -31,42 +35,18 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $evenementCP->date = new \DateTime($year . '-' . $month . '-02');
         $evenementCP->typeId = Constants\Evenements\Type::CONGE_PAYE;
 
-        $bulletinDTO = new DTO\Bulletin();
-        $bulletinDTO->set('contrat', new Domains\Contrat($contrat));
-        $bulletinDTO->set('evenements', array(
+        $evenements = array(
             new Domains\Evenement($evenementAccueil),
             new Domains\Evenement($evenementCP),
-        ));
-        $bulletin = new Domains\Bulletin($bulletinDTO);
-
-        $codes = array(
-            Code::SALAIRE,
-            Code::CSG_RDS,
         );
 
-        $lignesBuilder = new Lignes\Builder(new Repositories\Memory\Ligne());
-        $lignes = $lignesBuilder->build($codes, $bulletin);
+        $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
+        $bulletin = $bulletinBuilder->build($contrat, $evenements);
 
-        $lignes = iterator_to_array($lignes);
-
-        $this->assertArrayHasKey(Constants\Lignes\Code::CSG_RDS, $lignes);
-        $this->assertEquals(
-            4.55,
-            $lignes[Constants\Lignes\Code::CSG_RDS]->getValeur($bulletin),
-            '#' . Constants\Lignes\Code::CSG_RDS . ' #getValeur'
-        );
-
-        $this->assertArrayHasKey(Constants\Lignes\Code::SALAIRE, $lignes);
-        $this->assertEquals(
-            16,
-            $lignes[Constants\Lignes\Code::SALAIRE]->getQuantite($bulletin),
-            '#' . Constants\Lignes\Code::SALAIRE . ' #getQuantite'
-        );
-        $this->assertEquals(
-            160,
-            $lignes[Constants\Lignes\Code::SALAIRE]->getValeur($bulletin),
-            '#' . Constants\Lignes\Code::SALAIRE . ' getValeur'
-        );
+        $builderValidator = new BuilderValidator($bulletin);
+        $builderValidator->assertCgsRds(4.55);
+//         $builderValidator->assertCgsDeductible(8.00);
+        $builderValidator->assertSalaire(16, 160);
     }
 
 }

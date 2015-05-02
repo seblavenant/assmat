@@ -1,6 +1,6 @@
 <?php
 
-namespace Assmat\Services\Lignes;
+namespace Assmat\Services\Bulletin;
 
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
@@ -12,47 +12,37 @@ use Assmat\DataSource\Repositories\Memory\Lignes\Salaire;
 class Builder
 {
     private
-        $ligneRepository;
+        $ligneTemplateRepository;
 
-    public function __construct(Repositories\Ligne $ligneRepository)
+    public function __construct(Repositories\LigneTemplate $ligneTemplateRepository)
     {
-        $this->ligneRepository = $ligneRepository;
+        $this->ligneTemplateRepository = $ligneTemplateRepository;
     }
 
-    public function build(array $codes, Domains\Bulletin $bulletin)
+    public function build(Domains\Contrat $contrat, array $evenements)
     {
-        $lignes = $this->ligneRepository->findFromCodes($codes);
+        $lignes = $this->ligneTemplateRepository->findAll();
 
-        if(iterator_count($lignes) === 0)
-        {
-            return;
-        }
+        $bulletinDTO = new DTO\Bulletin();
+        $bulletinDTO->set('evenements', $evenements);
+        $bulletinDTO->set('contrat', $contrat);
+        $bulletinDTO->set('lignes', $lignes);
+        $bulletin = new Domains\Bulletin($bulletinDTO);
 
-        $ligneSalaire = $this->getLigneSalaire($lignes);
-        $ligneSalaire->hydrateFromBulletin($bulletin);
+        $this->hydrateLignes($lignes, Constants\Lignes\Context::REMUNERATION, $bulletin);
+        $this->hydrateLignes($lignes, Constants\Lignes\Context::COTISATION, $bulletin);
 
-        foreach($lignes as $ligne)
-        {
-            if($ligne->getCode() === Constants\Lignes\Code::SALAIRE)
-            {
-                continue;
-            }
-
-            $ligne->hydrateFromBulletin($bulletin);
-        }
-
-        return $lignes;
+        return $bulletin;
     }
 
-    private function getLigneSalaire($lignes)
+    private function hydrateLignes($lignes, $context, $bulletin)
     {
-        $ligneSalaireIterator = new FilterIterator\Lignes\Code($lignes, array(Constants\Lignes\Code::SALAIRE));
+        $lignesContext = new FilterIterator\Lignes\Action(new \ArrayIterator($lignes), $context);
 
-        if(iterator_count($ligneSalaireIterator) === 0)
+        foreach($lignesContext as $ligne)
         {
-            throw new \Exception('La ligne salaire est requise !');
+            $ligne->compute($bulletin);
         }
-
-        return current(iterator_to_array($ligneSalaireIterator));
     }
+
 }

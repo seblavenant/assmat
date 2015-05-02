@@ -2,9 +2,9 @@
 
 namespace Assmat\DataSource\Constants\Lignes;
 
-interface Type
+interface Action
 {
     const
-        GAIN = 'gain',
-        RETENUE = 'retenue';
+        GAIN = 1,
+        RETENUE = 2;
 }

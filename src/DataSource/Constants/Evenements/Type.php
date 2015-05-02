@@ -6,7 +6,7 @@ interface Type
 {
     const
         ACCUEIL = 1,
-        ABSENCE_PAYEE = 2,
+        ABSENCE_PAYEE = 4,
         ABSENCE_NON_PAYEE = 3,
-        CONGE_PAYE = 4;
+        CONGE_PAYE = 2;
 }

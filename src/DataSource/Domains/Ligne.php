@@ -20,14 +20,29 @@ class Ligne
         return $this->fields->id;
     }
 
-    public function getCode()
-    {
-        return $this->fields->code;
-    }
-
     public function getType()
     {
         return $this->fields->type;
+    }
+
+    public function getLabel()
+    {
+        return $this->fields->label;
+    }
+
+    public function getAction()
+    {
+        return $this->fields->action;
+    }
+
+    public function getContext()
+    {
+        return $this->fields->context;
+    }
+
+    public function getBase()
+    {
+        return $this->fields->base;
     }
 
     public function getTaux()
@@ -35,29 +50,19 @@ class Ligne
         return $this->fields->taux;
     }
 
-    public function getQuantite(Domains\Bulletin $bulletin)
+    public function getQuantite()
     {
-        if($this->fields->quantite !== null)
-        {
-            return $this->fields->quantite;
-        }
-
-        return $this->hydrateFromBulletin($bulletin);
+        return $this->fields->quantite;
     }
 
-    public function getValeur(Domains\Bulletin $bulletin)
+    public function getValeur()
     {
-        if($this->fields->valeur !== null)
-        {
-            return $this->fields->valeur;
-        }
-
-        return $this->hydrateFromBulletin($bulletin);
+        return $this->fields->valeur;
     }
 
-    public function hydrateFromBulletin(Domains\Bulletin $bulletin)
+    public function compute(Domains\Bulletin $bulletin)
     {
-        $hydrateFromBulletinClosure = $this->fields->hydrateFromBulletinClosure;
-        $hydrateFromBulletinClosure($bulletin);
+        $computeClosure = $this->fields->computeClosure;
+        $computeClosure($bulletin);
     }
 }

@@ -35,7 +35,7 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'nom', 'base_heure', 'type', 'employe_id'))
+            ->select(array('id', 'nom', 'salaire_horaire', 'jours_garde', 'heures_hebdo', 'type_id', 'employe_id'))
             ->from(self::DB_NAME);
 
         return $query;
@@ -46,8 +46,10 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
             'nom' => new Fields\NotNullable(new Fields\String('nom')),
-            'baseHeure' => new Fields\NotNullable(new Fields\Float('base_heure')),
-            'type' => new Fields\NotNullable(new Fields\Integer('type')),
+            'salaireHoraire' => new Fields\NotNullable(new Fields\Float('salaire_horaire')),
+            'joursGarde' => new Fields\NotNullable(new Fields\Integer('jours_garde')),
+            'heuresHebdo' => new Fields\NotNullable(new Fields\Integer('heures_hebdo')),
+            'typeId' => new Fields\NotNullable(new Fields\Integer('type_id')),
             'employeId' => new Fields\NotNullable(new Fields\Integer('employe_id')),
         );
     }

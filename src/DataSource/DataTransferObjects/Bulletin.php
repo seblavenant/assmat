@@ -10,13 +10,15 @@ class Bulletin extends Related
         $id,
         $mois,
         $annee,
-        $contratId;
+        $contratId,
+        $lignes;
 
     public function __construct()
     {
         parent::__construct(array(
             'evenements',
             'contrat',
+            'lignes',
         ));
     }
 }

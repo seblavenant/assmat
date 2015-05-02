@@ -64,7 +64,7 @@ class Evenement
         }
         catch(\Exception $e)
         {
-            return new JsonResponse(array('error' => $e->getMessage(), 400));
+            return new JsonResponse(array('error' => $e->getMessage()), 400);
         }
 
         return new JsonResponse(array('ok'));
