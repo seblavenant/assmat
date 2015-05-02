@@ -2,9 +2,9 @@
 
 namespace Assmat\DataSource\Constants\Lignes;
 
-interface Type
+interface Code
 {
     const
-        GAIN = 'gain',
-        RETENUE = 'retenue';
+        SALAIRE = 'salaire',
+        CSG_RDS = 'csg-rds';
 }
