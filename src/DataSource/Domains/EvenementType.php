@@ -24,4 +24,9 @@ class EvenementType
     {
         return $this->fields->label;
     }
+
+    public function isDureeFixe()
+    {
+        return $this->fields->dureeFixe === true;
+    }
 }

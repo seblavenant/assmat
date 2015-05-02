@@ -8,5 +8,6 @@ class EvenementType implements DataTransferObject
 {
     public
         $id,
-        $label;
+        $label,
+        $dureeFixe;
 }

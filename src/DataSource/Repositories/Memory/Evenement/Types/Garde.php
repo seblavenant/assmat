@@ -13,6 +13,7 @@ class Garde
         $evenementTypeDTO = new DTO\EvenementType();
         $evenementTypeDTO->id = Constants\Evenements\Type::GARDE;
         $evenementTypeDTO->label = 'Garde';
+        $evenementTypeDTO->dureeFixe = false;
 
         return new Domains\EvenementType($evenementTypeDTO);
     }

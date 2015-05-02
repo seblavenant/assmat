@@ -6,13 +6,13 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
 
-class CongePaye
+class AbsenceNonPayee
 {
     public function getDomain()
     {
         $evenementTypeDTO = new DTO\EvenementType();
-        $evenementTypeDTO->id = Constants\Evenements\Type::CONGE_PAYE;
-        $evenementTypeDTO->label = 'Congé payé';
+        $evenementTypeDTO->id = Constants\Evenements\Type::ABSENCE_NON_PAYEE;
+        $evenementTypeDTO->label = 'Absence non payée';
         $evenementTypeDTO->dureeFixe = true;
 
         return new Domains\EvenementType($evenementTypeDTO);

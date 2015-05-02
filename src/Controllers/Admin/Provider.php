@@ -69,7 +69,7 @@ class Provider implements ControllerProviderInterface
     private function initializeEvenementControllers(ControllerCollection $controllers, Application $app)
     {
         $app['evenement.controller'] = $app->share(function() use($app) {
-            return new Evenement($app['twig'], $app['request'], $app['form.factory'], $app['repository.evenement']);
+            return new Evenement($app['twig'], $app['request'], $app['form.factory'], $app['repository.evenement'], $app['repository.evenementType']);
         });
 
         $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:setAction')

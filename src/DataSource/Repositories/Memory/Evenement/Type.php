@@ -15,6 +15,8 @@ class Type implements Repositories\EvenementType
         $this->types = array(
             Constants\Evenements\Type::GARDE => (new Types\Garde())->getDomain(),
             Constants\Evenements\Type::CONGE_PAYE => (new Types\CongePaye())->getDomain(),
+            Constants\Evenements\Type::ABSENCE_PAYEE => (new Types\AbsencePayee())->getDomain(),
+            Constants\Evenements\Type::ABSENCE_NON_PAYEE => (new Types\AbsenceNonPayee())->getDomain(),
         );
     }
 

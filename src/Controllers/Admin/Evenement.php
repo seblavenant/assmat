@@ -9,6 +9,7 @@ use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\Iterators\Filters as FilterIterators;
 
 class Evenement
 {
@@ -16,14 +17,16 @@ class Evenement
         $twig,
         $request,
         $formFactory,
-        $evenementRepository;
+        $evenementRepository,
+        $evenementTypeRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository, Repositories\EvenementType $evenementTypeRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->formFactory = $formFactory;
         $this->evenementRepository = $evenementRepository;
+        $this->evenementTypeRepository = $evenementTypeRepository;
     }
 
     public function listAction($contratId)
@@ -35,6 +38,7 @@ class Evenement
         return new Response($this->twig->render('admin/evenements/list.html.twig', array(
             'contratId' => $contratId,
             'evenements' => $evenements,
+            'evenementsType' => new FilterIterators\Evenements\Types\DureeFixe(new \ArrayIterator($this->evenementTypeRepository->findAll())),
             'mois' => $this->request->get('mois'),
             'annee' => $this->request->get('annee'),
         )));
