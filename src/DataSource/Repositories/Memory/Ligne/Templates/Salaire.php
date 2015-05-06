@@ -32,13 +32,12 @@ class Salaire
         foreach($bulletin->getEvenements() as $evenement)
         {
             $evenementHeures = 0;
-
             switch($evenement->getTypeId())
             {
                 case Constants\Evenements\Type::GARDE :
-                case Constants\Evenements\Type::ABSENCE_PAYEE;
                     $evenementHeures = $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
                     break;
+                case Constants\Evenements\Type::ABSENCE_PAYEE;
                 case Constants\Evenements\Type::CONGE_PAYE :
                     $evenementHeures = $contrat->getHeuresJour();
                     break;

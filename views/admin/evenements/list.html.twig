@@ -35,7 +35,7 @@
             <h4 class="page-header" id="events-templates-header">Evénements</h4>
 
             {% for evenementType in evenementsType %}
-                <div class="external-event">{{ evenementType.label }}</div>
+                <div class="external-event" data-id="{{ evenementType.id }}">{{ evenementType.label }}</div>
             {% endfor %}
         </div>
     </div>
@@ -77,7 +77,8 @@ $(document).ready(function()
         $('#external-events div.external-event').each(function()
         {
             $(this).data('eventObject', {
-                title: $.trim($(this).text())
+                title: $.trim($(this).text()),
+                typeId: $(this).data('id')
             });
             $(this).draggable({
                 zIndex: 999,
@@ -93,7 +94,7 @@ $(document).ready(function()
             {
                 start: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureDebut | date('H:i:s') }}',
                 end: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureFin | date('H:i:s') }}',
-                title: '{% if evenement.typeId == 2 %}Congé payé{% endif %}',
+                title: '{{ evenement.type.label }}',
                 allDay: {% if evenement.heureDebut | date('H:i') == '00:00' and evenement.heureFin | date('H:i') == '00:00' %}true{% else %}false{% endif %}
             },
             {% endfor %}
@@ -235,7 +236,7 @@ $(document).ready(function()
                     evenement: {
                         date : date.format('YYYY-MM-DD'),
                         contratId : '{{ contratId }}',
-                        typeId : 2
+                        typeId : copiedEventObject.typeId
                     }
                 }
             })
