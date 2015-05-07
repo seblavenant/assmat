@@ -14,39 +14,162 @@ use Assmat\Services\Bulletin;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBuild()
+    public function testCotisationsBuild()
     {
-        $month = '01';
-        $year = '2015';
-
         $contratDTO = new DTO\Contrat();
         $contratDTO->salaireHoraire = 10;
         $contratDTO->heuresHebdo = 30;
         $contratDTO->joursGarde = 4;
         $contrat = new Domains\Contrat($contratDTO);
 
-        $evenementAccueil = new DTO\Evenement();
-        $evenementAccueil->date = new \DateTime($year . '-' . $month . '-01');
-        $evenementAccueil->heureDebut = new \DateTime($year . '-' . $month . '-01 08:00');
-        $evenementAccueil->heureFin = new \DateTime($year . '-' . $month . '-01 16:30');
-        $evenementAccueil->typeId = Constants\Evenements\Type::GARDE;
-
-        $evenementCP = new DTO\Evenement();
-        $evenementCP->date = new \DateTime($year . '-' . $month . '-02');
-        $evenementCP->typeId = Constants\Evenements\Type::CONGE_PAYE;
-
         $evenements = array(
-            new Domains\Evenement($evenementAccueil),
-            new Domains\Evenement($evenementCP),
+            $this->getEvenementGarde()
         );
 
         $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
         $bulletin = $bulletinBuilder->build($contrat, $evenements);
 
         $builderValidator = new BuilderValidator($bulletin);
-        $builderValidator->assertCgsRds(4.56);
-//         $builderValidator->assertCgsDeductible(8.00);
-        $builderValidator->assertSalaire(16, 160);
+        $builderValidator->assertSalaire(8.5, 85);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_RDS, 2.42);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_DEDUCTIBLE, 4.26);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::SECURITE_SOCIALE, 6.72);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::RETRAITE_COMPLEMENTAIRE, 2.64);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::PREVOYANCE, 0.98);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::AGFF, 0.68);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::ASSURANCE_CHOMAGE, 2.04);
     }
 
+    public function testContratProvider()
+    {
+        return array(
+            // test garde
+            array(
+                Constants\Contrats\Salaire::HEURES, 8.5, 85,
+                array(
+                    $this->getEvenementGarde()
+                ),
+            ),
+            array(
+                Constants\Contrats\Salaire::MENSUALISE, 130, 1300,
+                array(
+                    $this->getEvenementGarde()
+                ),
+            ),
+            // test absence non payee
+            array(
+                Constants\Contrats\Salaire::HEURES, 0, 0,
+                array(
+                    $this->getEvenementAbsenceNonPayee()
+                ),
+            ),
+            array(
+                Constants\Contrats\Salaire::MENSUALISE, 122.5, 1225,
+                array(
+                    $this->getEvenementAbsenceNonPayee()
+                ),
+            ),
+            // test absence payee
+            array(
+                Constants\Contrats\Salaire::HEURES, 7.5, 75,
+                array(
+                    $this->getEvenementAbsencePayee()
+                ),
+            ),
+            array(
+                Constants\Contrats\Salaire::MENSUALISE, 130, 1300,
+                array(
+                    $this->getEvenementAbsencePayee()
+                ),
+            ),
+            // test congés payés
+            array(
+                Constants\Contrats\Salaire::HEURES, 7.5, 75,
+                array(
+                    $this->getEvenementCongePaye()
+                ),
+            ),
+            array(
+                Constants\Contrats\Salaire::MENSUALISE, 130, 1300,
+                array(
+                    $this->getEvenementAbsencePayee()
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider testContratProvider
+     */
+    public function testBuild($typeID, $heures, $salaire, $evenements, $skipped = false)
+    {
+        if($skipped === true)
+        {
+            $this->markTestIncomplete(
+                'This functionality has not been implemented yet.'
+            );
+        }
+
+        $contratDTO = $this->getBaseContratDTO();
+        $contratDTO->typeId = $typeID;
+        $contrat = new Domains\Contrat($contratDTO);
+
+        $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
+        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+
+        $builderValidator = new BuilderValidator($bulletin);
+        $builderValidator->assertSalaire($heures, $salaire);
+    }
+
+    private function getBaseContratDTO()
+    {
+        $contratDTO = new DTO\Contrat();
+        $contratDTO->salaireHoraire = 10;
+        $contratDTO->heuresHebdo = 30;
+        $contratDTO->joursGarde = 4;
+
+        return $contratDTO;
+    }
+
+    private function getBaseEvenementDTO()
+    {
+        $evenementDTO = new DTO\Evenement();
+        $evenementDTO->date = new \DateTime('2015-01-01');
+
+        return $evenementDTO;
+    }
+
+    private function getEvenementGarde()
+    {
+        $evenementGarde = $this->getBaseEvenementDTO();
+        $evenementGarde->heureDebut = new \DateTime('2015-01-01 08:00');
+        $evenementGarde->heureFin = new \DateTime('2015-01-01 16:30');
+        $evenementGarde->typeId = Constants\Evenements\Type::GARDE;
+
+        return new Domains\Evenement($evenementGarde);
+    }
+
+    private function getEvenementAbsenceNonPayee()
+    {
+        $evenementGarde = $this->getBaseEvenementDTO();
+        $evenementGarde->typeId = Constants\Evenements\Type::ABSENCE_NON_PAYEE;
+
+        return new Domains\Evenement($evenementGarde);
+    }
+
+    private function getEvenementAbsencePayee()
+    {
+        $evenementGarde = $this->getBaseEvenementDTO();
+        $evenementGarde->typeId = Constants\Evenements\Type::ABSENCE_PAYEE;
+
+        return new Domains\Evenement($evenementGarde);
+    }
+
+    private function getEvenementCongePaye()
+    {
+        $evenementGarde = $this->getBaseEvenementDTO();
+        $evenementGarde->typeId = Constants\Evenements\Type::CONGE_PAYE;
+
+        return new Domains\Evenement($evenementGarde);
+    }
 }

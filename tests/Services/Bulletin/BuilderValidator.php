@@ -8,46 +8,36 @@ use Assmat\DataSource\Domains\Bulletin;
 class BuilderValidator extends \PHPUnit_Framework_TestCase
 {
     private
-        $bulletin;
+        $bulletin,
+        $lignes;
 
     public function __construct(Bulletin $bulletin)
     {
         $this->bulletin = $bulletin;
+        $this->lignes = $bulletin->getLignes();
     }
 
-    public function assertCgsRds($expected)
+    public function assertCotisation($code, $expected)
     {
-        $this->assertCgs(Constants\Lignes\Type::CSG_RDS, $expected);
-    }
-
-    public function assertCgsDeductible($expected)
-    {
-        $this->assertCgs(Constants\Lignes\Type::CSG_DECUCTIBLE, $expected);
-    }
-
-    private function assertCgs($code, $expected)
-    {
-        $lignes = $this->bulletin->getLignes();
-        $this->assertArrayHasKey($code, $lignes);
+        $this->assertArrayHasKey($code, $this->lignes);
         $this->assertEquals(
             $expected,
-            $lignes[$code]->getValeur($this->bulletin),
+            $this->lignes[$code]->getValeur($this->bulletin),
             '#' . $code . ' #getValeur'
         );
     }
 
     public function assertSalaire($quantiteExpected, $valeurExpected)
     {
-        $lignes = $this->bulletin->getLignes();
-        $this->assertArrayHasKey(Constants\Lignes\Type::SALAIRE, $lignes);
+        $this->assertArrayHasKey(Constants\Lignes\Type::SALAIRE, $this->lignes);
         $this->assertEquals(
             $quantiteExpected,
-            $lignes[Constants\Lignes\Type::SALAIRE]->getQuantite($this->bulletin),
+            $this->lignes[Constants\Lignes\Type::SALAIRE]->getQuantite($this->bulletin),
             '#' . Constants\Lignes\Type::SALAIRE . ' #getQuantite'
         );
         $this->assertEquals(
             $valeurExpected,
-            $lignes[Constants\Lignes\Type::SALAIRE]->getValeur($this->bulletin),
+            $this->lignes[Constants\Lignes\Type::SALAIRE]->getValeur($this->bulletin),
             '#' . Constants\Lignes\Type::SALAIRE . ' getValeur'
         );
     }
