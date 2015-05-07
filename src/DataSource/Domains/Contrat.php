@@ -3,9 +3,13 @@
 namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\DataSource\Constants;
 
 class Contrat
 {
+    const
+        NB_SEMAINE_AN_DEFAULT = 52;
+
     private
         $fields;
 
@@ -52,5 +56,25 @@ class Contrat
     public function getBulletins()
     {
         return $this->fields->load('bulletins');
+    }
+
+    public function getNombreSemainesAn()
+    {
+        if($this->fields->nombreSemainesAn === null)
+        {
+            $this->fields->nombreSemainesAn = self::NB_SEMAINE_AN_DEFAULT;
+        }
+
+        return $this->fields->nombreSemainesAn;
+    }
+
+    public function getTypeId()
+    {
+        return $this->fields->typeId;
+    }
+
+    public function isMensualise()
+    {
+        return $this->fields->typeId === Constants\Contrats\Salaire::MENSUALISE;
     }
 }
