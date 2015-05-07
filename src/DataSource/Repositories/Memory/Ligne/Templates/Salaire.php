@@ -28,7 +28,6 @@ class Salaire
 
         $heuresPayees = 0;
         $heuresNonPayees = 0;
-        $salaireBrut = 0;
 
         foreach($bulletin->getEvenements() as $evenement)
         {
@@ -50,7 +49,6 @@ class Salaire
 
             $heuresPayees += $evenementHeuresPayees;
             $heuresNonPayees += $evenementHeuresNonPayees;
-            $salaireBrut +=  $ligneDTO->base * $evenementHeuresPayees;
         }
 
         switch($contrat->getTypeId())
