@@ -1,20 +1,20 @@
 <?php
 
-namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates;
+namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Cotisations;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
 
-class RetraiteComplementaire
+class Agff
 {
     const
-        TAUX = 3.10;
+        TAUX = 0.80;
 
     public function getDomain()
     {
         $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'Retraite complementaire';
+        $ligneDTO->label = 'AGFF';
         $ligneDTO->type = Constants\Lignes\Type::CSG_RDS;
         $ligneDTO->action = Constants\Lignes\Action::RETENUE;
         $ligneDTO->context = Constants\Lignes\Context::COTISATION;

@@ -31,6 +31,7 @@ class Builder
 
         $this->hydrateLignes($lignes, Constants\Lignes\Context::REMUNERATION, $bulletin);
         $this->hydrateLignes($lignes, Constants\Lignes\Context::COTISATION, $bulletin);
+        $this->hydrateLignes($lignes, Constants\Lignes\Context::IDEMNITES, $bulletin);
 
         return $bulletin;
     }

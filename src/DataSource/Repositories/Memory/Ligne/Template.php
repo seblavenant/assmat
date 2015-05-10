@@ -16,14 +16,14 @@ class Template implements Repositories\LigneTemplate
     public function __construct()
     {
         $this->lignes = array(
-            Constants\Lignes\Type::SALAIRE => (new Templates\Salaire())->getDomain(),
-            Constants\Lignes\Type::CSG_RDS => (new Templates\CsgRds())->getDomain(),
-            Constants\Lignes\Type::CSG_DEDUCTIBLE => (new Templates\CsgDeductible())->getDomain(),
-            Constants\Lignes\Type::SECURITE_SOCIALE => (new Templates\SecuriteSociale())->getDomain(),
-            Constants\Lignes\Type::RETRAITE_COMPLEMENTAIRE => (new Templates\RetraiteComplementaire())->getDomain(),
-            Constants\Lignes\Type::PREVOYANCE => (new Templates\Prevoyance())->getDomain(),
-            Constants\Lignes\Type::AGFF => (new Templates\Agff())->getDomain(),
-            Constants\Lignes\Type::ASSURANCE_CHOMAGE => (new Templates\AssuranceChomage())->getDomain(),
+            Constants\Lignes\Type::SALAIRE => (new Templates\Remunerations\Salaire())->getDomain(),
+            Constants\Lignes\Type::CSG_RDS => (new Templates\Cotisations\CsgRds())->getDomain(),
+            Constants\Lignes\Type::CSG_DEDUCTIBLE => (new Templates\Cotisations\CsgDeductible())->getDomain(),
+            Constants\Lignes\Type::SECURITE_SOCIALE => (new Templates\Cotisations\SecuriteSociale())->getDomain(),
+            Constants\Lignes\Type::RETRAITE_COMPLEMENTAIRE => (new Templates\Cotisations\RetraiteComplementaire())->getDomain(),
+            Constants\Lignes\Type::PREVOYANCE => (new Templates\Cotisations\Prevoyance())->getDomain(),
+            Constants\Lignes\Type::AGFF => (new Templates\Cotisations\Agff())->getDomain(),
+            Constants\Lignes\Type::ASSURANCE_CHOMAGE => (new Templates\Cotisations\AssuranceChomage())->getDomain(),
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates;
+namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Remunerations;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
