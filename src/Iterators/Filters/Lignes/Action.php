@@ -5,19 +5,19 @@ namespace Assmat\Iterators\Filters\Lignes;
 class Action extends \FilterIterator
 {
     private
-        $action;
+        $context;
 
-    public function __construct(\Iterator $iterator, $action)
+    public function __construct(\Iterator $iterator, $context)
     {
         parent::__construct($iterator);
 
-        $this->action = $action;
+        $this->context = $context;
     }
 
     public function accept()
     {
         $ligne = $this->getInnerIterator()->current();
-        if($ligne->getAction() === $this->action)
+        if($ligne->getContext() === $this->context)
         {
             return true;
         }
