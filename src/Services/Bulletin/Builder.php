@@ -29,11 +29,36 @@ class Builder
         $bulletinDTO->set('lignes', $lignes);
         $bulletin = new Domains\Bulletin($bulletinDTO);
 
+        foreach($bulletin->getEvenements() as $evenement)
+        {
+            $evenement->computeFromType();
+
+            $bulletin->addHeuresPayees($this->computeHeuresPayees($evenement, $contrat));
+            $bulletin->addHeuresNonPayees(! $evenement->isJourPaye() ? $contrat->getHeuresJour() : null);
+            $bulletin->addJourGarde($evenement->isJourGarde() ? 1 : 0);
+            $bulletin->addCongePaye($evenement->isCongePaye() ? 1 : 0);
+        }
+
         $this->hydrateLignes($lignes, Constants\Lignes\Context::REMUNERATION, $bulletin);
         $this->hydrateLignes($lignes, Constants\Lignes\Context::COTISATION, $bulletin);
-        $this->hydrateLignes($lignes, Constants\Lignes\Context::IDEMNITES, $bulletin);
+        $this->hydrateLignes($lignes, Constants\Lignes\Context::INDEMNITE, $bulletin);
 
         return $bulletin;
+    }
+
+    private function computeHeuresPayees($evenement, $contrat)
+    {
+        if(! $evenement->isJourPaye())
+        {
+            return;
+        }
+
+        if(! $evenement->getType()->isDureeFixe())
+        {
+            return $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
+        }
+
+        return $contrat->getHeuresJour();
     }
 
     private function hydrateLignes($lignes, $context, $bulletin)

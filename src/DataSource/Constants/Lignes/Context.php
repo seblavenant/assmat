@@ -7,5 +7,5 @@ interface Context
     const
         REMUNERATION = 1,
         COTISATION = 2,
-        IDEMNITES = 3;
+        INDEMNITE = 3;
 }

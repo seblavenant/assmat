@@ -10,6 +10,10 @@ class Bulletin
 {
     private
         $fields,
+        $heuresPayees,
+        $heuresNonPayees,
+        $joursGardes,
+        $congesPayes,
         $salaireBrut,
         $salaireNet;
 
@@ -85,5 +89,35 @@ class Bulletin
         }
 
         return $this->salaireNet;
+    }
+
+    public function addHeuresPayees($heuresPayees)
+    {
+        $this->heuresPayees += (float) $heuresPayees;
+    }
+
+    public function addHeuresNonPayees($heuresNonPayees)
+    {
+        $this->heuresNonPayees += (float) $heuresNonPayees;
+    }
+
+    public function addJourGarde($jourGarde)
+    {
+        $this->joursGardes += (int) $jourGarde;
+    }
+
+    public function addCongePaye($congePaye)
+    {
+        $this->congePaye += (int) $congePaye;
+    }
+
+    public function getHeuresPayee()
+    {
+        return $this->heuresPayees;
+    }
+
+    public function getHeuresNonPayee()
+    {
+        return $this->heuresNonPayees;
     }
 }

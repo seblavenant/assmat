@@ -29,4 +29,10 @@ class EvenementType
     {
         return $this->fields->dureeFixe === true;
     }
+
+    public function compute($evenement)
+    {
+        $computeClosure = $this->fields->computeClosure;
+        $computeClosure($evenement);
+    }
 }
