@@ -34,7 +34,7 @@ class Builder
             $evenement->computeFromType();
 
             $bulletin->addHeuresPayees($this->computeHeuresPayees($evenement, $contrat));
-            $bulletin->addHeuresNonPayees(! $evenement->isJourPaye() ? $contrat->getHeuresJour() : null);
+            $bulletin->addHeuresNonPayees(!$evenement->isJourPaye() ? $contrat->getHeuresJour() : null);
             $bulletin->addJourGarde($evenement->isJourGarde() ? 1 : 0);
             $bulletin->addCongePaye($evenement->isCongePaye() ? 1 : 0);
         }
@@ -48,12 +48,12 @@ class Builder
 
     private function computeHeuresPayees($evenement, $contrat)
     {
-        if(! $evenement->isJourPaye())
+        if(!$evenement->isJourPaye())
         {
             return;
         }
 
-        if(! $evenement->getType()->isDureeFixe())
+        if(!$evenement->getType()->isDureeFixe())
         {
             return $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
         }

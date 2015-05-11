@@ -26,6 +26,6 @@ class AdminExtension extends \Twig_Extension
 
     public function formatDecimalToHour($hour)
     {
-        return date("H\hi", mktime(0,0,0)+($hour*3600));
+        return date("H\hi", mktime(0, 0, 0) + ($hour * 3600));
     }
 }
