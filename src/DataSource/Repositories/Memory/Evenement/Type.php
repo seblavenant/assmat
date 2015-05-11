@@ -22,7 +22,7 @@ class Type implements Repositories\EvenementType
 
     public function find($id)
     {
-        if(! array_key_exists($id, $this->types))
+        if(!array_key_exists($id, $this->types))
         {
             throw new \Exception(sprintf('Le type d\'évenement %d n\'existe pas !', $id));
         }
