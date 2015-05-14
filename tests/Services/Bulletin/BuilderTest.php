@@ -40,7 +40,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $contratDTO = $this->getBaseContratDTO();
         $contratDTO->set('indemnites', function(){
             return array(
-                $this->getIdemniteNourriture(),
+                $this->getIndemnite(),
             );
         });
         $contrat = new Domains\Contrat($contratDTO);
@@ -188,12 +188,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         return new Domains\Evenement($evenementGarde);
     }
 
-    private function getIdemniteNourriture()
+    private function getIndemnite()
     {
         $indemniteDTO = new DTO\Indemnite();
+        $indemniteDTO->contratId = 1;
         $indemniteDTO->typeId = Constants\Lignes\Type::INDEMNITES_NOURRITURE;
         $indemniteDTO->montant = 2.5;
-        $indemniteDTO->contratId = 1;
 
         return new Domains\Indemnite($indemniteDTO);
     }

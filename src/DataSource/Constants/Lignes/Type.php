@@ -15,5 +15,6 @@ interface Type
         AGFF = 205,
         ASSURANCE_CHOMAGE = 206,
 
-        INDEMNITES_NOURRITURE = 300;
+        INDEMNITES_NOURRITURE = 300,
+        INDEMNITES_ENTRETIEN = 301;
 }
