@@ -15,7 +15,7 @@ class Console
     {
         $this->configuration = $dic['configuration'];
 
-        $dic["security.firewalls"] = array();
+        $dic['security.firewalls'] = array();
 
         $this->app = new \Symfony\Component\Console\Application('silex-spear-app');
 
