@@ -15,5 +15,6 @@ class Ligne implements DataTransferObject
         $base,
         $taux,
         $quantite,
-        $valeur;
+        $valeur,
+        $computeClosure;
 }
