@@ -131,44 +131,43 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         return $contratDTO;
     }
 
-    private function getBaseEvenementDTO()
+    private function getBaseEvenementDTO($evenementType)
     {
         $evenementDTO = new DTO\Evenement();
         $evenementDTO->date = new \DateTime('2015-01-01');
+        $evenementDTO->set('type', function() use($evenementType) {
+            return $evenementType;
+        });
 
         return $evenementDTO;
     }
 
     private function getEvenementGarde()
     {
-        $evenementGarde = $this->getBaseEvenementDTO();
+        $evenementGarde = $this->getBaseEvenementDTO((new Repositories\Memory\Evenement\Types\Garde())->getDomain());
         $evenementGarde->heureDebut = new \DateTime('2015-01-01 08:00');
         $evenementGarde->heureFin = new \DateTime('2015-01-01 16:30');
-        $evenementGarde->typeId = Constants\Evenements\Type::GARDE;
 
         return new Domains\Evenement($evenementGarde);
     }
 
     private function getEvenementAbsenceNonPayee()
     {
-        $evenementGarde = $this->getBaseEvenementDTO();
-        $evenementGarde->typeId = Constants\Evenements\Type::ABSENCE_NON_PAYEE;
+        $evenementGarde = $this->getBaseEvenementDTO((new Repositories\Memory\Evenement\Types\AbsenceNonPayee())->getDomain());
 
         return new Domains\Evenement($evenementGarde);
     }
 
     private function getEvenementAbsencePayee()
     {
-        $evenementGarde = $this->getBaseEvenementDTO();
-        $evenementGarde->typeId = Constants\Evenements\Type::ABSENCE_PAYEE;
+        $evenementGarde = $this->getBaseEvenementDTO((new Repositories\Memory\Evenement\Types\AbsencePayee())->getDomain());
 
         return new Domains\Evenement($evenementGarde);
     }
 
     private function getEvenementCongePaye()
     {
-        $evenementGarde = $this->getBaseEvenementDTO();
-        $evenementGarde->typeId = Constants\Evenements\Type::CONGE_PAYE;
+        $evenementGarde = $this->getBaseEvenementDTO((new Repositories\Memory\Evenement\Types\CongePaye())->getDomain());
 
         return new Domains\Evenement($evenementGarde);
     }

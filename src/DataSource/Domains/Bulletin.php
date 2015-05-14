@@ -108,7 +108,7 @@ class Bulletin
 
     public function addCongePaye($congePaye)
     {
-        $this->congePaye += (int) $congePaye;
+        $this->congesPayes += (int) $congePaye;
     }
 
     public function getHeuresPayee()
