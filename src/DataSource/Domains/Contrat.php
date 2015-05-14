@@ -8,7 +8,9 @@ use Assmat\DataSource\Constants;
 class Contrat
 {
     const
-        NB_SEMAINE_AN_DEFAULT = 52;
+        NB_SEMAINE_AN_DEFAULT = 52,
+        NB_JOUR_HEBDO_DEFAULT = 5,
+        CP_AN_DEFAULT = 25;
 
     private
         $fields;
@@ -81,6 +83,14 @@ class Contrat
     public function getIndemnites()
     {
         return $this->fields->load('indemnites');
+    }
+
+    public function getNbCongesPayesMensuel()
+    {
+        $baseSemaine = self::CP_AN_DEFAULT * $this->getNombreSemainesAn() / self::NB_SEMAINE_AN_DEFAULT;
+        $baseJour = $baseSemaine * $this->getJoursGarde() / self::NB_JOUR_HEBDO_DEFAULT;
+
+        return $baseJour / 12;
     }
 
 }
