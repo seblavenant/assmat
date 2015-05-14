@@ -76,7 +76,7 @@
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>Salaire net : {{ bulletin.salaireNet }} €
+                        <i class="fa fa-user"></i>Salaire net : {{ bulletin.salaireNet | round(2) }} €
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -97,10 +97,10 @@
                         {% for ligne in bulletin.lignes %}
                             <tr>
                                 <td>{{ ligne.label }}</td>
-                                <td>{{ ligne.base }}</td>
-                                <td>{{ ligne.taux ? ligne.taux ~ '%' }}{{ ligne.quantite ? ligne.quantite }}</td>
-                                <td>{{ ligne.action == 1 ? ligne.valeur }}</td>
-                                <td>{{ ligne.action == 2 ? ligne.valeur }}</td>
+                                <td>{{ ligne.base ? ligne.base | round(2) }}</td>
+                                <td>{{ ligne.taux ? ligne.taux | round(2) ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
+                                <td>{{ ligne.action == 1 ? ligne.valeur | round(2) }}</td>
+                                <td>{{ ligne.action == 2 ? ligne.valeur | round(2) }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
