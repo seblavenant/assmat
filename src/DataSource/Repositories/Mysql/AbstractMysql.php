@@ -39,12 +39,12 @@ abstract class AbstractMysql
     {
         $dataSet = $this->db->fetchAll($query->toString());
 
+        $domains = array();
         if(empty($dataSet))
         {
-            return null;
+            $dataSet = array();
         }
 
-        $domains = array();
         foreach($dataSet as $record)
         {
             $domains[] = $this->buildDomainObject($record);

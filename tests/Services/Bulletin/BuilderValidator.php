@@ -27,6 +27,21 @@ class BuilderValidator extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function assertIndemnites($code, $quantiteExpected, $valeurExpected)
+    {
+        $this->assertArrayHasKey($code, $this->lignes);
+        $this->assertEquals(
+            $quantiteExpected,
+            $this->lignes[$code]->getQuantite($this->bulletin),
+            '#' . $code . ' #getQuantite'
+        );
+        $this->assertEquals(
+            $valeurExpected,
+            $this->lignes[$code]->getValeur($this->bulletin),
+            '#' . $code . ' #getValeur'
+        );
+    }
+
     public function assertSalaire($quantiteExpected, $valeurExpected)
     {
         $this->assertArrayHasKey(Constants\Lignes\Type::SALAIRE, $this->lignes);

@@ -77,4 +77,10 @@ class Contrat
     {
         return $this->fields->typeId === Constants\Contrats\Salaire::MENSUALISE;
     }
+
+    public function getIndemnites()
+    {
+        return $this->fields->load('indemnites');
+    }
+
 }

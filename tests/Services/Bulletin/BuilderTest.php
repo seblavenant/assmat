@@ -16,10 +16,33 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testCotisationsBuild()
     {
-        $contratDTO = new DTO\Contrat();
-        $contratDTO->salaireHoraire = 10;
-        $contratDTO->heuresHebdo = 30;
-        $contratDTO->joursGarde = 4;
+        $contrat = new Domains\Contrat($this->getBaseContratDTO());
+
+        $evenements = array(
+            $this->getEvenementGarde()
+        );
+
+        $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
+        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+
+        $builderValidator = new BuilderValidator($bulletin);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_RDS, 2.42);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_DEDUCTIBLE, 4.26);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::SECURITE_SOCIALE, 6.72);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::RETRAITE_COMPLEMENTAIRE, 2.64);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::PREVOYANCE, 0.98);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::AGFF, 0.68);
+        $builderValidator->assertCotisation(Constants\Lignes\Type::ASSURANCE_CHOMAGE, 2.04);
+    }
+
+    public function testIndemnitesBuild()
+    {
+        $contratDTO = $this->getBaseContratDTO();
+        $contratDTO->set('indemnites', function(){
+            return array(
+                $this->getIdemniteNourriture(),
+            );
+        });
         $contrat = new Domains\Contrat($contratDTO);
 
         $evenements = array(
@@ -30,17 +53,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $bulletin = $bulletinBuilder->build($contrat, $evenements);
 
         $builderValidator = new BuilderValidator($bulletin);
-        $builderValidator->assertSalaire(8.5, 85);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_RDS, 2.42);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_DEDUCTIBLE, 4.26);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::SECURITE_SOCIALE, 6.72);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::RETRAITE_COMPLEMENTAIRE, 2.64);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::PREVOYANCE, 0.98);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::AGFF, 0.68);
-        $builderValidator->assertCotisation(Constants\Lignes\Type::ASSURANCE_CHOMAGE, 2.04);
+        $builderValidator->assertIndemnites(Constants\Lignes\Type::INDEMNITES_NOURRITURE, 1, 2.5);
     }
 
-    public function testContratProvider()
+    public function testSalaireBuildProvider()
     {
         return array(
             // test garde
@@ -99,9 +115,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testContratProvider
+     * @dataProvider testSalaireBuildProvider
      */
-    public function testBuild($typeID, $heures, $salaire, $evenements, $skipped = false)
+    public function testSalaireBuild($typeID, $heures, $salaire, $evenements, $skipped = false)
     {
         if($skipped === true)
         {
@@ -170,5 +186,15 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $evenementGarde = $this->getBaseEvenementDTO((new Repositories\Memory\Evenement\Types\CongePaye())->getDomain());
 
         return new Domains\Evenement($evenementGarde);
+    }
+
+    private function getIdemniteNourriture()
+    {
+        $indemniteDTO = new DTO\Indemnite();
+        $indemniteDTO->typeId = Constants\Lignes\Type::INDEMNITES_NOURRITURE;
+        $indemniteDTO->montant = 2.5;
+        $indemniteDTO->contratId = 1;
+
+        return new Domains\Indemnite($indemniteDTO);
     }
 }

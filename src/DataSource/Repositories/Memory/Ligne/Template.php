@@ -24,6 +24,7 @@ class Template implements Repositories\LigneTemplate
             Constants\Lignes\Type::PREVOYANCE => (new Templates\Cotisations\Prevoyance())->getDomain(),
             Constants\Lignes\Type::AGFF => (new Templates\Cotisations\Agff())->getDomain(),
             Constants\Lignes\Type::ASSURANCE_CHOMAGE => (new Templates\Cotisations\AssuranceChomage())->getDomain(),
+            Constants\Lignes\Type::INDEMNITES_NOURRITURE => (new Templates\Indemnites\Nourriture())->getDomain(),
         );
     }
 

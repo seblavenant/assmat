@@ -55,7 +55,7 @@ class Builder
 
         if(!$evenement->getType()->isDureeFixe())
         {
-            return $evenement->getDuree()->format('%h') + $evenement->getDuree()->format('%i') / 60;
+            return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
         }
 
         return $contrat->getHeuresJour();

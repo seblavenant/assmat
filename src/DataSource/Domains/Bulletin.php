@@ -120,4 +120,9 @@ class Bulletin
     {
         return $this->heuresNonPayees;
     }
+
+    public function getJoursGardes()
+    {
+        return $this->joursGardes;
+    }
 }

@@ -18,6 +18,10 @@ class Application extends AbstractApplication
         $this->configureTwig();
         $this->initializeRepositories();
         $this->initializeSecurity();
+
+        $this['bulletin.builder'] = function($c) {
+            return new Services\Bulletin\Builder($c['repository.ligneTemplate']);
+        };
     }
 
     protected function registerProviders()
@@ -90,7 +94,7 @@ class Application extends AbstractApplication
         };
 
         $this['repository.contrat'] = function($c) {
-            return new Repositories\Mysql\Contrat($c['db.default']);
+            return new Repositories\Mysql\Contrat($c['db.default'], $c['repository.indemnite']);
         };
 
         $this['repository.bulletin'] = function($c) {
@@ -101,8 +105,16 @@ class Application extends AbstractApplication
             return new Repositories\Mysql\Evenement($c['db.default'], $c['repository.evenementType']);
         };
 
+        $this['repository.indemnite'] = function($c) {
+            return new Repositories\Mysql\Indemnite($c['db.default']);
+        };
+
         $this['repository.evenementType'] = function($c) {
             return new Repositories\Memory\Evenement\Type();
+        };
+
+        $this['repository.ligneTemplate'] = function($c) {
+            return new Repositories\Memory\Ligne\Template();
         };
     }
 }

@@ -5,12 +5,15 @@ namespace Assmat\DataSource\Constants\Lignes;
 interface Type
 {
     const
-        SALAIRE = 1,
-        CSG_RDS = 3,
-        CSG_DEDUCTIBLE = 4,
-        SECURITE_SOCIALE = 5,
-        RETRAITE_COMPLEMENTAIRE = 6,
-        PREVOYANCE = 7,
-        AGFF = 8,
-        ASSURANCE_CHOMAGE = 9;
+        SALAIRE = 100,
+
+        CSG_RDS = 200,
+        CSG_DEDUCTIBLE = 201,
+        SECURITE_SOCIALE = 202,
+        RETRAITE_COMPLEMENTAIRE = 203,
+        PREVOYANCE = 204,
+        AGFF = 205,
+        ASSURANCE_CHOMAGE = 206,
+
+        INDEMNITES_NOURRITURE = 300;
 }

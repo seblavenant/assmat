@@ -5,7 +5,6 @@ namespace Assmat\Controllers\Admin;
 use Symfony\Component\HttpFoundation\Response;
 use Assmat\DataSource\Repositories;
 use Symfony\Component\HttpFoundation\Request;
-use Assmat\Services\Evenements;
 use Assmat\Services;
 
 class Bulletin
@@ -15,15 +14,17 @@ class Bulletin
         $request,
         $bulletinRepository,
         $evenementRepository,
-        $contratRepository;
+        $contratRepository,
+        $bulletinBuilder;
 
-    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->bulletinRepository = $bulletinRepository;
         $this->evenementRepository = $evenementRepository;
         $this->contratRepository = $contratRepository;
+        $this->bulletinBuilder = $bulletinBuilder;
     }
 
     public function indexAction($contratId)
@@ -39,12 +40,12 @@ class Bulletin
     public function newAction($contratId)
     {
         $contrat = $this->contratRepository->find($contratId);
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Evenements\Periods\Month(new \DateTime()));
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime()));
 
         return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
             'contrat' => $contrat,
             'evenements' => $evenements,
-            'bulletin' => (new Services\Bulletin\Builder(new Repositories\Memory\Ligne\Template()))->build($contrat, $evenements),
+            'bulletin' => $this->bulletinBuilder->build($contrat, $evenements),
         )));
     }
 

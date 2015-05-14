@@ -10,11 +10,22 @@ use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
+use Doctrine\DBAL\Driver\Connection;
 
 class Contrat extends AbstractMysql implements Repositories\Contrat
 {
     const
         DB_NAME = 'contrat';
+
+    private
+        $indemniteRepository;
+
+    public function __construct(Connection $db, Repositories\Indemnite $indemniteRepository)
+    {
+        parent::__construct($db);
+
+        $this->indemniteRepository = $indemniteRepository;
+    }
 
     public function find($id)
     {
@@ -56,6 +67,10 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
 
     public function getDomain(DataTransferObject $dto)
     {
+        $dto->set('indemnites', function() use($dto) {
+            return $this->indemniteRepository->findFromContrat($dto->id);
+        });
+
         return new Domains\Contrat($dto);
     }
 
