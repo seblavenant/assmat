@@ -14,7 +14,7 @@ class AbsenceNonPayee
         $evenementTypeDTO->id = Constants\Evenements\Type::ABSENCE_NON_PAYEE;
         $evenementTypeDTO->label = 'Absence non payée';
         $evenementTypeDTO->dureeFixe = true;
-        $evenementTypeDTO->computeClosure = function($evenement) {
+        $evenementTypeDTO->computeClosure = function() {
         };
 
         return new Domains\EvenementType($evenementTypeDTO);
