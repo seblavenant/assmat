@@ -109,11 +109,11 @@ class Application extends AbstractApplication
             return new Repositories\Mysql\Indemnite($c['db.default']);
         };
 
-        $this['repository.evenementType'] = function($c) {
+        $this['repository.evenementType'] = function() {
             return new Repositories\Memory\Evenement\Type();
         };
 
-        $this['repository.ligneTemplate'] = function($c) {
+        $this['repository.ligneTemplate'] = function() {
             return new Repositories\Memory\Ligne\Template();
         };
     }
