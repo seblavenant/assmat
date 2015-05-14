@@ -61,52 +61,52 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         return array(
             // test garde
             array(
-                Constants\Contrats\Salaire::HEURES, 8.5, 85,
+                Constants\Contrats\Salaire::HEURES, 8.5, 85, 65.26,
                 array(
                     $this->getEvenementGarde()
                 ),
             ),
             array(
-                Constants\Contrats\Salaire::MENSUALISE, 130, 1300,
+                Constants\Contrats\Salaire::MENSUALISE, 130, 1300, 998.27,
                 array(
                     $this->getEvenementGarde()
                 ),
             ),
             // test absence non payee
             array(
-                Constants\Contrats\Salaire::HEURES, 0, 0,
+                Constants\Contrats\Salaire::HEURES, 0, 0, 0,
                 array(
                     $this->getEvenementAbsenceNonPayee()
                 ),
             ),
             array(
-                Constants\Contrats\Salaire::MENSUALISE, 122.5, 1225,
+                Constants\Contrats\Salaire::MENSUALISE, 122.5, 1225, 940.67,
                 array(
                     $this->getEvenementAbsenceNonPayee()
                 ),
             ),
             // test absence payee
             array(
-                Constants\Contrats\Salaire::HEURES, 7.5, 75,
+                Constants\Contrats\Salaire::HEURES, 7.5, 75, 57.58,
                 array(
                     $this->getEvenementAbsencePayee()
                 ),
             ),
             array(
-                Constants\Contrats\Salaire::MENSUALISE, 130, 1300,
+                Constants\Contrats\Salaire::MENSUALISE, 130, 1300, 998.27,
                 array(
                     $this->getEvenementAbsencePayee()
                 ),
             ),
             // test congés payés
             array(
-                Constants\Contrats\Salaire::HEURES, 7.5, 75,
+                Constants\Contrats\Salaire::HEURES, 7.5, 75, 57.58,
                 array(
                     $this->getEvenementCongePaye()
                 ),
             ),
             array(
-                Constants\Contrats\Salaire::MENSUALISE, 130, 1300,
+                Constants\Contrats\Salaire::MENSUALISE, 130, 1300, 998.27,
                 array(
                     $this->getEvenementAbsencePayee()
                 ),
@@ -117,15 +117,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider testSalaireBuildProvider
      */
-    public function testSalaireBuild($typeID, $heures, $salaire, $evenements, $skipped = false)
+    public function testSalaireBuild($typeID, $heures, $salaireBrut, $salaireNet, $evenements)
     {
-        if($skipped === true)
-        {
-            $this->markTestIncomplete(
-                'This functionality has not been implemented yet.'
-            );
-        }
-
         $contratDTO = $this->getBaseContratDTO();
         $contratDTO->typeId = $typeID;
         $contrat = new Domains\Contrat($contratDTO);
@@ -134,8 +127,30 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $bulletin = $bulletinBuilder->build($contrat, $evenements);
 
         $builderValidator = new BuilderValidator($bulletin);
-        $builderValidator->assertSalaire($heures, $salaire);
+        $builderValidator->assertSalaire($heures, $salaireBrut);
     }
+
+    /**
+     * @dataProvider testSalaireBuildProvider
+     */
+    public function testSalaireNetBuild($typeID, $heures, $salaireBrut, $salaireNet, $evenements)
+    {
+        $contratDTO = $this->getBaseContratDTO();
+        $contratDTO->typeId = $typeID;
+        
+        // TODO : ajouter les indemnites
+        
+        $contrat = new Domains\Contrat($contratDTO);
+
+        $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
+        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+
+        $builderValidator = new BuilderValidator($bulletin);
+
+        $builderValidator->assertEquals($bulletin->getSalaireBrut(), $salaireBrut);
+        $builderValidator->assertEquals($bulletin->getSalaireNet(), $salaireNet);
+    }
+
 
     private function getBaseContratDTO()
     {

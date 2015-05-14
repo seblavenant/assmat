@@ -15,7 +15,9 @@ class Bulletin
         $joursGardes,
         $congesPayes,
         $salaireBrut,
-        $salaireNet;
+        $salaireNet,
+        $cotisationMontant,
+        $indemnitesMontant;
 
     public function __construct(DTO\Bulletin $bulletinDTO)
     {
@@ -56,14 +58,7 @@ class Bulletin
     {
         if($this->salaireBrut === null)
         {
-            $salaireBrut = 0;
-            $lignesRemuneration = new FilterIterators\Lignes\Type(new \ArrayIterator($this->getLignes()), array(Constants\Lignes\Type::SALAIRE));
-            foreach($lignesRemuneration as $ligne)
-            {
-                $salaireBrut += $ligne->getValeur();
-            }
-
-            $this->salaireBrut = $salaireBrut;
+            $this->salaireBrut = $this->computeContextMontant(array(Constants\Lignes\Context::REMUNERATION));
         }
 
         return $this->salaireBrut;
@@ -73,22 +68,42 @@ class Bulletin
     {
         if($this->salaireNet === null)
         {
-            $salaireNet = 0;
-            foreach($this->getLignes() as $ligne)
-            {
-                $valeur = $ligne->getValeur();
-                if($ligne->getAction() === Constants\Lignes\Action::RETENUE)
-                {
-                    $valeur *= -1;
-                }
-
-                $salaireNet += $valeur;
-            }
-
-            $this->salaireNet = $salaireNet;
+            $this->salaireNet = $this->getSalaireBrut() - $this->getCotisationsMontant() + $this->getIndemnitesMontant();
         }
 
         return $this->salaireNet;
+    }
+
+    public function getCotisationsMontant()
+    {
+        if($this->cotisationMontant === null)
+        {
+            $this->cotisationMontant = $this->computeContextMontant(array(Constants\Lignes\Context::COTISATION));
+        }
+
+        return $this->cotisationMontant;
+    }
+
+    public function getIndemnitesMontant()
+    {
+        if($this->indemnitesMontant === null)
+        {
+            $this->indemnitesMontant = $this->computeContextMontant(array(Constants\Lignes\Context::INDEMNITE));
+        }
+
+        return $this->indemnitesMontant;
+    }
+
+    private function computeContextMontant(array $context)
+    {
+        $salaireBrut = 0;
+        $lignesRemuneration = new FilterIterators\Lignes\Context(new \ArrayIterator($this->getLignes()), $context);
+        foreach($lignesRemuneration as $ligne)
+        {
+            $salaireBrut += $ligne->getValeur();
+        }
+
+        return $salaireBrut;
     }
 
     public function addHeuresPayees($heuresPayees)
