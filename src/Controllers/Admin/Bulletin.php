@@ -40,7 +40,7 @@ class Bulletin
     public function newAction($contratId)
     {
         $contrat = $this->contratRepository->find($contratId);
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($this->request->get('annee') . '-' .$this->request->get('mois'))));
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($this->request->get('annee') . '-' . $this->request->get('mois'))));
 
         return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
             'contrat' => $contrat,

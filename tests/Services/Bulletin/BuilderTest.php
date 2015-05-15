@@ -9,7 +9,6 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\Services\Lignes;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Constants;
-use Assmat\DataSource\Constants\Lignes\Code;
 use Assmat\Services\Bulletin;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
