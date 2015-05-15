@@ -15,7 +15,7 @@ use Doctrine\DBAL\Driver\Connection;
 class Contrat extends AbstractMysql implements Repositories\Contrat
 {
     const
-        DB_NAME = 'contrat';
+        TABLE_NAME = 'contrat';
 
     private
         $indemniteRepository;
@@ -47,7 +47,7 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'nom', 'salaire_horaire', 'jours_garde', 'heures_hebdo', 'type_id', 'employe_id'))
-            ->from(self::DB_NAME);
+            ->from(self::TABLE_NAME);
 
         return $query;
     }

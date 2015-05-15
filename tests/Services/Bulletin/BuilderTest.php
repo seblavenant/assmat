@@ -22,7 +22,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
-        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+        $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);
         $builderValidator->assertCotisation(Constants\Lignes\Type::CSG_RDS, 2.42);
@@ -49,7 +49,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
-        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+        $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);
         $builderValidator->assertIndemnites(Constants\Lignes\Type::INDEMNITES_NOURRITURE, 1, 2.5);
@@ -123,7 +123,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $contrat = new Domains\Contrat($contratDTO);
 
         $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
-        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+        $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);
         $builderValidator->assertSalaire($heures, $salaireBrut);
@@ -136,13 +136,13 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $contratDTO = $this->getBaseContratDTO();
         $contratDTO->typeId = $typeID;
-        
+
         // TODO : ajouter les indemnites
-        
+
         $contrat = new Domains\Contrat($contratDTO);
 
         $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
-        $bulletin = $bulletinBuilder->build($contrat, $evenements);
+        $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);
 

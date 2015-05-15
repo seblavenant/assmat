@@ -16,7 +16,14 @@
         <div class="col-xs-12">
             <div class="box">
                 <div id="actions" class="box-content">
-                    <a href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i> Voir le planning</a>
+                    <a class="btn btn-label-left" href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : mois, annee : annee}) }}">
+                        <span><i class="fa fa-calendar"></i></span> Voir le planning
+                    </a>
+                    <form action="{{ path('admin_bulletins_create', { contratId : contrat.id, mois : mois, annee : annee}) }}" method="post">
+                    <button class="btn btn-primary btn-label-left" type="submit">
+                        <span><i class="fa fa-check"></i></span> Valider
+                    </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -99,8 +106,8 @@
                                 <td>{{ ligne.label }}</td>
                                 <td>{{ ligne.base ? ligne.base | round(2) }}</td>
                                 <td>{{ ligne.taux ? ligne.taux | round(2) ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
-                                <td>{{ ligne.action == 1 ? ligne.valeur | round(2) }}</td>
-                                <td>{{ ligne.action == 2 ? ligne.valeur | round(2) }}</td>
+                                <td>{{ ligne.actionId == 1 ? ligne.valeur | round(2) }}</td>
+                                <td>{{ ligne.actionId == 2 ? ligne.valeur | round(2) }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

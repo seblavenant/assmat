@@ -5,19 +5,19 @@ namespace Assmat\Iterators\Filters\Lignes;
 class Type extends \FilterIterator
 {
     private
-        $types;
+        $typesId;
 
-    public function __construct(\Iterator $iterator, array $types)
+    public function __construct(\Iterator $iterator, array $typesId)
     {
         parent::__construct($iterator);
 
-        $this->types = $types;
+        $this->typesId = $typesId;
     }
 
     public function accept()
     {
         $ligne = $this->getInnerIterator()->current();
-        if(in_array($ligne->getType(), $this->types))
+        if(in_array($ligne->getTypeId(), $this->typesId))
         {
             return true;
         }

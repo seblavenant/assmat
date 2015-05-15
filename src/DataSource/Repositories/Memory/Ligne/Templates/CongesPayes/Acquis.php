@@ -12,9 +12,9 @@ class Acquis
     {
         $ligneDTO = new DTO\Ligne();
         $ligneDTO->label = 'Congés payés aquis';
-        $ligneDTO->type = Constants\Lignes\Type::CONGES_PAYES_ACQUIS;
-        $ligneDTO->action = Constants\Lignes\Action::GAIN;
-        $ligneDTO->context = Constants\Lignes\Context::CONGE_PAYE;
+        $ligneDTO->typeId = Constants\Lignes\Type::CONGES_PAYES_ACQUIS;
+        $ligneDTO->actionId = Constants\Lignes\Action::GAIN;
+        $ligneDTO->contextId = Constants\Lignes\Context::CONGE_PAYE;
         $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
             $ligneDTO->valeur = $bulletin->getContrat()->getNbCongesPayesMensuel();
         };

@@ -10,8 +10,7 @@ class Bulletin extends Related
         $id,
         $mois,
         $annee,
-        $contratId,
-        $lignes;
+        $contratId;
 
     public function __construct()
     {

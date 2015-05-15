@@ -15,7 +15,7 @@ use Doctrine\DBAL\Driver\Connection;
 class Employe extends AbstractMysql implements Repositories\Employe
 {
     const
-        DB_NAME = 'employe';
+        TABLE_NAME = 'employe';
 
     private
         $contactRepository,
@@ -49,7 +49,7 @@ class Employe extends AbstractMysql implements Repositories\Employe
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'ss_id', 'contact_id', 'employeur_id'))
-            ->from(self::DB_NAME);
+            ->from(self::TABLE_NAME);
 
         return $query;
     }

@@ -680,14 +680,14 @@ td.beauty-hover {
   font-weight: bold;
   text-align: center;
   background-color: #a2a2a2;
-  background: #a2a2a2 -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-  background: #a2a2a2 -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+  background: #a2a2a2;
   line-height: 24px;
   margin: 0 0 10px 0;
   padding: 0 10px;
   -moz-user-select: none;
   -webkit-user-select: none;
   outline: none !important;
+  color: #fff;
 }
 .btn-label-left, .btn-label-right {
   padding: 0 10px;

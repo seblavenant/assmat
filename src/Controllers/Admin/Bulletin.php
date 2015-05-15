@@ -15,9 +15,10 @@ class Bulletin
         $bulletinRepository,
         $evenementRepository,
         $contratRepository,
-        $bulletinBuilder;
+        $bulletinBuilder,
+        $ligneRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder)
+    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder, Repositories\Ligne $ligneRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -25,6 +26,7 @@ class Bulletin
         $this->evenementRepository = $evenementRepository;
         $this->contratRepository = $contratRepository;
         $this->bulletinBuilder = $bulletinBuilder;
+        $this->ligneRepository = $ligneRepository;
     }
 
     public function indexAction($contratId)
@@ -39,14 +41,40 @@ class Bulletin
 
     public function newAction($contratId)
     {
+        $this->validateDate();
+        $mois = $this->request->get('mois');
+        $annee = $this->request->get('annee');
+
         $contrat = $this->contratRepository->find($contratId);
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($this->request->get('annee') . '-' . $this->request->get('mois'))));
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
+        $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
         return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
             'contrat' => $contrat,
             'evenements' => $evenements,
-            'bulletin' => $this->bulletinBuilder->build($contrat, $evenements),
+            'annee' => $annee,
+            'mois' => $mois,
+            'bulletin' => $bulletin,
         )));
+    }
+
+    public function createAction($contratId)
+    {
+        $this->validateDate();
+        $mois = $this->request->get('mois');
+        $annee = $this->request->get('annee');
+
+        $contrat = $this->contratRepository->find($contratId);
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
+        $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
+
+        $bulletin = $bulletin->persist($this->bulletinRepository);
+
+        foreach($bulletin->getLignes() as $ligne)
+        {
+            $ligne->setBulletinId($bulletin->getId());
+            $ligne->persist($this->ligneRepository);
+        }
     }
 
     public function readAction($id)
@@ -56,5 +84,25 @@ class Bulletin
         return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
             'bulletin' => $bulletin,
         )));
+    }
+
+    private function validateDate()
+    {
+        if(! $this->request->get('mois') || ! $this->request->get('annee'))
+        {
+            throw new \Exception('Les parametres "mois" et "annee" sont requis !');
+        }
+    }
+
+    private function buildBulletin()
+    {
+        $this->validateDate();
+        $mois = $this->request->get('mois');
+        $annee = $this->request->get('annee');
+
+        $contrat = $this->contratRepository->find($contratId);
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
+
+        return $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
     }
 }

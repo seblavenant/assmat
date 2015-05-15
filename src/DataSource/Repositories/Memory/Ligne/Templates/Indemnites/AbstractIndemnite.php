@@ -16,7 +16,7 @@ abstract class AbstractIndemnite
         {
             return;
         }
-        $indemnite = $this->getIndemniteByTypeId($indemnites, $ligneDTO->type);
+        $indemnite = $this->getIndemniteByTypeId($indemnites, $ligneDTO->typeId);
         if(empty($indemnite))
         {
             return;

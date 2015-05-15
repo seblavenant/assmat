@@ -12,9 +12,9 @@ class Salaire
     {
         $ligneDTO = new DTO\Ligne();
         $ligneDTO->label = 'Salaire';
-        $ligneDTO->type = Constants\Lignes\Type::SALAIRE;
-        $ligneDTO->action = Constants\Lignes\Action::GAIN;
-        $ligneDTO->context = Constants\Lignes\Context::REMUNERATION;
+        $ligneDTO->typeId = Constants\Lignes\Type::SALAIRE;
+        $ligneDTO->actionId = Constants\Lignes\Action::GAIN;
+        $ligneDTO->contextId = Constants\Lignes\Context::REMUNERATION;
         $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
             return $this->hydrateFromBulletin($ligneDTO, $bulletin);
         };

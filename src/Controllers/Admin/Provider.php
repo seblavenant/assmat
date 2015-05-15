@@ -51,11 +51,14 @@ class Provider implements ControllerProviderInterface
     private function initializeBulletinsControllers(ControllerCollection $controllers, Application $app)
     {
         $app['bulletin.controller'] = $app->share(function() use($app) {
-            return new Bulletin($app['twig'], $app['request'], $app['repository.bulletin'], $app['repository.evenement'], $app['repository.contrat'], $app['bulletin.builder']);
+            return new Bulletin($app['twig'], $app['request'], $app['repository.bulletin'], $app['repository.evenement'], $app['repository.contrat'], $app['bulletin.builder'], $app['repository.ligne']);
         });
 
         $controllers->get('/contrats/{contratId}/bulletins', 'bulletin.controller:indexAction')
                     ->bind('admin_bulletins');
+
+        $controllers->post('/contrats/{contratId}/bulletins', 'bulletin.controller:createAction')
+                    ->bind('admin_bulletins_create');
 
         $controllers->get('/bulletins/{id}', 'bulletin.controller:readAction')
                     ->bind('admin_bulletins_read');

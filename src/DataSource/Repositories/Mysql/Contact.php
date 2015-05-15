@@ -14,7 +14,7 @@ use Spear\Silex\Persistence\DataTransferObject;
 class Contact extends AbstractMysql implements Repositories\Contact
 {
     const
-        DB_NAME = 'contact';
+        TABLE_NAME = 'contact';
 
     public function find($id)
     {
@@ -36,7 +36,7 @@ class Contact extends AbstractMysql implements Repositories\Contact
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'email', 'password', 'nom', 'prenom', 'adresse', 'code_postal', 'ville'))
-            ->from(self::DB_NAME);
+            ->from(self::TABLE_NAME);
 
         return $query;
     }

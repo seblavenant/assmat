@@ -116,5 +116,9 @@ class Application extends AbstractApplication
         $this['repository.ligneTemplate'] = function() {
             return new Repositories\Memory\Ligne\Template();
         };
+
+        $this['repository.ligne'] = function($c) {
+            return new Repositories\Mysql\Ligne($c['db.default']);
+        };
     }
 }

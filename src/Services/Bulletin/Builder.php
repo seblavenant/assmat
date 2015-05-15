@@ -19,11 +19,14 @@ class Builder
         $this->ligneTemplateRepository = $ligneTemplateRepository;
     }
 
-    public function build(Domains\Contrat $contrat, array $evenements)
+    public function build(Domains\Contrat $contrat, array $evenements, $annee, $mois)
     {
         $lignes = $this->ligneTemplateRepository->findAll();
 
         $bulletinDTO = new DTO\Bulletin();
+        $bulletinDTO->annee = (int) $annee;
+        $bulletinDTO->mois = (int) $mois;
+        $bulletinDTO->contratId = $contrat->getId();
         $bulletinDTO->set('evenements', $evenements);
         $bulletinDTO->set('contrat', $contrat);
         $bulletinDTO->set('lignes', $lignes);

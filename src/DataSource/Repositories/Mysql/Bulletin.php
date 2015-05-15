@@ -13,11 +13,12 @@ use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
+use Muffin\Tests\Escapers\Muffin\Tests\Escapers;
 
 class Bulletin extends AbstractMysql implements Repositories\Bulletin
 {
     const
-        DB_NAME = 'bulletin';
+        TABLE_NAME = 'bulletin';
 
     private
         $evenementRepository,
@@ -47,11 +48,32 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         return $this->fetchAll($query);
     }
 
+    public function create(DTO\Bulletin $bulletinDTO)
+    {
+         $this->db->insert(
+             self::TABLE_NAME,
+             array(
+                 'annee' => $bulletinDTO->annee,
+                 'mois' => $bulletinDTO->mois,
+                 'contrat_id' => $bulletinDTO->contratId,
+             ),
+             array(
+                 \PDO::PARAM_INT,
+                 \PDO::PARAM_INT,
+                 \PDO::PARAM_INT,
+             )
+         );
+
+         $bulletinDTO->id = (int) $this->db->lastInsertId();
+
+         return new Domains\Bulletin($bulletinDTO);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'mois', 'annee'))
-            ->from(self::DB_NAME)
+            ->from(self::TABLE_NAME)
             ->orderBy('annee', OrderBy::DESC)
             ->orderBy('mois', OrderBy::DESC);
 

@@ -4,6 +4,8 @@ namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Domains;
+use Assmat\DataSource\Repositories;
+use Assmat\DataSource\Repositories\Repository;
 
 class Ligne
 {
@@ -20,9 +22,9 @@ class Ligne
         return $this->fields->id;
     }
 
-    public function getType()
+    public function getTypeId()
     {
-        return $this->fields->type;
+        return $this->fields->typeId;
     }
 
     public function getLabel()
@@ -30,14 +32,14 @@ class Ligne
         return $this->fields->label;
     }
 
-    public function getAction()
+    public function getActionId()
     {
-        return $this->fields->action;
+        return $this->fields->actionId;
     }
 
-    public function getContext()
+    public function getContextId()
     {
-        return $this->fields->context;
+        return $this->fields->contextId;
     }
 
     public function getBase()
@@ -60,9 +62,31 @@ class Ligne
         return $this->fields->valeur;
     }
 
+    public function setBulletinId($bulletinId)
+    {
+        $this->fields->bulletinId = $bulletinId;
+    }
+
+    public function getBulletinId()
+    {
+        return $this->fields->bulletinId;
+    }
+
     public function compute(Domains\Bulletin $bulletin)
     {
         $computeClosure = $this->fields->computeClosure;
         $computeClosure($bulletin);
+    }
+
+    public function persist(Repositories\Ligne $ligneRepository)
+    {
+        if($this->fields->id === null)
+        {
+            $ligneRepository->create($this->fields);
+        }
+        else
+        {
+            //$ligneRepository->update($this->fields);
+        }
     }
 }

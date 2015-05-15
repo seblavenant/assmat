@@ -12,9 +12,9 @@ class Entretien extends AbstractIndemnite
     {
         $ligneDTO = new DTO\Ligne();
         $ligneDTO->label = 'Indemnites d\'entretien';
-        $ligneDTO->type = Constants\Lignes\Type::INDEMNITES_ENTRETIEN;
-        $ligneDTO->action = Constants\Lignes\Action::GAIN;
-        $ligneDTO->context = Constants\Lignes\Context::INDEMNITE;
+        $ligneDTO->typeId = Constants\Lignes\Type::INDEMNITES_ENTRETIEN;
+        $ligneDTO->actionId = Constants\Lignes\Action::GAIN;
+        $ligneDTO->contextId = Constants\Lignes\Context::INDEMNITE;
         $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
             $this->compute($bulletin, $ligneDTO);
         };

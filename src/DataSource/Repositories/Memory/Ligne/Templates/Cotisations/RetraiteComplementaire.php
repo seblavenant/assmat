@@ -15,9 +15,9 @@ class RetraiteComplementaire
     {
         $ligneDTO = new DTO\Ligne();
         $ligneDTO->label = 'Retraite complementaire';
-        $ligneDTO->type = Constants\Lignes\Type::CSG_RDS;
-        $ligneDTO->action = Constants\Lignes\Action::RETENUE;
-        $ligneDTO->context = Constants\Lignes\Context::COTISATION;
+        $ligneDTO->typeId = Constants\Lignes\Type::CSG_RDS;
+        $ligneDTO->actionId = Constants\Lignes\Action::RETENUE;
+        $ligneDTO->contextId = Constants\Lignes\Context::COTISATION;
         $ligneDTO->taux = self::TAUX;
         $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
             $base = $bulletin->getSalaireBrut();

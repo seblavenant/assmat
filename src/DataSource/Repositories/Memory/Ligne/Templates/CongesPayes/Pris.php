@@ -13,9 +13,9 @@ class Pris
     {
         $ligneDTO = new DTO\Ligne();
         $ligneDTO->label = 'Congés payés pris';
-        $ligneDTO->type = Constants\Lignes\Type::CONGES_PAYES_PRIS;
-        $ligneDTO->action = Constants\Lignes\Action::RETENUE;
-        $ligneDTO->context = Constants\Lignes\Context::CONGE_PAYE;
+        $ligneDTO->typeId = Constants\Lignes\Type::CONGES_PAYES_PRIS;
+        $ligneDTO->actionId = Constants\Lignes\Action::RETENUE;
+        $ligneDTO->contextId = Constants\Lignes\Context::CONGE_PAYE;
         $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
             $ligneDTO->valeur = $this->countCongesPayes($bulletin->getEvenements());
         };

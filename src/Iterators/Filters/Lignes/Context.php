@@ -5,19 +5,19 @@ namespace Assmat\Iterators\Filters\Lignes;
 class Context extends \FilterIterator
 {
     private
-        $contexts;
+        $contextsId;
 
-    public function __construct(\Iterator $iterator, array $contexts)
+    public function __construct(\Iterator $iterator, array $contextsId)
     {
         parent::__construct($iterator);
 
-        $this->contexts = $contexts;
+        $this->contextsId = $contextsId;
     }
 
     public function accept()
     {
         $ligne = $this->getInnerIterator()->current();
-        if(in_array($ligne->getContext(), $this->contexts))
+        if(in_array($ligne->getContextId(), $this->contextsId))
         {
             return true;
         }

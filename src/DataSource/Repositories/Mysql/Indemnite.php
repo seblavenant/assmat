@@ -14,7 +14,7 @@ use Spear\Silex\Persistence\DataTransferObject;
 class Indemnite extends AbstractMysql implements Repositories\Indemnite
 {
     const
-        DB_NAME = 'indemnite';
+        TABLE_NAME = 'indemnite';
 
     public function find($id)
     {
@@ -36,7 +36,7 @@ class Indemnite extends AbstractMysql implements Repositories\Indemnite
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select(array('id', 'montant', 'type_id', 'contrat_id'))
-            ->from(self::DB_NAME);
+            ->from(self::TABLE_NAME);
 
         return $query;
     }

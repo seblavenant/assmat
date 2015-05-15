@@ -5,6 +5,7 @@ namespace Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\Iterators\Filters as FilterIterators;
+use Assmat\DataSource\Repositories;
 
 class Bulletin
 {
@@ -139,5 +140,17 @@ class Bulletin
     public function getJoursGardes()
     {
         return $this->joursGardes;
+    }
+
+    public function persist(Repositories\Bulletin $bulletinRepository)
+    {
+        if($this->fields->id === null)
+        {
+            return $bulletinRepository->create($this->fields);
+        }
+        else
+        {
+            //return $bulletinRepository->update($this->fields);
+        }
     }
 }
