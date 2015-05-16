@@ -11,29 +11,37 @@ use Assmat\DataSource\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\Iterators\Filters as FilterIterators;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class Evenement
 {
     private
         $twig,
         $request,
+        $security,
         $formFactory,
         $evenementRepository,
         $evenementTypeRepository,
-        $bulletinRepository;
+        $bulletinRepository,
+        $contratRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository, Repositories\EvenementType $evenementTypeRepository, Repositories\Bulletin $bulletinRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository, Repositories\EvenementType $evenementTypeRepository, Repositories\Bulletin $bulletinRepository, Repositories\Contrat $contratRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
+        $this->security = $security;
         $this->formFactory = $formFactory;
         $this->evenementRepository = $evenementRepository;
         $this->evenementTypeRepository = $evenementTypeRepository;
         $this->bulletinRepository = $bulletinRepository;
+        $this->contratRepository = $contratRepository;
     }
 
     public function listAction($contratId)
     {
+        $contrat = $this->contratRepository->find($contratId);
+        $contrat->validateContactAutorisation($this->getContact());
+
         $this->validateRangeDateParams();
         $mois = $this->request->get('mois');
         $annee = $this->request->get('annee');
@@ -80,6 +88,9 @@ class Evenement
 
         try
         {
+            $contrat = $this->contratRepository->find($contratId);
+            $contrat->validateContactAutorisation($this->getContact());
+
             $this->validateEvenementHasNoActiveBulletin($contratId, $date);
             $this->evenementRepository->persist($evenementDTO);
         }
@@ -98,6 +109,9 @@ class Evenement
 
         try
         {
+            $contrat = $this->contratRepository->find($contratId);
+            $contrat->validateContactAutorisation($this->getContact());
+
             $this->validateEvenementHasNoActiveBulletin($contratId, $date);
             $evenement = $this->evenementRepository->findOneFromContratAndDay($contratId, new \DateTime($date));
             $this->evenementRepository->delete($evenement->getId());
@@ -132,5 +146,10 @@ class Evenement
         {
             throw new \Exception('L\'année ' . $this->request->get('annee') . ' est invalide !');
         }
+    }
+
+    private function getContact()
+    {
+        return $this->security->getToken()->getUser()->getContact();
     }
 }

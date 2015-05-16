@@ -17,14 +17,14 @@ class Bulletin
         $twig,
         $request,
         $security,
+        $urlGenerator,
         $bulletinRepository,
         $evenementRepository,
         $contratRepository,
-        $bulletinBuilder,
         $ligneRepository,
-        $urlGenerator;
+        $bulletinBuilder;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder, Repositories\Ligne $ligneRepository, UrlGeneratorInterface $urlGenerator)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Repositories\Ligne $ligneRepository, Services\Bulletin\Builder $bulletinBuilder)
     {
         $this->twig = $twig;
         $this->request = $request;
