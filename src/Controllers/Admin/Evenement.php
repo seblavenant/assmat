@@ -68,15 +68,19 @@ class Evenement
             return new JsonResponse(array('error' => $evenementForm->getErrors(true)), 400);
         }
 
+        $contratId = $evenementForm->get('contratId')->getData();
+        $date = $evenementForm->get('date')->getData();
+
         $evenementDTO = new DTO\Evenement();
-        $evenementDTO->date = $evenementForm->get('date')->getData();
+        $evenementDTO->date = $date;
         $evenementDTO->heureDebut = $evenementForm->get('heureDebut')->getData();
         $evenementDTO->heureFin = $evenementForm->get('heureFin')->getData();
-        $evenementDTO->contratId = $evenementForm->get('contratId')->getData();
+        $evenementDTO->contratId = $contratId;
         $evenementDTO->typeId = $evenementForm->get('typeId')->getData();
 
         try
         {
+            $this->validateEvenementHasNoActiveBulletin($contratId, $date);
             $this->evenementRepository->persist($evenementDTO);
         }
         catch(\Exception $e)
@@ -89,17 +93,32 @@ class Evenement
 
     public function deleteAction()
     {
+        $contratId = $this->request->get('contratId');
+        $date = $this->request->get('date');
+
         try
         {
-            $evenement = $this->evenementRepository->findOneFromContratAndDay($this->request->get('contratId'), new \DateTime($this->request->get('date')));
+            $this->validateEvenementHasNoActiveBulletin($contratId, $date);
+            $evenement = $this->evenementRepository->findOneFromContratAndDay($contratId, new \DateTime($date));
             $this->evenementRepository->delete($evenement->getId());
         }
         catch(\Exception $e)
         {
-            return new JsonResponse(array('error' => $e->getMessage(), 400));
+            return new JsonResponse(array('error' => $e->getMessage()), 400);
         }
 
         return new JsonResponse(array('ok'));
+    }
+
+    private function validateEvenementHasNoActiveBulletin($contratId, $date)
+    {
+        $date = new \DateTime($date);
+        $bulletin = $this->bulletinRepository->findOneFromContratAndDate($contratId, (int) $date->format('Y'), (int) $date->format('m'));
+
+        if($bulletin instanceof Domains\Bulletin)
+        {
+            throw new \Exception('Il est interdit de modifier les évenements d\'un mois dont le bulletin a été créé');
+        }
     }
 
     private function validateRangeDateParams()
