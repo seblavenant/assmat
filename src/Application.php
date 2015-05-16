@@ -97,20 +97,12 @@ class Application extends AbstractApplication
             return new Repositories\Mysql\Contrat($c['db.default'], $c['repository.indemnite']);
         };
 
-        $this['repository.bulletin.closure'] = $this->protect(function($c) {
-            return new Repositories\Mysql\Bulletin($c['db.default'], $c['repository.evenement'], $c['repository.contrat'], $c['repository.ligne']);
-        });
-
         $this['repository.bulletin'] = function($c) {
-            return $c['repository.bulletin.closure']($c);
-        };
-
-        $this['repository.bulletin.proxy'] = function($c) {
-            return new Repositories\Proxy\Bulletin($c['repository.bulletin.closure']);
+            return new Repositories\Mysql\Bulletin($c['db.default'], $c['repository.evenement'], $c['repository.contrat'], $c['repository.ligne']);
         };
 
         $this['repository.evenement'] = function($c) {
-            return new Repositories\Mysql\Evenement($c['db.default'], $c['repository.evenementType'], $c['repository.bulletin.proxy']);
+            return new Repositories\Mysql\Evenement($c['db.default'], $c['repository.evenementType']);
         };
 
         $this['repository.indemnite'] = function($c) {

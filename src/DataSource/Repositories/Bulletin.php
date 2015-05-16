@@ -10,7 +10,7 @@ interface Bulletin extends Repository
 
     public function findFromContrat($contratId);
 
-    public function findOneFromContratAndDate($contratId, $annee, $mois)
+    public function findOneFromContratAndDate($contratId, $annee, $mois);
 
     public function create(DTO\Bulletin $bulletinDTO);
 }
