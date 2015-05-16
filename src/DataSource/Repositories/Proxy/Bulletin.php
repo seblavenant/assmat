@@ -43,7 +43,8 @@ class Bulletin implements Repositories\Bulletin
     {
         if($this->bulletinRepository === null)
         {
-            $this->bulletinRepository = $this->bulletinRepositoryClosure();
+            $repositoryClosure = $this->bulletinRepositoryClosure();
+            $this->bulletinRepository = $repositoryClosure();
         }
 
         return $this->bulletinRepository;
