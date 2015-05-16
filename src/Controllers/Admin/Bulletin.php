@@ -34,7 +34,7 @@ class Bulletin
         $this->contratRepository = $contratRepository;
         $this->bulletinBuilder = $bulletinBuilder;
         $this->ligneRepository = $ligneRepository;
-        $this->urlGenerator =$urlGenerator;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function indexAction($contratId)
@@ -109,7 +109,7 @@ class Bulletin
         $bulletin = $this->bulletinRepository->find($id);
         $bulletin->getContrat()->validateContactAutorisation($this->getContact());
 
-        if(! $bulletin instanceof Domains\Bulletin)
+        if(!$bulletin instanceof Domains\Bulletin)
         {
             throw new \Exception('Aucun bulletin ne correspond à cet identifiant');
         }
@@ -126,7 +126,7 @@ class Bulletin
 
     private function validateDate()
     {
-        if(! $this->request->get('mois') || ! $this->request->get('annee'))
+        if(!$this->request->get('mois') || !$this->request->get('annee'))
         {
             throw new \Exception('Les parametres "mois" et "annee" sont requis !');
         }

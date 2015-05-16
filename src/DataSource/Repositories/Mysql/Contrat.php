@@ -7,7 +7,6 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
 use Muffin\Types;
-use Muffin\Conditions;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;

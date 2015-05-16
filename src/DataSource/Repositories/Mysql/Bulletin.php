@@ -13,7 +13,6 @@ use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
 use Doctrine\DBAL\Driver\Connection;
-use Muffin\Tests\Escapers\Muffin\Tests\Escapers;
 
 class Bulletin extends AbstractMysql implements Repositories\Bulletin
 {
