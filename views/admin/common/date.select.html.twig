@@ -1,0 +1,14 @@
+<select id="evenementMois" name="evenementMois">
+{% for month in range(1, 12) %}
+    <option value="{{ "%02d"|format(month) }}">{{ "%02d"|format(month) }}</option>
+{% endfor %}
+</select>
+
+{% set currentYear =  "now"|date("Y") %}
+<select id="evenementAnnee" name="evenementAnnee">
+    {% for annee in range(currentYear -1 , currentYear +2) %}
+<option value="{{ annee }}">{{ annee }}</option>
+{% endfor %}
+</select>
+
+<input type="submit" value="Changer de mois" />

@@ -26,6 +26,9 @@
                     </button>
                     </form>
                     {% endif %}
+                    <form id="evenementPeriode" action="{{ path('admin_bulletins_new', { contratId: contrat.id }) }}" method="get">
+                        {% include 'admin/common/date.select.html.twig' with { contratId : contrat.id } %}
+                    </form>
                 </div>
             </div>
         </div>
@@ -119,4 +122,34 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block specificsJavascripts %}
+<script>
+    $(function(){
+        $('#evenementAnnee option').each(function(){
+            if($(this).val() == '{{ annee }}')
+            {
+                $(this).attr('selected', true);
+            }
+        });
+
+        $('#evenementMois option').each(function(){
+            if($(this).val() == '{{ "%02d"|format(mois) }}')
+            {
+                $(this).attr('selected', true);
+            }
+        });
+
+        $('#evenementPeriode').submit(function(e){
+            e.preventDefault();
+            var params = new Array();
+            params['annee'] = $('#evenementAnnee').val();
+            params['mois'] = $('#evenementMois').val();
+
+            window.location.href=$(this).attr('action') + '?' + http_build_query(params);
+        });
+
+    });
+</script>
 {% endblock %}
