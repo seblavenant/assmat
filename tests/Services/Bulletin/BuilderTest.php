@@ -37,7 +37,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testIndemnitesBuild()
     {
         $contratDTO = $this->getBaseContratDTO();
-        $contratDTO->set('indemnites', function(){
+        $contratDTO->set('indemnites', function() {
             return array(
                 $this->getIndemnite(),
             );

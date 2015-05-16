@@ -104,8 +104,7 @@ class Contrat
         if(
             $contact->getId() !== $this->getEmploye()->getContact()->getId()
             && $contact->getId() !== $this->getEmployeur()->getContact()->getId()
-        )
-        {
+        ) {
             throw new \Exception('Vous n\'êtes pas autorisé à adminitrer ce contrat');
         }
     }
