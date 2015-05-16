@@ -19,12 +19,12 @@ class Contrat implements Repositories\Contrat
 
     public function find($id)
     {
-        $this->getContratRepository()->find($id);
+        return $this->getContratRepository()->find($id);
     }
 
     public function findFromEmploye($employeId)
     {
-        $this->getContratRepository()->findFromEmploye($employeId);
+        return $this->getContratRepository()->findFromEmploye($employeId);
     }
 
     public function getContratRepository()
