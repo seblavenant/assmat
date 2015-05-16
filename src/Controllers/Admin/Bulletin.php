@@ -124,16 +124,4 @@ class Bulletin
             throw new \Exception('Les parametres "mois" et "annee" sont requis !');
         }
     }
-
-    private function buildBulletin()
-    {
-        $this->validateDate();
-        $mois = $this->request->get('mois');
-        $annee = $this->request->get('annee');
-
-        $contrat = $this->contratRepository->find($contratId);
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
-
-        return $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
-    }
 }
