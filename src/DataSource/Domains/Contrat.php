@@ -35,6 +35,11 @@ class Contrat
         return $this->fields->load('employe');
     }
 
+    public function getEmployeur()
+    {
+        return $this->fields->load('employeur');
+    }
+
     public function getSalaireHoraire()
     {
         return $this->fields->salaireHoraire;
@@ -92,5 +97,4 @@ class Contrat
 
         return $baseJour / 12;
     }
-
 }

@@ -9,18 +9,21 @@ class Contrat extends Related
     public
         $id,
         $nom,
-        $employeId,
         $salaireHoraire,
         $joursGarde,
         $heuresHebdo,
         $nombreSemainesAn,
         $indemnites,
-        $typeId;
+        $typeId,
+        $employeId,
+        $employeurId;
 
     public function __construct()
     {
         parent::__construct(array(
             'indemnites',
+            'employe',
+            'employeur'
         ));
     }
 }

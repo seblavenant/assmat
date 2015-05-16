@@ -9,12 +9,14 @@ use Assmat\DataSource\Domains;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class Bulletin
 {
     private
         $twig,
         $request,
+        $security,
         $bulletinRepository,
         $evenementRepository,
         $contratRepository,
@@ -22,10 +24,11 @@ class Bulletin
         $ligneRepository,
         $urlGenerator;
 
-    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder, Repositories\Ligne $ligneRepository, UrlGeneratorInterface $urlGenerator)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder, Repositories\Ligne $ligneRepository, UrlGeneratorInterface $urlGenerator)
     {
         $this->twig = $twig;
         $this->request = $request;
+        $this->security = $security;
         $this->bulletinRepository = $bulletinRepository;
         $this->evenementRepository = $evenementRepository;
         $this->contratRepository = $contratRepository;
@@ -55,6 +58,7 @@ class Bulletin
         {
             return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_read', array('id' => $bulletin->getId())));
         }
+        $this->validateUser($bulletin);
 
         $contrat = $this->contratRepository->find($contratId);
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
@@ -79,6 +83,7 @@ class Bulletin
         $contrat = $this->contratRepository->find($contratId);
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
+        $this->validateUser($bulletin);
 
         try
         {
@@ -101,6 +106,7 @@ class Bulletin
     public function readAction($id)
     {
         $bulletin = $this->bulletinRepository->find($id);
+        $this->validateUser($bulletin);
 
         if(! $bulletin instanceof Domains\Bulletin)
         {
@@ -122,6 +128,23 @@ class Bulletin
         if(! $this->request->get('mois') || ! $this->request->get('annee'))
         {
             throw new \Exception('Les parametres "mois" et "annee" sont requis !');
+        }
+    }
+
+    private function validateUser(Domains\Bulletin $bulletin)
+    {
+        $contactId = $this->security->getToken()->getUser()->getContact()->getId();
+        $contrat = $this->contratRepository->find($bulletin->getContrat()->getId());
+
+        if(
+            ! $contrat instanceof Domains\Contrat ||
+            (
+                $contactId !== $contrat->getEmploye()->getContact()->getId()
+                && $contactId !== $contrat->getEmployeur()->getContact()->getId()
+            )
+        )
+        {
+            throw new \Exception('Vous n\être pas autorisé à adminitrer ce bulletin');
         }
     }
 }

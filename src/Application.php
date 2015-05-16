@@ -86,15 +86,23 @@ class Application extends AbstractApplication
         };
 
         $this['repository.employe'] = function($c) {
-            return new Repositories\Mysql\Employe($c['db.default'], $c['repository.contact'], $c['repository.contrat']);
+            return new Repositories\Mysql\Employe($c['db.default'], $c['repository.contact'], $c['repository.contrat.proxy']);
         };
 
         $this['repository.contact'] = function($c) {
             return new Repositories\Mysql\Contact($c['db.default']);
         };
 
+        $this['repository.contrat.closure'] = $this->protect(function($c) {
+            return new Repositories\Mysql\Contrat($c['db.default'], $c['repository.indemnite'], $c['repository.employe'], $c['repository.employeur']);
+        });
+
         $this['repository.contrat'] = function($c) {
-            return new Repositories\Mysql\Contrat($c['db.default'], $c['repository.indemnite']);
+            return $c['repository.contrat.closure']($c);
+        };
+
+        $this['repository.contrat.proxy'] = function($c) {
+            return new Repositories\Proxy\Contrat($c['repository.contrat.closure']);
         };
 
         $this['repository.bulletin'] = function($c) {

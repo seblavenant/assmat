@@ -7,6 +7,7 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
 use Muffin\Types;
+use Muffin\Conditions;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
@@ -18,13 +19,17 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         TABLE_NAME = 'contrat';
 
     private
-        $indemniteRepository;
+        $indemniteRepository,
+        $employeRepository,
+        $employeurRepository;
 
-    public function __construct(Connection $db, Repositories\Indemnite $indemniteRepository)
+    public function __construct(Connection $db, Repositories\Indemnite $indemniteRepository, Repositories\Employe $employeRepository, Repositories\Employeur $employeurRepository)
     {
         parent::__construct($db);
 
         $this->indemniteRepository = $indemniteRepository;
+        $this->employeRepository = $employeRepository;
+        $this->employeurRepository = $employeurRepository;
     }
 
     public function find($id)
@@ -46,7 +51,7 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'nom', 'salaire_horaire', 'jours_garde', 'heures_hebdo', 'type_id', 'employe_id'))
+            ->select(array('id', 'nom', 'salaire_horaire', 'jours_garde', 'heures_hebdo', 'type_id', 'employe_id', 'employeur_id'))
             ->from(self::TABLE_NAME);
 
         return $query;
@@ -62,6 +67,7 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
             'heuresHebdo' => new Fields\NotNullable(new Fields\Integer('heures_hebdo')),
             'typeId' => new Fields\NotNullable(new Fields\Integer('type_id')),
             'employeId' => new Fields\NotNullable(new Fields\Integer('employe_id')),
+            'employeurId' => new Fields\NotNullable(new Fields\Integer('employeur_id')),
         );
     }
 
@@ -69,6 +75,14 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     {
         $dto->set('indemnites', function() use($dto) {
             return $this->indemniteRepository->findFromContrat($dto->id);
+        });
+
+        $dto->set('employe', function() use($dto) {
+            return $this->employeRepository->find($dto->employeId);
+        });
+
+        $dto->set('employeur', function() use($dto) {
+            return $this->employeurRepository->find($dto->employeurId);
         });
 
         return new Domains\Contrat($dto);
