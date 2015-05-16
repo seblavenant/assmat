@@ -58,9 +58,9 @@ class Bulletin
         {
             return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_read', array('id' => $bulletin->getId())));
         }
-        $this->validateUser($bulletin);
 
         $contrat = $this->contratRepository->find($contratId);
+        $contrat->validateContactAutorisation($this->getContact());
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
@@ -81,9 +81,10 @@ class Bulletin
         $annee = $this->request->get('annee');
 
         $contrat = $this->contratRepository->find($contratId);
+        $contrat->validateContactAutorisation($this->getContact());
+
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
-        $this->validateUser($bulletin);
 
         try
         {
@@ -106,7 +107,7 @@ class Bulletin
     public function readAction($id)
     {
         $bulletin = $this->bulletinRepository->find($id);
-        $this->validateUser($bulletin);
+        $bulletin->getContrat()->validateContactAutorisation($this->getContact());
 
         if(! $bulletin instanceof Domains\Bulletin)
         {
@@ -131,20 +132,8 @@ class Bulletin
         }
     }
 
-    private function validateUser(Domains\Bulletin $bulletin)
+    private function getContact()
     {
-        $contactId = $this->security->getToken()->getUser()->getContact()->getId();
-        $contrat = $this->contratRepository->find($bulletin->getContrat()->getId());
-
-        if(
-            ! $contrat instanceof Domains\Contrat ||
-            (
-                $contactId !== $contrat->getEmploye()->getContact()->getId()
-                && $contactId !== $contrat->getEmployeur()->getContact()->getId()
-            )
-        )
-        {
-            throw new \Exception('Vous n\être pas autorisé à adminitrer ce bulletin');
-        }
+        return $this->security->getToken()->getUser()->getContact();
     }
 }

@@ -4,6 +4,7 @@ namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
+use Assmat\DataSource\Domains;
 
 class Contrat
 {
@@ -96,5 +97,16 @@ class Contrat
         $baseJour = $baseSemaine * $this->getJoursGarde() / self::NB_JOUR_HEBDO_DEFAULT;
 
         return $baseJour / 12;
+    }
+
+    public function validateContactAutorisation(Domains\Contact $contact)
+    {
+        if(
+            $contact->getId() !== $this->getEmploye()->getContact()->getId()
+            && $contact->getId() !== $this->getEmployeur()->getContact()->getId()
+        )
+        {
+            throw new \Exception('Vous n\'êtes pas autorisé à adminitrer ce contrat');
+        }
     }
 }
