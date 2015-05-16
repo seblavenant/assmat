@@ -81,40 +81,40 @@ class Application extends AbstractApplication
 
     private function initializeRepositories()
     {
-        $this['repository.employeur'] = function($c) {
-            return new Repositories\Mysql\Employeur($c['db.default'], $c['repository.contact'], $c['repository.employe']);
+        $this['repository.employeur'] = function() {
+            return new Repositories\Mysql\Employeur($this['db.default'], $this['repository.contact'], $this['repository.employe']);
         };
 
-        $this['repository.employe'] = function($c) {
-            return new Repositories\Mysql\Employe($c['db.default'], $c['repository.contact'], $c['repository.contrat.proxy']);
+        $this['repository.employe'] = function() {
+            return new Repositories\Mysql\Employe($this['db.default'], $this['repository.contact'], $this['repository.contrat.proxy']);
         };
 
-        $this['repository.contact'] = function($c) {
-            return new Repositories\Mysql\Contact($c['db.default']);
+        $this['repository.contact'] = function() {
+            return new Repositories\Mysql\Contact($this['db.default']);
         };
 
-        $this['repository.contrat.closure'] = $this->protect(function($c) {
-            return new Repositories\Mysql\Contrat($c['db.default'], $c['repository.indemnite'], $c['repository.employe'], $c['repository.employeur']);
+        $this['repository.contrat.closure'] = $this->protect(function() {
+            return new Repositories\Mysql\Contrat($this['db.default'], $this['repository.indemnite'], $this['repository.employe'], $this['repository.employeur']);
         });
 
-        $this['repository.contrat'] = function($c) {
-            return $c['repository.contrat.closure']($c);
+        $this['repository.contrat'] = function() {
+            return $this['repository.contrat.closure']();
         };
 
-        $this['repository.contrat.proxy'] = function($c) {
-            return new Repositories\Proxy\Contrat($c['repository.contrat.closure']);
+        $this['repository.contrat.proxy'] = function() {
+            return new Repositories\Proxy\Contrat($this['repository.contrat.closure']);
         };
 
-        $this['repository.bulletin'] = function($c) {
-            return new Repositories\Mysql\Bulletin($c['db.default'], $c['repository.evenement'], $c['repository.contrat'], $c['repository.ligne']);
+        $this['repository.bulletin'] = function() {
+            return new Repositories\Mysql\Bulletin($this['db.default'], $this['repository.evenement'], $this['repository.contrat'], $this['repository.ligne']);
         };
 
-        $this['repository.evenement'] = function($c) {
-            return new Repositories\Mysql\Evenement($c['db.default'], $c['repository.evenementType']);
+        $this['repository.evenement'] = function() {
+            return new Repositories\Mysql\Evenement($this['db.default'], $this['repository.evenementType']);
         };
 
-        $this['repository.indemnite'] = function($c) {
-            return new Repositories\Mysql\Indemnite($c['db.default']);
+        $this['repository.indemnite'] = function() {
+            return new Repositories\Mysql\Indemnite($this['db.default']);
         };
 
         $this['repository.evenementType'] = function() {
@@ -125,8 +125,8 @@ class Application extends AbstractApplication
             return new Repositories\Memory\Ligne\Template();
         };
 
-        $this['repository.ligne'] = function($c) {
-            return new Repositories\Mysql\Ligne($c['db.default']);
+        $this['repository.ligne'] = function() {
+            return new Repositories\Mysql\Ligne($this['db.default']);
         };
     }
 }
