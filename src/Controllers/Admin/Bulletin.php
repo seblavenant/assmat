@@ -3,9 +3,12 @@
 namespace Assmat\Controllers\Admin;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Assmat\DataSource\Repositories;
+use Assmat\DataSource\Domains;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Bulletin
 {
@@ -16,9 +19,10 @@ class Bulletin
         $evenementRepository,
         $contratRepository,
         $bulletinBuilder,
-        $ligneRepository;
+        $ligneRepository,
+        $urlGenerator;
 
-    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder, Repositories\Ligne $ligneRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder, Repositories\Ligne $ligneRepository, UrlGeneratorInterface $urlGenerator)
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -27,6 +31,7 @@ class Bulletin
         $this->contratRepository = $contratRepository;
         $this->bulletinBuilder = $bulletinBuilder;
         $this->ligneRepository = $ligneRepository;
+        $this->urlGenerator =$urlGenerator;
     }
 
     public function indexAction($contratId)
@@ -45,16 +50,23 @@ class Bulletin
         $mois = $this->request->get('mois');
         $annee = $this->request->get('annee');
 
+        $bulletin = $this->bulletinRepository->findOneFromContratAndDate($contratId, $annee, $mois);
+        if($bulletin instanceof Domains\Bulletin)
+        {
+            return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_read', array('id' => $bulletin->getId())));
+        }
+
         $contrat = $this->contratRepository->find($contratId);
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
-        return new Response($this->twig->render('admin/bulletins/new.html.twig', array(
+        return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
             'contrat' => $contrat,
             'evenements' => $evenements,
             'annee' => $annee,
             'mois' => $mois,
             'bulletin' => $bulletin,
+            'saveEnable' => true,
         )));
     }
 
@@ -68,12 +80,21 @@ class Bulletin
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Periods\Month(new \DateTime($annee . '-' . $mois)));
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
-        $bulletin = $bulletin->persist($this->bulletinRepository);
-
-        foreach($bulletin->getLignes() as $ligne)
+        try
         {
-            $ligne->setBulletinId($bulletin->getId());
-            $ligne->persist($this->ligneRepository);
+            $bulletin = $bulletin->persist($this->bulletinRepository);
+
+            foreach($bulletin->getLignes() as $ligne)
+            {
+                $ligne->setBulletinId($bulletin->getId());
+                $ligne->persist($this->ligneRepository);
+            }
+
+            return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_read', array('id' => $bulletin->getId())));
+        }
+        catch(\Exception $e)
+        {
+            return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_new', array('contratId' => $contratId, 'annee' => $annee, 'mois' => $mois)));
         }
     }
 
@@ -81,8 +102,18 @@ class Bulletin
     {
         $bulletin = $this->bulletinRepository->find($id);
 
+        if(! $bulletin instanceof Domains\Bulletin)
+        {
+            throw new \Exception('Aucun bulletin ne correspond à cet identifiant');
+        }
+
         return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
+            'contrat' => $bulletin->getContrat(),
+            'evenements' => $bulletin->getEvenements(),
+            'annee' => $bulletin->getAnnee(),
+            'mois' => $bulletin->getMois(),
             'bulletin' => $bulletin,
+            'saveEnable' => false,
         )));
     }
 

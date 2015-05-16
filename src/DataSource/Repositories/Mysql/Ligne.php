@@ -16,10 +16,18 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
     const
         TABLE_NAME = 'ligne';
 
+    public function findFromBulletin($bulletinId)
+    {
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Integer('bulletin_id'))->equal($bulletinId));
+
+        return $this->fetchAll($query);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'montant', 'type_id', 'contrat_id'))
+            ->select(array('id', 'label', 'type_id', 'action_id', 'context_id', 'base', 'taux', 'quantite', 'valeur', 'bulletin_id'))
             ->from(self::TABLE_NAME);
 
         return $query;
@@ -68,7 +76,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
             'contextId' => new Fields\NotNullable(new Fields\Integer('context_id')),
             'base' => new Fields\Float('base'),
             'taux' => new Fields\Float('taux'),
-            'quantite' => new Fields\Integer('quantite'),
+            'quantite' => new Fields\Float('quantite'),
             'valeur' => new Fields\Float('valeur'),
             'bulletinId' => new Fields\NotNullable(new Fields\Integer('bulletin_id')),
         );
@@ -76,11 +84,11 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
 
     public function getDomain(DataTransferObject $dto)
     {
-        return new Domains\Indemnite($dto);
+        return new Domains\Ligne($dto);
     }
 
     public function getDTO()
     {
-        return new DTO\Indemnite();
+        return new DTO\Ligne();
     }
 }

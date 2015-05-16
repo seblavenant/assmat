@@ -11,23 +11,42 @@
         </div>
     </div>
 
-    <form id="evenementPeriode" action="{{ path('admin_evenements_list', { contratId : contratId}) }}" method="get">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div id="actions" class="box-content">
+                    {% if bulletinId %}
+                    <a class="btn btn-label-left btn-primary" href="{{ path('admin_bulletins_read', { id: bulletinId }) }}">
+                        <span><i class="fa fa-eye"></i></span> Voir le bulletin
+                    </a>
+                    {% else %}
+                    <a class="btn btn-label-left btn-primary" href="{{ path('admin_bulletins_new', { contratId: contratId, mois : mois, annee : annee}) }}">
+                        <span><i class="fa fa-plus-square-o"></i></span> Créer le bulletin
+                    </a>
+                    {% endif %}
+                    <form id="evenementPeriode" action="{{ path('admin_evenements_list', { contratId : contratId}) }}" method="get">
 
-        <select id="evenementMois" name="evenementMois">
-        {% for month in range(1, 12) %}
-            <option value="{{ "%02d"|format(month) }}">{{ "%02d"|format(month) }}</option>
-        {% endfor %}
-        </select>
+                        <select id="evenementMois" name="evenementMois">
+                        {% for month in range(1, 12) %}
+                            <option value="{{ "%02d"|format(month) }}">{{ "%02d"|format(month) }}</option>
+                        {% endfor %}
+                        </select>
 
-        {% set currentYear =  "now"|date("Y") %}
-        <select id="evenementAnnee" name="evenementAnnee">
-        {% for annee in range(currentYear -1 , currentYear +2) %}
-            <option value="{{ annee }}">{{ annee }}</option>
-        {% endfor %}
-        </select>
+                        {% set currentYear =  "now"|date("Y") %}
+                        <select id="evenementAnnee" name="evenementAnnee">
+                        {% for annee in range(currentYear -1 , currentYear +2) %}
+                            <option value="{{ annee }}">{{ annee }}</option>
+                        {% endfor %}
+                        </select>
 
-    <input type="submit" value="Changer de mois" />
-    </form>
+                        <input type="submit" value="Changer de mois" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 <div class="row full-calendar">
     <div class="col-sm-3">

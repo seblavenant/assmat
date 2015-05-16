@@ -6,11 +6,117 @@
             <ol class="breadcrumb">
                 <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
                 <li><a href="{{ path('admin_contrats') }}">Mes contrats</a></li>
-                <li>Bulletin de {{ bulletin.mois }}/{{ bulletin.annee }}</li>
+                <li><a href="{{ path('admin_contrats_read', {id : contrat.id}) }}">Contrat {{ contrat.id }}</a></li>
+                <li><a href="{{ path('admin_bulletins', {contratId : contrat.id}) }}">Bulletins</a></li>
+                <li>>Nouveau</li>
             </ol>
         </div>
     </div>
-
-{{ dump(bulletin) }}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div id="actions" class="box-content">
+                    <a class="btn btn-label-left" href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : "%02d"|format(mois), annee : annee}) }}">
+                        <span><i class="fa fa-calendar"></i></span> Voir le planning
+                    </a>
+                    {% if saveEnable %}
+                    <form action="{{ path('admin_bulletins_create', { contratId : contrat.id, mois : mois, annee : annee}) }}" method="post">
+                    <button class="btn btn-primary btn-label-left" type="submit">
+                        <span><i class="fa fa-check"></i></span> Valider
+                    </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i>Heures du mois
+                    </div>
+                    <div class="box-icons">
+                        <a class="collapse-link" data-toggle="collapse">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-content" style="display: none">
+                    <table class="table">
+                        <thead>
+                            <th>Date</td>
+                            <th>Type</th>
+                            <th>Heure début</th>
+                            <th>Heure fin</th>
+                            <th>Durée</th>
+                        </thead>
+                        <tbody>
+                            {% for evenement in evenements  %}
+                            <tr>
+                                <td>{{ evenement.date | date('Y-m-d') }}</td>
+                                <td>{{ evenement.type.label }}</td>
+                                <td>
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ evenement.heureDebut | date('h:i') }}</td>
+                                {% endif %}
+                                <td>
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ evenement.heureFin | date('h:i') }}</td>
+                                {% endif %}
+                                <td>
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}
+                                {% elseif(evenement.typeId != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::ABSENCE_NON_PAYEE')) %}
+                                    {{ formatDecimalToHour(contrat.heuresJour) }}
+                                {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i>Salaire net : {{ bulletin.salaireNet | round(2) }} €
+                    </div>
+                    <div class="box-icons">
+                        <a class="collapse-link" data-toggle="collapse">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <th>Label</td>
+                            <th>Base</th>
+                            <th>Taux / Qté</th>
+                            <th>Gain</th>
+                            <th>Retenue</th>
+                        </thead>
+                        <tbody>
+                        {% for ligne in bulletin.lignes %}
+                            <tr>
+                                <td>{{ ligne.label }}</td>
+                                <td>{{ ligne.base ? ligne.base | round(2) }}</td>
+                                <td>{{ ligne.taux ? ligne.taux | round(2) ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
+                                <td>{{ ligne.actionId == 1 ? ligne.valeur | round(2) }}</td>
+                                <td>{{ ligne.actionId == 2 ? ligne.valeur | round(2) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

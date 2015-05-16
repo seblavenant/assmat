@@ -51,7 +51,7 @@ class Provider implements ControllerProviderInterface
     private function initializeBulletinsControllers(ControllerCollection $controllers, Application $app)
     {
         $app['bulletin.controller'] = $app->share(function() use($app) {
-            return new Bulletin($app['twig'], $app['request'], $app['repository.bulletin'], $app['repository.evenement'], $app['repository.contrat'], $app['bulletin.builder'], $app['repository.ligne']);
+            return new Bulletin($app['twig'], $app['request'], $app['repository.bulletin'], $app['repository.evenement'], $app['repository.contrat'], $app['bulletin.builder'], $app['repository.ligne'], $app['url_generator']);
         });
 
         $controllers->get('/contrats/{contratId}/bulletins', 'bulletin.controller:indexAction')
@@ -72,7 +72,7 @@ class Provider implements ControllerProviderInterface
     private function initializeEvenementControllers(ControllerCollection $controllers, Application $app)
     {
         $app['evenement.controller'] = $app->share(function() use($app) {
-            return new Evenement($app['twig'], $app['request'], $app['form.factory'], $app['repository.evenement'], $app['repository.evenementType']);
+            return new Evenement($app['twig'], $app['request'], $app['form.factory'], $app['repository.evenement'], $app['repository.evenementType'], $app['repository.bulletin']);
         });
 
         $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:setAction')

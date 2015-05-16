@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormFactoryInterface;
 use Assmat\DataSource\Repositories;
+use Assmat\DataSource\Domains;
 use Assmat\DataSource\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\DataSource\DataTransferObjects as DTO;
@@ -18,29 +19,41 @@ class Evenement
         $request,
         $formFactory,
         $evenementRepository,
-        $evenementTypeRepository;
+        $evenementTypeRepository,
+        $bulletinRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository, Repositories\EvenementType $evenementTypeRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository, Repositories\EvenementType $evenementTypeRepository, Repositories\Bulletin $bulletinRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->formFactory = $formFactory;
         $this->evenementRepository = $evenementRepository;
         $this->evenementTypeRepository = $evenementTypeRepository;
+        $this->bulletinRepository = $bulletinRepository;
     }
 
     public function listAction($contratId)
     {
         $this->validateRangeDateParams();
+        $mois = $this->request->get('mois');
+        $annee = $this->request->get('annee');
 
         $evenements = $this->evenementRepository->findAllFromContrat($contratId);
+
+        $bulletinId = null;
+        $bulletin = $this->bulletinRepository->findOneFromContratAndDate($contratId, $annee, $mois);
+        if($bulletin instanceof Domains\Bulletin)
+        {
+            $bulletinId = $bulletin->getId();
+        }
 
         return new Response($this->twig->render('admin/evenements/list.html.twig', array(
             'contratId' => $contratId,
             'evenements' => $evenements,
             'evenementsType' => new FilterIterators\Evenements\Types\DureeFixe(new \ArrayIterator($this->evenementTypeRepository->findAll())),
-            'mois' => $this->request->get('mois'),
-            'annee' => $this->request->get('annee'),
+            'mois' => $mois,
+            'annee' => $annee,
+            'bulletinId' => $bulletinId,
         )));
     }
 
