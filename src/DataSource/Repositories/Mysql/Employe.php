@@ -10,7 +10,6 @@ use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
-use Doctrine\DBAL\Driver\Connection;
 
 class Employe extends AbstractMysql implements Repositories\Employe
 {
@@ -21,7 +20,7 @@ class Employe extends AbstractMysql implements Repositories\Employe
         $contactRepository,
         $contratRepository;
 
-    public function __construct(Connection $db, Repositories\Contact $contactRepository, Repositories\Contrat $contratRepository)
+    public function __construct(Mysql $db, Repositories\Contact $contactRepository, Repositories\Contrat $contratRepository)
     {
         parent::__construct($db);
 

@@ -12,7 +12,6 @@ use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
 use Assmat\Services\Evenements\Periods\Period;
-use Doctrine\DBAL\Driver\Connection;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
@@ -22,7 +21,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     private
         $evenementTypeRepository;
 
-    public function __construct(Connection $db, Repositories\EvenementType $evenementTypeRepository)
+    public function __construct(Mysql $db, Repositories\EvenementType $evenementTypeRepository)
     {
         parent::__construct($db);
 

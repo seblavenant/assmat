@@ -12,7 +12,6 @@ use Muffin\Tests\Escapers\SimpleEscaper;
 use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
-use Doctrine\DBAL\Driver\Connection;
 
 class Bulletin extends AbstractMysql implements Repositories\Bulletin
 {
@@ -24,7 +23,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         $contratRepository,
         $ligneRepository;
 
-    public function __construct(Connection $db, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Repositories\Ligne $ligneRepository)
+    public function __construct(Mysql $db, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Repositories\Ligne $ligneRepository)
     {
         parent::__construct($db);
 

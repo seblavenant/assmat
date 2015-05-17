@@ -30,7 +30,7 @@ class Application extends AbstractApplication
         $this->register(new SilexProvider\UrlGeneratorServiceProvider());
         $this->register(new SilexProvider\FormServiceProvider());
         $this->register(new SilexProvider\TranslationServiceProvider());
-        $this->register(new SpearProvider\DBAL());
+        $this->register(new \Assmat\Providers\MysqlDBAL());
         $this->register(new SpearProvider\Twig());
         $this->register(new SpearProvider\AsseticServiceProvider());
     }

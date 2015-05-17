@@ -4,7 +4,6 @@ namespace Assmat\DataSource\Repositories\Mysql;
 
 use Muffin\Query;
 use Spear\Silex\Persistence\DTOHydrators;
-use Doctrine\DBAL\Driver\Connection;
 use Spear\Silex\Persistence\DataTransferObject;
 
 abstract class AbstractMysql
@@ -12,7 +11,7 @@ abstract class AbstractMysql
     protected
         $db;
 
-    public function __construct(Connection $db)
+    public function __construct(Mysql $db)
     {
         $this->db = $db;
     }

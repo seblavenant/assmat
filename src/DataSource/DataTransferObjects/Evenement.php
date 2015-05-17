@@ -2,7 +2,6 @@
 
 namespace Assmat\DataSource\DataTransferObjects;
 
-use Doctrine\DBAL\Driver\Connection;
 use Spear\Silex\Persistence\DataTransferObjects\Related;
 
 class Evenement extends Related
