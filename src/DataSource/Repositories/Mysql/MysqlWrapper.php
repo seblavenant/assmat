@@ -64,7 +64,7 @@ class MysqlWrapper implements Mysql
         return $this->mysql->query();
     }
 
-    public function quote($input, $type=\PDO::PARAM_STR)
+    public function quote($input, $type = \PDO::PARAM_STR)
     {
         return $this->mysql->quote($input, $type);
     }
