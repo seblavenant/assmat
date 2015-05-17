@@ -48,7 +48,7 @@ class MysqlDBAL implements ServiceProviderInterface
         );
 
         // Declare helper
-        $app['db.' . $database] = $app->share(function () use ($app, $database) {
+        $app['db.' . $database] = $app->share(function() use ($app, $database) {
             return new MysqlWrapper($app['dbs'][$database]);
         });
 
@@ -61,7 +61,7 @@ class MysqlDBAL implements ServiceProviderInterface
 
     private function validatePuzzleConfiguration(Application $app)
     {
-        if(! isset($app['configuration']) || ! $app['configuration'] instanceof Configuration)
+        if(!isset($app['configuration']) || !$app['configuration'] instanceof Configuration)
         {
             throw new \LogicException(__CLASS__ . ' requires an instance of puzzle/configuration (as key "configuration")');
         }
