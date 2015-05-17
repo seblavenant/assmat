@@ -2,7 +2,7 @@
 
 namespace Assmat\DataSource\Repositories;
 
-interface Indemnite extends Repository
+interface Indemnite
 {
     public function find($id);
 

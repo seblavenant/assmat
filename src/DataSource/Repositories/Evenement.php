@@ -4,7 +4,7 @@ namespace Assmat\DataSource\Repositories;
 
 use Assmat\Services\Evenements\Periods\Period;
 
-interface Evenement extends Repository
+interface Evenement
 {
     public function find($id);
 

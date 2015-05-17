@@ -2,7 +2,7 @@
 
 namespace Assmat\DataSource\Repositories;
 
-interface Contrat extends Repository
+interface Contrat
 {
     public function find($id);
 

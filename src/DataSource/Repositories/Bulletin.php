@@ -4,7 +4,7 @@ namespace Assmat\DataSource\Repositories;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 
-interface Bulletin extends Repository
+interface Bulletin
 {
     public function find($id);
 

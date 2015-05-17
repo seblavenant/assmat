@@ -37,10 +37,4 @@ class Contrat implements Repositories\Contrat
 
         return $this->contratRepository;
     }
-
-    public function getDomain(DataTransferObject $dto){}
-
-    public function getDTO(){}
-
-    public function getFields(){}
 }

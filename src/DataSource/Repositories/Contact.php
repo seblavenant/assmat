@@ -2,7 +2,7 @@
 
 namespace Assmat\DataSource\Repositories;
 
-interface Contact extends Repository
+interface Contact
 {
     public function find($id);
 
