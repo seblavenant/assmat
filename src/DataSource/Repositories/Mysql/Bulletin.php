@@ -61,23 +61,23 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
 
     public function create(DTO\Bulletin $bulletinDTO)
     {
-         $this->db->insert(
-             self::TABLE_NAME,
-             array(
-                 'annee' => $bulletinDTO->annee,
-                 'mois' => $bulletinDTO->mois,
-                 'contrat_id' => $bulletinDTO->contratId,
-             ),
-             array(
-                 \PDO::PARAM_INT,
-                 \PDO::PARAM_INT,
-                 \PDO::PARAM_INT,
-             )
-         );
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'annee' => $bulletinDTO->annee,
+                'mois' => $bulletinDTO->mois,
+                'contrat_id' => $bulletinDTO->contratId,
+            ),
+            array(
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+            )
+        );
 
-         $bulletinDTO->id = (int) $this->db->lastInsertId();
+        $bulletinDTO->id = (int) $this->db->lastInsertId();
 
-         return new Domains\Bulletin($bulletinDTO);
+        return new Domains\Bulletin($bulletinDTO);
     }
 
     private function getBaseQuery()

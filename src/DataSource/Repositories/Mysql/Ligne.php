@@ -35,35 +35,35 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
 
     public function create(DTO\Ligne $ligneDTO)
     {
-         $this->db->insert(
-             self::TABLE_NAME,
-             array(
-                 'label' => $ligneDTO->label,
-                 'type_id' => $ligneDTO->typeId,
-                 'action_id' => $ligneDTO->actionId,
-                 'context_id' => $ligneDTO->contextId,
-                 'base' => $ligneDTO->base,
-                 'taux' => $ligneDTO->taux,
-                 'quantite' => $ligneDTO->quantite,
-                 'valeur' => $ligneDTO->valeur,
-                 'bulletin_id' => $ligneDTO->bulletinId,
-             ),
-             array(
-                 \PDO::PARAM_STR,
-                 \PDO::PARAM_INT,
-                 \PDO::PARAM_INT,
-                 \PDO::PARAM_INT,
-                 \PDO::PARAM_STR,
-                 \PDO::PARAM_STR,
-                 \PDO::PARAM_INT,
-                 \PDO::PARAM_STR,
-                 \PDO::PARAM_INT,
-             )
-         );
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'label' => $ligneDTO->label,
+                'type_id' => $ligneDTO->typeId,
+                'action_id' => $ligneDTO->actionId,
+                'context_id' => $ligneDTO->contextId,
+                'base' => $ligneDTO->base,
+                'taux' => $ligneDTO->taux,
+                'quantite' => $ligneDTO->quantite,
+                'valeur' => $ligneDTO->valeur,
+                'bulletin_id' => $ligneDTO->bulletinId,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+            )
+        );
 
-         $ligneDTO->id = $this->db->lastInsertId();
+        $ligneDTO->id = $this->db->lastInsertId();
 
-         return new Domains\Ligne($ligneDTO);
+        return new Domains\Ligne($ligneDTO);
     }
 
     public function getFields()
