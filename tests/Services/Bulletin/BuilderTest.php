@@ -161,7 +161,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         return $contratDTO;
     }
 
-    private function getBaseEvenementDTO($evenementType)
+    private function getBaseEvenementDTO(Domains\EvenementType $evenementType)
     {
         $evenementDTO = new DTO\Evenement();
         $evenementDTO->date = new \DateTime('2015-01-01');
