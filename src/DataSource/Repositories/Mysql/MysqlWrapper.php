@@ -64,42 +64,42 @@ class MysqlWrapper implements Mysql
         return $this->mysql->query();
     }
 
-    function quote($input, $type=\PDO::PARAM_STR)
+    public function quote($input, $type=\PDO::PARAM_STR)
     {
         return $this->mysql->quote($input, $type);
     }
 
-    function exec($statement)
+    public function exec($statement)
     {
         return $this->mysql->exec($statement);
     }
 
-    function lastInsertId($name = null)
+    public function lastInsertId($name = null)
     {
         return $this->mysql->lastInsertId($name = null);
     }
 
-    function beginTransaction()
+    public function beginTransaction()
     {
         return $this->mysql->beginTransaction();
     }
 
-    function commit()
+    public function commit()
     {
         return $this->mysql->commit();
     }
 
-    function rollBack()
+    public function rollBack()
     {
         return $this->mysql->rollBack();
     }
 
-    function errorCode()
+    public function errorCode()
     {
         return $this->mysql->errorCode();
     }
 
-    function errorInfo()
+    public function errorInfo()
     {
         return $this->mysql->errorInfo();
     }
