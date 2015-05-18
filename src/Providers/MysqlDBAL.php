@@ -35,7 +35,7 @@ class MysqlDBAL implements ServiceProviderInterface
 
     private function registerDatabase(Application $app, Configuration $configuration, $database)
     {
-        $configuration = new PrefixedConfiguration($configuration, 'db/ ' . $database);
+        $configuration = new PrefixedConfiguration($configuration, 'db/' . $database);
 
         $options = array(
             'driver'   => 'pdo_mysql',
