@@ -28,4 +28,9 @@ class Employeur
     {
         return $this->fields->load('employes');
     }
+
+    public function getPajeEmploiId()
+    {
+        return $this->fields->pajeEmploiId;
+    }
 }

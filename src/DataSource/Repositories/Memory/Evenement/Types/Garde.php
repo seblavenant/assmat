@@ -13,6 +13,7 @@ class Garde
         $evenementTypeDTO = new DTO\EvenementType();
         $evenementTypeDTO->id = Constants\Evenements\Type::GARDE;
         $evenementTypeDTO->label = 'Garde';
+        $evenementTypeDTO->code = 'GRD';
         $evenementTypeDTO->dureeFixe = false;
         $evenementTypeDTO->computeClosure = function($evenement) {
             $evenement->setJourPaye();

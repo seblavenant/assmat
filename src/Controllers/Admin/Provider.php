@@ -78,6 +78,9 @@ class Provider implements ControllerProviderInterface
         $controllers->get('/bulletins/{id}', 'bulletin.controller:readAction')
                     ->bind('admin_bulletins_read');
 
+        $controllers->get('/bulletins/{id}/print', 'bulletin.controller:printAction')
+                    ->bind('admin_bulletins_print');
+
         $controllers->get('/contrats/{contratId}/bulletins/new', 'bulletin.controller:newAction')
                     ->bind('admin_bulletins_new');
 

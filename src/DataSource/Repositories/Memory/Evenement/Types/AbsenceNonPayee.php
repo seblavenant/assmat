@@ -13,6 +13,7 @@ class AbsenceNonPayee
         $evenementTypeDTO = new DTO\EvenementType();
         $evenementTypeDTO->id = Constants\Evenements\Type::ABSENCE_NON_PAYEE;
         $evenementTypeDTO->label = 'Absence non payée';
+        $evenementTypeDTO->code = 'ABSNP';
         $evenementTypeDTO->dureeFixe = true;
         $evenementTypeDTO->computeClosure = function() {
         };

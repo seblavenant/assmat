@@ -25,6 +25,11 @@ class EvenementType
         return $this->fields->label;
     }
 
+    public function getCode()
+    {
+        return $this->fields->code;
+    }
+
     public function isDureeFixe()
     {
         return $this->fields->dureeFixe === true;

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+
+        <style>
+            * {
+                font-family: verdana;
+                margin: 0;
+                padding: 0;
+                font-size: 12px;
+            }
+            .clear {
+                clear:both;
+            }
+            .column {
+                float: left;
+            }
+            .right {
+                text-align: right;
+            }
+            .colored {
+                background: #eee;
+            }
+            #container {
+                width:800px;
+                margin: 0 auto;
+            }
+            #title {
+                background: #4986E8;
+                text-align: center;
+                font-weight: bold;
+                padding: 5px 0;
+            }
+            #contacts
+            {
+                margin-top: 15px;
+            }
+            #contacts .contact {
+                width: 380px;
+                background: #eee;
+                margin-left: 12px;
+                padding: 5px 0;
+
+                text-align: center;
+            }
+
+            #contacts .contact li {
+                list-style: none;
+            }
+
+            #contacts .contact .type {
+                font-weight: bold;
+            }
+
+            #contenu {
+                padding-top: 15px;
+            }
+            #heures {
+                width: 120px;
+            }
+            #heures li {
+                list-style: none;
+                clear: both;
+            }
+            #heures div {
+                width: 45px;
+                height: 15px;
+                float: left;
+                overflow: hidden;
+            }
+            #heures .date {
+                width: 20px;
+            }
+            #heures .duree {
+                background: #eee;
+            }
+            #lignes table {
+                width: 99%;
+            }
+            #lignes {
+                width: 650px;
+                padding: 5px;
+                border: 1px solid #eee;
+                min-height: 300px;
+                margin-left: 15px;
+            }
+            #lignes td {
+                padding: 2px 5px;
+                height: 20px;
+                min-width: 100px;
+            }
+            #lignes #netAPayer {
+                margin-top: 15px;
+                background: #4986E8;
+                font-weight: bold;
+                text-align: right;
+                padding: 5px;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div id="container">
+            <div id="title">BULLETIN DE PAYE {{ "%02d"|format(bulletin.mois) }}/{{ bulletin.annee}}</div>
+            <div id="contacts" class="clear">
+                <div id="employeur" class="contact column">
+                    {% set employeur = contrat.employeur.contact %}
+                    <div class="type">Employeur</div>
+                    <ul>
+                        <li>{{ employeur.nom }} {{ employeur.prenom }}</i>
+                        <li>{{ employeur.adresse }}</i>
+                        <li>{{ employeur.codePostal }} {{ employeur.ville }}</li>
+                        <li>{{ contrat.employeur.pajeEmploiId }}</li>
+                    </ul>
+                </div>
+                <div id="employe" class="contact column">
+                    {% set employe = contrat.employe.contact %}
+                    <div class="type">Employé</div>
+                    <ul>
+                        <li>{{ employe.nom }} {{ employe.prenom }}</i>
+                        <li>{{ employe.adresse }}</i>
+                        <li>{{ employe.codePostal }} {{ employe.ville }}</li>
+                        <li>{{ contrat.employe.ssId }}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="contenu" class="clear">
+                <div id="heures" class="column">
+                    <ul>
+                    {% for evenement in bulletin.evenements %}
+                        <li>
+                            <div class="date">{{ evenement.date | date('d') }}</div>
+                            <div class="code
+                            {% if evenement.type.id != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}colored{% endif %}
+                            ">
+                            {% if evenement.type.id != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}
+                                {{ evenement.type.code }}
+                            {% endif %}
+                            </div>
+                            <div class="duree">
+                                {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
+                                    {{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}
+                                {% elseif(evenement.typeId != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::ABSENCE_NON_PAYEE')) %}
+                                    {{ formatDecimalToHour(contrat.heuresJour) }}
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div id="lignes" class="column">
+                    <table class="table">
+                        <thead>
+                            <th></td>
+                            <th class="right">BASE</th>
+                            <th class="right">QTE</th>
+                            <th class="right">GAIN</th>
+                            <th class="right">RETENUE</th>
+                        </thead>
+                        <tbody>
+                        {% for ligne in bulletin.lignes %}
+                            <tr
+                            {% if loop.index is odd %} class="colored" {% endif %}
+                            >
+                                <td>{{ ligne.label }}</td>
+                                <td class="right">{{ ligne.base ? ligne.base | number_format(2, ',', ' ') }}</td>
+                                <td class="right">{{ ligne.taux ? ligne.taux | number_format(2, ',', ' ') ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
+                                <td class="right">{{ ligne.actionId == 1 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
+                                <td class="right">{{ ligne.actionId == 2 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="netAPayer">
+                        Net à payer : {{ bulletin.salaireNet | number_format(2, ',', ' ') }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>

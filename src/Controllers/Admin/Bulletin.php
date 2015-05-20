@@ -106,15 +106,26 @@ class Bulletin
 
     public function readAction($id)
     {
+        return $this->renderBulletin($id, 'admin/bulletins/read.html.twig');
+    }
+
+    public function printAction($id)
+    {
+        return $this->renderBulletin($id, 'admin/bulletins/print.html.twig');
+    }
+
+    private function renderBulletin($id, $view)
+    {
         $bulletin = $this->bulletinRepository->find($id);
-        $bulletin->getContrat()->validateContactAutorisation($this->getContact());
 
         if(!$bulletin instanceof Domains\Bulletin)
         {
             throw new \Exception('Aucun bulletin ne correspond à cet identifiant');
         }
 
-        return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
+        $bulletin->getContrat()->validateContactAutorisation($this->getContact());
+
+        return new Response($this->twig->render($view, array(
             'contrat' => $bulletin->getContrat(),
             'evenements' => $bulletin->getEvenements(),
             'annee' => $bulletin->getAnnee(),

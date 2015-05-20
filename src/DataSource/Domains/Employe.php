@@ -19,6 +19,11 @@ class Employe
         return $this->fields->id;
     }
 
+    public function getSSId()
+    {
+        return $this->fields->ssId;
+    }
+
     public function getContact()
     {
         return $this->fields->load('contact');

@@ -56,6 +56,11 @@ class Contrat
         return $this->fields->heuresHebdo;
     }
 
+    public function getHeuresMensuel()
+    {
+        return $this->getHeuresHebdo() * $this->getNombreSemainesAn() / 12;
+    }
+
     public function getHeuresJour()
     {
         return $this->fields->heuresHebdo / $this->fields->joursGarde;

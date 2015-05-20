@@ -30,7 +30,7 @@ class Salaire
         switch($contrat->getTypeId())
         {
             case Constants\Contrats\Salaire::MENSUALISE:
-                $ligneDTO->quantite = $contrat->getHeuresHebdo() * $contrat->getNombreSemainesAn() / 12;
+                $ligneDTO->quantite = $contrat->getHeuresMensuel();
                 $ligneDTO->quantite -= $bulletin->getHeuresNonPayee();
                 break;
             case Constants\Contrats\Salaire::HEURES:

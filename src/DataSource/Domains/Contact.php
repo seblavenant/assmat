@@ -38,4 +38,19 @@ class Contact
     {
         return $this->fields->prenom;
     }
+
+    public function getAdresse()
+    {
+        return $this->fields->adresse;
+    }
+
+    public function getCodePostal()
+    {
+        return $this->fields->codePostal;
+    }
+
+    public function getVille()
+    {
+        return $this->fields->ville;
+    }
 }

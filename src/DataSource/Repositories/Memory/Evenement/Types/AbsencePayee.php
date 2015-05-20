@@ -13,6 +13,7 @@ class AbsencePayee
         $evenementTypeDTO = new DTO\EvenementType();
         $evenementTypeDTO->id = Constants\Evenements\Type::ABSENCE_PAYEE;
         $evenementTypeDTO->label = 'Absence payée';
+        $evenementTypeDTO->code = 'ABSP';
         $evenementTypeDTO->dureeFixe = true;
         $evenementTypeDTO->computeClosure = function($evenement) {
             $evenement->setJourPaye();
