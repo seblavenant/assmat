@@ -26,22 +26,25 @@
                 margin: 0 auto;
             }
             #title {
-                background: #4986E8;
+                background: #0B8CBF;
                 text-align: center;
                 font-weight: bold;
-                padding: 5px 0;
+                padding: 10px 0;
+                margin-top: 15px;
             }
             #contacts
             {
                 margin-top: 15px;
             }
             #contacts .contact {
-                width: 380px;
+                width: 390px;
                 background: #eee;
-                margin-left: 12px;
                 padding: 5px 0;
 
                 text-align: center;
+            }
+            #contacts #employe {
+                margin-left: 20px;
             }
 
             #contacts .contact li {
@@ -56,45 +59,70 @@
                 padding-top: 15px;
             }
             #heures {
-                width: 120px;
+                width: 150px;
             }
             #heures li {
                 list-style: none;
                 clear: both;
             }
             #heures div {
-                width: 45px;
-                height: 15px;
+                width: 55px;
+                padding: 0 2px;
+                height: 30px;
                 float: left;
                 overflow: hidden;
+                line-height: 30px;
+                white-space: nowrap;
+            }
+            #heures .large {
+                width: 110px;
+                font-size: 9px;
             }
             #heures .date {
                 width: 20px;
+                font-weight: bold;
+                border-right: 1px solid #ddd;
             }
             #heures .duree {
                 background: #eee;
             }
             #lignes table {
                 width: 99%;
+                border-collapse: collapse;
             }
             #lignes {
-                width: 650px;
+                width: 620px;
                 padding: 5px;
                 border: 1px solid #eee;
                 min-height: 300px;
                 margin-left: 15px;
             }
+            #lignes th {
+                background: #eee;
+                font-weight: normal;
+                height: 30px;
+                padding: 2px 5px;
+            }
             #lignes td {
                 padding: 2px 5px;
-                height: 20px;
+                height: 30px;
                 min-width: 100px;
+                border-bottom: 1px solid #eee;
             }
-            #lignes #netAPayer {
-                margin-top: 15px;
-                background: #4986E8;
-                font-weight: bold;
-                text-align: right;
+            #lignes .subtotal{
                 padding: 5px;
+                background: #79BED9;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            #lignes .total {
+                background: #0B8CBF;
+                font-weight: bold;
+                padding: 5px;
+                text-transform: uppercase;
+            }
+            #lignes .subtotal, #lignes .total {
+                border: none;
             }
         </style>
 
@@ -107,20 +135,20 @@
                     {% set employeur = contrat.employeur.contact %}
                     <div class="type">Employeur</div>
                     <ul>
-                        <li>{{ employeur.nom }} {{ employeur.prenom }}</i>
+                        <li>{{ employeur.nom | upper }} {{ employeur.prenom | capitalize }}</i>
                         <li>{{ employeur.adresse }}</i>
-                        <li>{{ employeur.codePostal }} {{ employeur.ville }}</li>
-                        <li>{{ contrat.employeur.pajeEmploiId }}</li>
+                        <li>{{ employeur.codePostal }} {{ employeur.ville | upper }}</li>
+                        <li>N° PAJEMPLOI : {{ contrat.employeur.pajeEmploiId }}</li>
                     </ul>
                 </div>
                 <div id="employe" class="contact column">
                     {% set employe = contrat.employe.contact %}
                     <div class="type">Employé</div>
                     <ul>
-                        <li>{{ employe.nom }} {{ employe.prenom }}</i>
+                        <li>{{ employe.nom | upper}} {{ employe.prenom | capitalize}}</i>
                         <li>{{ employe.adresse }}</i>
-                        <li>{{ employe.codePostal }} {{ employe.ville }}</li>
-                        <li>{{ contrat.employe.ssId }}</li>
+                        <li>{{ employe.codePostal }} {{ employe.ville | upper }}</li>
+                        <li>N° SS : {{ contrat.employe.ssId }}</li>
                     </ul>
                 </div>
             </div>
@@ -129,21 +157,20 @@
                 <div id="heures" class="column">
                     <ul>
                     {% for evenement in bulletin.evenements %}
+                        {% set class = "" %}
+                        {% if evenement.type.id == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}
+                            {% set class = 'colored' %}
+                        {% endif %}
                         <li>
-                            <div class="date">{{ evenement.date | date('d') }}</div>
-                            <div class="code
-                            {% if evenement.type.id != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}colored{% endif %}
-                            ">
-                            {% if evenement.type.id != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}
-                                {{ evenement.type.code }}
-                            {% endif %}
-                            </div>
-                            <div class="duree">
+                            <div class="date {{ class }}">{{ evenement.date | date('d') }}</div>
+                            <div class="large {{ class }}">
+                            {% if evenement.type.id == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}
                                 {% if(evenement.typeId == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE')) %}
                                     {{ evenement.duree | date('%H') }}h{{ evenement.duree | date('%I') }}
-                                {% elseif(evenement.typeId != constant('Assmat\\DataSource\\Constants\\Evenements\\Type::ABSENCE_NON_PAYEE')) %}
-                                    {{ formatDecimalToHour(contrat.heuresJour) }}
                                 {% endif %}
+                            {% else %}
+                                {{ evenement.type.label }}
+                            {% endif %}
                             </div>
                         </li>
                     {% endfor %}
@@ -154,30 +181,47 @@
                         <thead>
                             <th></td>
                             <th class="right">BASE</th>
-                            <th class="right">QTE</th>
+                            <th class="right">QUANTITE</th>
                             <th class="right">GAIN</th>
                             <th class="right">RETENUE</th>
                         </thead>
                         <tbody>
-                        {% for ligne in bulletin.lignes %}
-                            <tr
-                            {% if loop.index is odd %} class="colored" {% endif %}
-                            >
-                                <td>{{ ligne.label }}</td>
-                                <td class="right">{{ ligne.base ? ligne.base | number_format(2, ',', ' ') }}</td>
-                                <td class="right">{{ ligne.taux ? ligne.taux | number_format(2, ',', ' ') ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
-                                <td class="right">{{ ligne.actionId == 1 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
-                                <td class="right">{{ ligne.actionId == 2 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
-                            </tr>
-                        {% endfor %}
+
+                    {{ _self.displayLignes(bulletin.lignes, constant('Assmat\\DataSource\\Constants\\Lignes\\Context::REMUNERATION')) }}
+                    <tr class="subtotal">
+                        <td>Salaire brut</td>
+                        <td colspan="4" class="right">{{ bulletin.salaireBrut | number_format(2, ',', ' ') }}</td>
+                    </tr>
+                    {{ _self.displayLignes(bulletin.lignes, constant('Assmat\\DataSource\\Constants\\Lignes\\Context::COTISATION')) }}
+                    <tr class="subtotal">
+                        <td>Total cotisations</td>
+                        <td colspan="4" class="right">{{ bulletin.cotisationsMontant | number_format(2, ',', ' ') }}</td>
+                    </tr>
+                    {{ _self.displayLignes(bulletin.lignes, constant('Assmat\\DataSource\\Constants\\Lignes\\Context::INDEMNITE')) }}
+                    <tr class="subtotal">
+                        <td>Total indemnites</td>
+                        <td colspan="4" class="right">{{ bulletin.indemnitesMontant | number_format(2, ',', ' ') }}</td>
+                    </tr>
+                    <tr class="total">
+                        <td>Net à payer</td>
+                        <td colspan="4" class="right">{{ bulletin.salaireNet | number_format(2, ',', ' ') }}</td>
+                    </tr>
                         </tbody>
                     </table>
-                    <div id="netAPayer">
-                        Net à payer : {{ bulletin.salaireNet | number_format(2, ',', ' ') }}
-                    </div>
                 </div>
-
             </div>
         </div>
     </body>
 </html>
+
+{% macro displayLignes(lignes, type) %}
+    {% for ligne in lignes if ligne.contextId == type %}
+        <tr>
+            <td>{{ ligne.label }}</td>
+            <td class="right">{{ ligne.base ? ligne.base | number_format(2, ',', ' ') }}</td>
+            <td class="right">{{ ligne.taux ? ligne.taux | number_format(2, ',', ' ') ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
+            <td class="right">{{ ligne.actionId == 1 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
+            <td class="right">{{ ligne.actionId == 2 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
