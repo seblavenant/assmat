@@ -33,6 +33,9 @@ class Application extends AbstractApplication
         $this->register(new \Assmat\Providers\MysqlDBAL());
         $this->register(new SpearProvider\Twig());
         $this->register(new SpearProvider\AsseticServiceProvider());
+        $this->register(new SilexProvider\WebProfilerServiceProvider(), array(
+            'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+        ));
     }
 
     protected function mountControllerProviders()

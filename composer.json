@@ -29,6 +29,7 @@
         "oyejorge/less.php" : "~1.7",
         "symfony/security": "~2.6",
         "knplabs/knp-snappy": "0.4",
-        "h4cc/wkhtmltopdf-i386": "0.12.2.1"
+        "h4cc/wkhtmltopdf-i386": "0.12.2.1",
+        "silex/web-profiler": "~1.0"
     }
 }

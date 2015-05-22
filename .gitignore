@@ -6,3 +6,4 @@ var/
 assets/compiled/
 www/js
 www/css
+cache
