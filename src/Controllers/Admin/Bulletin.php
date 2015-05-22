@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\Symfony\Component\HttpFoundation;
 
 class Bulletin
 {
@@ -106,12 +108,24 @@ class Bulletin
 
     public function readAction($id)
     {
-        return $this->renderBulletin($id, 'admin/bulletins/read.html.twig');
+        $bulletinHtml =  $this->renderBulletin($id, 'admin/bulletins/read.html.twig');
+
+        return new Response($bulletinHtml);
     }
 
     public function printAction($id)
     {
-        return $this->renderBulletin($id, 'admin/bulletins/print.html.twig');
+        $bulletinHtml = $this->renderBulletin($id, 'admin/bulletins/print.html.twig');
+
+        $bulletinPdf  = (new Pdf('/usr/local/bin/wkhtmltopdf.sh'))->getOutputFromHtml(utf8_decode($bulletinHtml));
+
+        $headers = array(
+            'Content-Disposition' => 'attachment; filename="bulletin.pdf"',
+            'Content-Type' => 'application/pdf',
+            'Content-Length' => strlen($bulletinPdf),
+        );
+
+        return new Response($bulletinPdf, 200, $headers);
     }
 
     private function renderBulletin($id, $view)
@@ -125,14 +139,14 @@ class Bulletin
 
         $bulletin->getContrat()->validateContactAutorisation($this->getContact());
 
-        return new Response($this->twig->render($view, array(
+        return $this->twig->render($view, array(
             'contrat' => $bulletin->getContrat(),
             'evenements' => $bulletin->getEvenements(),
             'annee' => $bulletin->getAnnee(),
             'mois' => $bulletin->getMois(),
             'bulletin' => $bulletin,
             'saveEnable' => false,
-        )));
+        ));
     }
 
     private function validateDate()
