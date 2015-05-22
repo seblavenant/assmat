@@ -32,3 +32,9 @@ source /home/vagrant/.bashrc
 
 # SERVICE LAUNCH
 service apache2 restart
+
+apt-get install -y wkhtmltopdf
+apt-get install -y openssl build-essential xorg libssl-dev
+apt-get install -y xvfb
+cp /vagrant/.vagrant/provision/scripts/wkhtmltopdf.sh /usr/local/bin/
+chmod a+x /usr/local/bin/wkhtmltopdf.sh

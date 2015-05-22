@@ -27,6 +27,8 @@
         "twbs/bootstrap" : "~3.3",
         "fortawesome/font-awesome": "~4.3",
         "oyejorge/less.php" : "~1.7",
-        "symfony/security": "~2.6"
+        "symfony/security": "~2.6",
+        "knplabs/knp-snappy": "0.4",
+        "h4cc/wkhtmltopdf-i386": "0.12.2.1"
     }
 }
