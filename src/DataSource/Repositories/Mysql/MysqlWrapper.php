@@ -3,54 +3,71 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Doctrine\DBAL\Driver\Connection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Assmat\Services;
 
 class MysqlWrapper implements Mysql
 {
     private
-        $mysql;
+        $mysql,
+        $dispatcher;
 
-    public function __construct(\Doctrine\DBAL\Connection $mysql)
+    public function __construct(\Doctrine\DBAL\Connection $mysql, EventDispatcherInterface $dispatcher)
     {
         $this->mysql = $mysql;
+        $this->dispatcher = $dispatcher;
+    }
+
+    private function dispatch($sql)
+    {
+        $this->dispatcher->dispatch('mysql.query', new Services\Events\Mysql($sql));
     }
 
     public function fetchAssoc($statement, array $params = array(), array $types = array())
     {
+        $this->dispatch($statement);
         return $this->mysql->fetchAssoc($statement, $params, $types);
     }
 
     public function fetchArray($statement, array $params = array(), array $types = array())
     {
+        $this->dispatch($statement);
         return $this->mysql->fetchArray($statement, $params, $types);
     }
 
     public function fetchColumn($statement, array $params = array(), $column = 0, array $types = array())
     {
+        $this->dispatch($statement);
         return $this->mysql->fetchColumn($statement, $params, $column, $types);
     }
 
     public function fetchAll($sql, array $params = array(), $types = array())
     {
+        $this->dispatch($sql);
         return $this->mysql->fetchAll($sql, $params, $types);
     }
 
     public function executeQuery($query, array $params = array(), $types = array(), QueryCacheProfile $qcp = null)
     {
+        $this->dispatch($sql);
         return $this->mysql->executeQuery($query, $params, $types, $qcp);
     }
 
     public function delete($tableExpression, array $identifier, array $types = array())
     {
+        $this->dispatch($sql);
         return $this->mysql->delete($tableExpression, $identifier, $types);
     }
 
     public function update($tableExpression, array $data, array $identifier, array $types = array())
     {
+        $this->dispatch($sql);
         return $this->mysql->update($tableExpression, $data, $identifier, $types);
     }
 
     public function insert($tableExpression, array $data, array $types = array())
     {
+        $this->dispatch($sql);
         return $this->mysql->insert($tableExpression, $data, $types);
     }
 
@@ -71,6 +88,7 @@ class MysqlWrapper implements Mysql
 
     public function exec($statement)
     {
+        $this->dispatch($statement);
         return $this->mysql->exec($statement);
     }
 

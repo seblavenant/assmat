@@ -10,7 +10,6 @@ use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\Services;
 
-
 class Application extends AbstractApplication
 {
     protected function initializeServices()
@@ -30,12 +29,9 @@ class Application extends AbstractApplication
         $this->register(new SilexProvider\UrlGeneratorServiceProvider());
         $this->register(new SilexProvider\FormServiceProvider());
         $this->register(new SilexProvider\TranslationServiceProvider());
-        $this->register(new \Assmat\Providers\MysqlDBAL());
         $this->register(new SpearProvider\Twig());
-        $this->register(new SpearProvider\AsseticServiceProvider());
-        $this->register(new SilexProvider\WebProfilerServiceProvider(), array(
-            'profiler.cache_dir' => __DIR__.'/../cache/profiler',
-        ));
+        $this->register(new \Assmat\Providers\MysqlDBAL());
+        $this->register(new \Assmat\Providers\WebProfiler());
     }
 
     protected function mountControllerProviders()
@@ -43,7 +39,6 @@ class Application extends AbstractApplication
         $this->mount('/', new Controllers\Home\Provider());
         $this->mount('/admin', new Controllers\Admin\Provider());
     }
-
 
     private function configureTwig()
     {

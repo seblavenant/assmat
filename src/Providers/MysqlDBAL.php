@@ -49,7 +49,7 @@ class MysqlDBAL implements ServiceProviderInterface
 
         // Declare helper
         $app['db.' . $database] = $app->share(function() use ($app, $database) {
-            return new MysqlWrapper($app['dbs'][$database]);
+            return new MysqlWrapper($app['dbs'][$database], $app['dispatcher']);
         });
 
         return $options;

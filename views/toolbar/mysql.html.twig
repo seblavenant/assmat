@@ -1,0 +1,36 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {# Symfony Logo #}
+    {% set icon %}
+        <img alt="Symfony" src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA/tJREFUeNq0ln9olHUcx5/7fbfddIOKlafnj+klZyhsZBoYhcwplKQWGY2YKFqSZu6fIIp+iJHFQKyV/pkTnDkSoUhwhiAkDXTQj+tSQsTIeXM3t93P3V2vz/HZ8Xg+4xauL7x4nuf76/35fr6f7+f72AqFgtHU1GRYFDeEYTkshtkwA1wwArfgT+iHPrhpVChOi7rVygZYaEytxOEs/ADdMGzVyWZaWS18AZuN+ytX4XU4U95g12cdfDcNQlIWwEl4aTKxt2GFMX3FD53wkJXYSmP6S60G1T1iJ/4HsYhG6z1iPXBoGoWuwQvgsBL7BI7CjnJr/mPJwlfQAq/CY1Zij8JxOKcHeRP06vmpVHIQhX0QUoNfg3ZIWh3qMVgGv8JpOAxrwAv1GlUzNcoks9zRMTEY0GwyB9qgFeZOmkFsNtslDveT+v288hf8COfhd7U+A3kV9MEi9cIz8ETZHiXsdvvfVivbr53NSXKe0maqKyj2Sr7F+DdhUBcj36VBbVRs5flNhTlsFYT+gC7JRMzXlc/n61idwdNwu92llb2McqMmX1nhHnhWXTWVkmT8bgSOTKxEBMSVIpJOpw2Hw1ESG9Z9kuviYDKZ3FZdXe1hwBImkVwXYIKABolcMbc1OGRP/qGtP5vNyr6uYvJWxgSpk+CKUf8L3x28DxWzfmNj47c0rjf5+xaWdCP2fSaTuUjVoNfrLUhfwePxGNSLxS7GZauqqgwmPUBbu6zKYv+u0Ke1KBYOh5di0XkEZli4KGMKdTm0efZBPOIfGBjYE4vFjoVCoQPUtctcprOX1wC0qWuHipuN0Gw6vkLFdQvLJMwfgCA0SLiz4vnj4+NJOBEMBlfJATYJSdkJS/ToFEsxWIrx73R+hMgCXDEX9okbK17xTueFQCAgLtxiYeB1PZfpUhjTZyJAUnx0wDz24SB78jGWrEN0mV6GsqIHNTodGn2/ScTxnGVynazoBnV9asC78Dm8Ac1FMQRSsul02uXz+bZTdQq+hPelecJy2t16zsTiAl6QkPaaDrzc0DHTSn/WZ3NJzOVydTLRU9rgyeVyL/IUhuS6ULeOaGLN8V3FmF72ujOVSt3WyR36szMKH6rQO/A4LC2lq5qamuNjY2NS+VbZRtcpd6cRJsegOujkSFzGM89p1D2tXQ6Z/gDWll8xUvYmEok1iPVPJWWwXyuj0WhDJBLp4P1aWZDs1ZsjXBIibd2V5wjlM2SP5Vi8kcFfU3VBfz7zEysyDfbV19e/h9Aw/eVPatA0lezRNr12iuNGR0e7neXuYWVp/U3oMf24PAIP42o/aUzSVQKRQb/ff5NvO0b+JKmK8Z8xvsWc6WGE9w/i8fin/wowADoTsCStFL0zAAAAAElFTkSuQmCC" />
+<span class="sf-toolbar-status">{{ collector.data | length }}</span>
+    {% endset %}
+    {% set text %}
+        <b>Requêtes SQL</b> : {{ collector.data | length }}
+    {% endset %}
+    {% include '@WebProfiler/Profiler/toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+<span class="label">
+    <span class="icon"><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA/tJREFUeNq0ln9olHUcx5/7fbfddIOKlafnj+klZyhsZBoYhcwplKQWGY2YKFqSZu6fIIp+iJHFQKyV/pkTnDkSoUhwhiAkDXTQj+tSQsTIeXM3t93P3V2vz/HZ8Xg+4xauL7x4nuf76/35fr6f7+f72AqFgtHU1GRYFDeEYTkshtkwA1wwArfgT+iHPrhpVChOi7rVygZYaEytxOEs/ADdMGzVyWZaWS18AZuN+ytX4XU4U95g12cdfDcNQlIWwEl4aTKxt2GFMX3FD53wkJXYSmP6S60G1T1iJ/4HsYhG6z1iPXBoGoWuwQvgsBL7BI7CjnJr/mPJwlfQAq/CY1Zij8JxOKcHeRP06vmpVHIQhX0QUoNfg3ZIWh3qMVgGv8JpOAxrwAv1GlUzNcoks9zRMTEY0GwyB9qgFeZOmkFsNtslDveT+v288hf8COfhd7U+A3kV9MEi9cIz8ETZHiXsdvvfVivbr53NSXKe0maqKyj2Sr7F+DdhUBcj36VBbVRs5flNhTlsFYT+gC7JRMzXlc/n61idwdNwu92llb2McqMmX1nhHnhWXTWVkmT8bgSOTKxEBMSVIpJOpw2Hw1ESG9Z9kuviYDKZ3FZdXe1hwBImkVwXYIKABolcMbc1OGRP/qGtP5vNyr6uYvJWxgSpk+CKUf8L3x28DxWzfmNj47c0rjf5+xaWdCP2fSaTuUjVoNfrLUhfwePxGNSLxS7GZauqqgwmPUBbu6zKYv+u0Ke1KBYOh5di0XkEZli4KGMKdTm0efZBPOIfGBjYE4vFjoVCoQPUtctcprOX1wC0qWuHipuN0Gw6vkLFdQvLJMwfgCA0SLiz4vnj4+NJOBEMBlfJATYJSdkJS/ToFEsxWIrx73R+hMgCXDEX9okbK17xTueFQCAgLtxiYeB1PZfpUhjTZyJAUnx0wDz24SB78jGWrEN0mV6GsqIHNTodGn2/ScTxnGVynazoBnV9asC78Dm8Ac1FMQRSsul02uXz+bZTdQq+hPelecJy2t16zsTiAl6QkPaaDrzc0DHTSn/WZ3NJzOVydTLRU9rgyeVyL/IUhuS6ULeOaGLN8V3FmF72ujOVSt3WyR36szMKH6rQO/A4LC2lq5qamuNjY2NS+VbZRtcpd6cRJsegOujkSFzGM89p1D2tXQ6Z/gDWll8xUvYmEok1iPVPJWWwXyuj0WhDJBLp4P1aWZDs1ZsjXBIibd2V5wjlM2SP5Vi8kcFfU3VBfz7zEysyDfbV19e/h9Aw/eVPatA0lezRNr12iuNGR0e7neXuYWVp/U3oMf24PAIP42o/aUzSVQKRQb/ff5NvO0b+JKmK8Z8xvsWc6WGE9w/i8fin/wowADoTsCStFL0zAAAAAElFTkSuQmCC" alt="Mysql"></span>
+    <b>Requêtes SQL</b>
+</span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Requêtes SQL</h2>
+    <table>
+       <tr>
+           <th>Query</th>
+       </tr>
+       {% for query in collector.data%}
+           <tr>
+               <td>{{ query }}</td>
+           </tr>
+       {% endfor %}
+   </table>
+{% endblock %}
