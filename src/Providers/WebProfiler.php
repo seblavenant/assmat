@@ -22,7 +22,7 @@ class WebProfiler implements ServiceProviderInterface
         }
 
         $app->register(new SilexProvider\WebProfilerServiceProvider(), array(
-            'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+            'profiler.cache_dir' => __DIR__.'/../../cache/profiler',
         ));
         $app['mysql.collector'] = $app->share(function() {
             return new Services\WebProfiler\Collectors\Mysql();
