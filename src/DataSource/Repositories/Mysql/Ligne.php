@@ -7,7 +7,6 @@ use Assmat\DataSource\Constants;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
-use Muffin\Conditions;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
@@ -52,7 +51,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
             $yearFin -= 1;
         }
 
-        $dateDebutPreviousYear = new \DateTime(($yearDebut -1) . '-06-01');
+        $dateDebutPreviousYear = new \DateTime(($yearDebut - 1) . '-06-01');
         $dateFinPreviousYear = new \DateTime($yearFin . '-05-31');
         $dateDebutCurrentYear = new \DateTime($yearDebut . '-06-01');
         $dateFinCurrentYear = new \DateTime($currentYear . '-' . $date->format('m') . '-' . $date->format('t'));

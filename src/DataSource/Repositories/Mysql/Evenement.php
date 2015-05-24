@@ -7,6 +7,7 @@ use Assmat\DataSource\DataTransferObjects;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
 use Muffin\Types;
+use Muffin\Query;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
@@ -63,7 +64,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         return $query;
     }
 
-    public function getDateQuery($query, Date $date)
+    public function getDateQuery(Query $query, Date $date)
     {
         $query->where((new Types\Datetime('date'))->like($date->getDate() . '%'));
 
