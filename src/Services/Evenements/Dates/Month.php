@@ -1,8 +1,8 @@
 <?php
 
-namespace Assmat\Services\Evenements\Periods;
+namespace Assmat\Services\Evenements\Dates;
 
-class Month implements Period
+class Month implements Date
 {
     private
         $date;
@@ -17,7 +17,7 @@ class Month implements Period
         $this->date = $date;
     }
 
-    public function getPeriod()
+    public function getDate()
     {
         return $this->date->format('Y-m');
     }

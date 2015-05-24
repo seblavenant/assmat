@@ -104,7 +104,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     public function getDomain(DataTransferObject $dto)
     {
         $dto->set('evenements', function() use($dto) {
-            return $this->evenementRepository->findAllFromContrat($dto->contratId, new Evenements\Periods\Month(new \DateTime($dto->annee . '-' . $dto->mois)));
+            return $this->evenementRepository->findAllFromContrat($dto->contratId, new Evenements\Dates\Month(new \DateTime($dto->annee . '-' . $dto->mois)));
         });
 
         $dto->set('contrat', function() use($dto) {
@@ -113,6 +113,10 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
 
         $dto->set('lignes', function() use($dto) {
             return $this->ligneRepository->findFromBulletin($dto->id);
+        });
+
+        $dto->set('congesPayes', function() use($dto) {
+            return $this->ligneRepository->findCongePayesFromContratAndDate($dto->contratId, new \DateTime($dto->annee . '-' . $dto->mois));
         });
 
         return new Domains\Bulletin($dto);

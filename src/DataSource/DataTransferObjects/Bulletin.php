@@ -18,6 +18,7 @@ class Bulletin extends Related
             'evenements',
             'contrat',
             'lignes',
+            'congesPayes',
         ));
     }
 }

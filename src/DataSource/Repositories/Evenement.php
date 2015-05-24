@@ -2,7 +2,7 @@
 
 namespace Assmat\DataSource\Repositories;
 
-use Assmat\Services\Evenements\Periods\Period;
+use Assmat\Services\Evenements\Dates\Date;
 
 interface Evenement
 {
@@ -10,5 +10,5 @@ interface Evenement
 
     public function findOneFromContratAndDay($contratId, \DateTime $date = null);
 
-    public function findAllFromContrat($contratId, Period $period = null);
+    public function findAllFromContrat($contratId, Date $period = null);
 }

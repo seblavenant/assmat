@@ -55,6 +55,11 @@ class Bulletin
         return $this->fields->load('evenements');
     }
 
+    public function getCongesPayes()
+    {
+        return $this->fields->load('congesPayes');
+    }
+
     public function getSalaireBrut()
     {
         if($this->salaireBrut === null)

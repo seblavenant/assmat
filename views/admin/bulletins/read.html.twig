@@ -126,6 +126,50 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i>Congés payés
+                    </div>
+                    <div class="box-icons">
+                        <a class="collapse-link" data-toggle="collapse">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <th>Compteurs</td>
+                            <th>Acquis</th>
+                            <th>Pris</th>
+                        </thead>
+                        <tbody>
+                        {% for label, periods in bulletin.congesPayes %}
+                            <tr>
+                                {% set aquisTotal = 0 %}
+                                {% set prisTotal = 0 %}
+                                <td>{{ label }}</td>
+                                {% for cp in periods %}
+                                    {% if cp.typeId == constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS') %}
+                                        {% set aquisTotal = aquisTotal + cp.valeur %}
+                                    {% endif %}
+                                    {% if cp.typeId == constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS') %}
+                                        {% set prisTotal = prisTotal + cp.valeur %}
+                                    {% endif %}
+                                {% endfor %}
+                                <td>{{ aquisTotal | round(2) }}</p>
+                                <td>{{ prisTotal | round(2) }}</p>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

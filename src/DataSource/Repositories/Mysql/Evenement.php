@@ -11,7 +11,7 @@ use Muffin\Tests\Escapers\SimpleEscaper;
 use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
-use Assmat\Services\Evenements\Periods\Period;
+use Assmat\Services\Evenements\Dates\Date;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
@@ -38,34 +38,34 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
 
     public function findOneFromContratAndDay($contratId, \DateTime $date = null)
     {
-        $query = $this->getQueryFromContrat($contratId, new \Assmat\Services\Evenements\Periods\Day($date));
+        $query = $this->getQueryFromContrat($contratId, new \Assmat\Services\Evenements\Dates\Day($date));
 
         return $this->fetchOne($query);
     }
 
-    public function findAllFromContrat($contratId, Period $period = null)
+    public function findAllFromContrat($contratId, Date $date = null)
     {
-        $query = $this->getQueryFromContrat($contratId, $period);
+        $query = $this->getQueryFromContrat($contratId, $date);
 
         return $this->fetchAll($query);
     }
 
-    private function getQueryFromContrat($contratId, Period $period = null)
+    private function getQueryFromContrat($contratId, Date $date = null)
     {
         $query = $this->getBaseQuery();
         $query->where((new Types\Integer('contrat_id'))->equal($contratId));
 
-        if($period instanceof Period)
+        if($date instanceof Date)
         {
-            $this->getDateQuery($query, $period);
+            $this->getDateQuery($query, $date);
         }
 
         return $query;
     }
 
-    public function getDateQuery($query, $period)
+    public function getDateQuery($query, Date $date)
     {
-        $query->where((new Types\Datetime('date'))->like($period->getPeriod() . '%'));
+        $query->where((new Types\Datetime('date'))->like($date->getDate() . '%'));
 
         return $query;
     }

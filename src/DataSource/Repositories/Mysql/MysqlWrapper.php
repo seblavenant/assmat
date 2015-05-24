@@ -49,25 +49,25 @@ class MysqlWrapper implements Mysql
 
     public function executeQuery($query, array $params = array(), $types = array(), QueryCacheProfile $qcp = null)
     {
-        $this->dispatch($sql);
+        $this->dispatch($query);
         return $this->mysql->executeQuery($query, $params, $types, $qcp);
     }
 
     public function delete($tableExpression, array $identifier, array $types = array())
     {
-        $this->dispatch($sql);
+        $this->dispatch($tableExpression);
         return $this->mysql->delete($tableExpression, $identifier, $types);
     }
 
     public function update($tableExpression, array $data, array $identifier, array $types = array())
     {
-        $this->dispatch($sql);
+        $this->dispatch($tableExpression);
         return $this->mysql->update($tableExpression, $data, $identifier, $types);
     }
 
     public function insert($tableExpression, array $data, array $types = array())
     {
-        $this->dispatch($sql);
+        $this->dispatch($tableExpression);
         return $this->mysql->insert($tableExpression, $data, $types);
     }
 

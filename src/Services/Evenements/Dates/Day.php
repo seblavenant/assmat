@@ -1,6 +1,6 @@
 <?php
 
-namespace Assmat\Services\Evenements\Periods;
+namespace Assmat\Services\Evenements\Dates;
 
 class Day implements Period
 {
@@ -17,7 +17,7 @@ class Day implements Period
         $this->date = $date;
     }
 
-    public function getPeriod()
+    public function getDate()
     {
         return $this->date->format('Y-m-d');
     }
