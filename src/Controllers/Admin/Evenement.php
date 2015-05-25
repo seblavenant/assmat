@@ -73,7 +73,7 @@ class Evenement
 
         if(!$evenementForm->isValid())
         {
-            return new JsonResponse(array('error' => $evenementForm->getErrors(true)), 400);
+            return new JsonResponse(array('message' => $evenementForm->getErrors(true)), 400);
         }
 
         $contratId = $evenementForm->get('contratId')->getData();
@@ -96,7 +96,7 @@ class Evenement
         }
         catch(\Exception $e)
         {
-            return new JsonResponse(array('error' => $e->getMessage()), 400);
+            return new JsonResponse(array('message' => $e->getMessage()), 400);
         }
 
         return new JsonResponse(array('ok'));
@@ -118,7 +118,7 @@ class Evenement
         }
         catch(\Exception $e)
         {
-            return new JsonResponse(array('error' => $e->getMessage()), 400);
+            return new JsonResponse(array('message' => $e->getMessage()), 400);
         }
 
         return new JsonResponse(array('ok'));

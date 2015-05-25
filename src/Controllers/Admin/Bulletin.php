@@ -116,8 +116,6 @@ class Bulletin
     {
         $bulletinHtml = $this->renderBulletin($id, 'admin/bulletins/print.html.twig');
 
-        return new Response($bulletinHtml);
-
         $bulletinPdf  = (new Pdf('/usr/local/bin/wkhtmltopdf.sh'))->getOutputFromHtml(utf8_decode($bulletinHtml));
 
         $headers = array(

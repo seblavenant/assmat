@@ -3,11 +3,11 @@
 namespace Assmat;
 
 use Silex\Provider as SilexProvider;
-use Spear\Silex\Provider as SpearProvider;
-use Assmat\DataSource\Repositories;
-use Spear\Silex\Application\AbstractApplication;
 use Silex\Provider\SecurityServiceProvider;
+use Spear\Silex\Provider as SpearProvider;
+use Spear\Silex\Application\AbstractApplication;
 use Symfony\Component\HttpFoundation\Request;
+use Assmat\DataSource\Repositories;
 use Assmat\Services;
 
 class Application extends AbstractApplication
@@ -30,6 +30,7 @@ class Application extends AbstractApplication
         $this->register(new SilexProvider\FormServiceProvider());
         $this->register(new SilexProvider\TranslationServiceProvider());
         $this->register(new SpearProvider\Twig());
+        $this->register(new SpearProvider\AsseticServiceProvider());
         $this->register(new \Assmat\Providers\MysqlDBAL());
         $this->register(new \Assmat\Providers\WebProfiler());
     }
