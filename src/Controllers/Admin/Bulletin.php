@@ -11,7 +11,6 @@ use Assmat\Services;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Knp\Snappy\Pdf;
-use Symfony\Component\HttpFoundation\Symfony\Component\HttpFoundation;
 
 class Bulletin
 {
@@ -108,7 +107,7 @@ class Bulletin
 
     public function readAction($id)
     {
-        $bulletinHtml =  $this->renderBulletin($id, 'admin/bulletins/read.html.twig');
+        $bulletinHtml = $this->renderBulletin($id, 'admin/bulletins/read.html.twig');
 
         return new Response($bulletinHtml);
     }

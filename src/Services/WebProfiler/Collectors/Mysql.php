@@ -16,7 +16,7 @@ class Mysql extends DataCollector
         $this->data = array();
     }
 
-    public function collect(Request $request, Response $response, \Exception $exception = null){}
+    public function collect(Request $request, Response $response, \Exception $exception = null) {}
 
     public function add(Events\Mysql $mysql)
     {
