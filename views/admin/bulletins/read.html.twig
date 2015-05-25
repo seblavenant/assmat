@@ -145,6 +145,7 @@
                             <th>Compteurs</td>
                             <th>Acquis</th>
                             <th>Pris</th>
+                            <th>Restant</th>
                         </thead>
                         <tbody>
                         {% for label, periods in bulletin.congesPayes %}
@@ -160,8 +161,9 @@
                                         {% set prisTotal = prisTotal + cp.valeur %}
                                     {% endif %}
                                 {% endfor %}
-                                <td>{{ aquisTotal | round(2) }}</p>
-                                <td>{{ prisTotal | round(2) }}</p>
+                                <td>{{ aquisTotal | round(2) }}</td>
+                                <td>{{ prisTotal | round(2) }}</td>
+                                <td>{{ (aquisTotal - prisTotal) | round(2) }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

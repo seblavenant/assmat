@@ -9,6 +9,9 @@
                 padding: 0;
                 font-size: 16px;
             }
+            body {
+                padding: 20px 0 !important;
+            }
             .clear {
                 clear:both;
             }
@@ -17,6 +20,9 @@
             }
             .right {
                 text-align: right;
+            }
+            .left {
+                text-align: left;
             }
             .colored {
                 background: #eee;
@@ -30,10 +36,8 @@
                 text-align: center;
                 font-weight: bold;
                 padding: 10px 0;
-                margin-top: 15px;
             }
-            #contacts
-            {
+            #contacts {
                 margin-top: 15px;
             }
             #contacts .contact {
@@ -86,36 +90,36 @@
             #heures .duree {
                 background: #eee;
             }
-            #lignes table {
+            #lignes table, #conges-payes table {
                 width: 99%;
                 border-collapse: collapse;
             }
-            #lignes {
+            #lignes, #conges-payes {
                 width: 770px;
                 padding: 5px;
                 border: 1px solid #eee;
                 min-height: 300px;
                 margin-left: 15px;
             }
-            #lignes th {
+            #lignes th, #conges-payes th {
                 background: #eee;
                 font-weight: normal;
                 height: 30px;
                 padding: 2px 5px;
             }
-            #lignes td {
+            #lignes td, #conges-payes td {
                 padding: 2px 5px;
                 height: 30px;
                 min-width: 100px;
                 border-bottom: 1px solid #eee;
             }
-            #lignes .subtotal{
+            #lignes .subtotal {
                 padding: 5px;
                 background: #79BED9;
                 font-weight: bold;
                 text-transform: uppercase;
             }
-            #lignes .total {
+            #lignes .total, #conges-payes .total {
                 background: #0B8CBF;
                 font-weight: bold;
                 padding: 5px;
@@ -123,6 +127,12 @@
             }
             #lignes .subtotal, #lignes .total {
                 border: none;
+            }
+            #conges-payes {
+                margin-left: 215px;
+                margin-top: 15px;
+                margin-bottom: 20px;
+                min-height: auto;
             }
         </style>
 
@@ -209,6 +219,45 @@
                         </tbody>
                     </table>
                 </div>
+                <div id="conges-payes" class="column clear">
+                    <table class="table">
+                        <thead>
+                            <th class="left"></td>
+                            <th class="right">ACQUIS</th>
+                            <th class="right">PRIS</th>
+                            <th class="right">RESTANT</th>
+                        </thead>
+                        <tbody>
+                        {{ _self.displayCongesPayes(bulletin.lignes) }}
+                        {% set restantGlobal = 0 %}
+                        {% for label, periods in bulletin.congesPayes %}
+                            <tr>
+                                {% set aquisTotal = 0 %}
+                                {% set prisTotal = 0 %}
+                                {% set restantTotal = 0 %}
+                                <td>{{ label }}</td>
+                                {% for cp in periods %}
+                                    {% if cp.typeId == constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS') %}
+                                        {% set aquisTotal = aquisTotal + cp.valeur %}
+                                    {% endif %}
+                                    {% if cp.typeId == constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS') %}
+                                        {% set prisTotal = prisTotal + cp.valeur %}
+                                    {% endif %}
+                                    {% set restantTotal = aquisTotal - prisTotal %}
+                                {% endfor %}
+                                {% set restantGlobal = restantGlobal + restantTotal %}
+                                <td class="right">{{ aquisTotal | number_format(2, ',', ' ') }}</td>
+                                <td class="right">{{ prisTotal | number_format(2, ',', ' ') }}</td>
+                                <td class="right">{{ restantTotal | number_format(2, ',', ' ') }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="total">
+                            <td>CONGES PAYES</td>
+                            <td colspan="4" class="right">{{ restantGlobal | number_format(2, ',', ' ') }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </body>
@@ -219,9 +268,27 @@
         <tr>
             <td>{{ ligne.label }}</td>
             <td class="right">{{ ligne.base ? ligne.base | number_format(2, ',', ' ') }}</td>
-            <td class="right">{{ ligne.taux ? ligne.taux | number_format(2, ',', ' ') ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
+            <td class="right">{{ ligne.taux ? ligne.taux | number_format(2, ',', ' ') ~ ' %' }}{{ ligne.quantite ? ligne.quantite | number_format(2, ',', ' ') }}</td>
             <td class="right">{{ ligne.actionId == 1 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
             <td class="right">{{ ligne.actionId == 2 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
         </tr>
     {% endfor %}
+{% endmacro %}
+{% macro displayCongesPayes(lignes) %}
+    {% set aquis = 0 %}
+    {% set pris = 0 %}
+    {% for ligne in lignes if ligne.contextId == constant('Assmat\\DataSource\\Constants\\Lignes\\Context::CONGE_PAYE') %}
+        {% if ligne.actionId == constant('Assmat\\DataSource\\Constants\\Lignes\\Action::GAIN') %}
+            {% set aquis = ligne.valeur %}
+        {% endif %}
+        {% if ligne.actionId == constant('Assmat\\DataSource\\Constants\\Lignes\\Action::RETENUE') %}
+            {% set pris = ligne.valeur %}
+        {% endif %}
+    {% endfor %}
+        <tr>
+            <td>Mois en cours</td>
+            <td class="right">{{ aquis != 0 ? aquis | number_format(2, ',', ' ') }}</td>
+            <td class="right">{{ pris != 0 ? pris | number_format(2, ',', ' ') }}</td>
+            <td class="right"></td>
+        </tr>
 {% endmacro %}
