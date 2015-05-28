@@ -45,6 +45,7 @@
         </div>
     </div>
     <div class="col-sm-9">
+        <div id="loader"></div>
         <div id="calendar"></div>
     </div>
 </div>
@@ -53,9 +54,20 @@
 
 {% block specificsJavascripts %}
 <script>
-$(document).ready(function()
-{
-    $(function(){
+
+var loader = {
+        pendingStart: function(){
+            $('.fc-center').html('<img alt="preloader" class="devoops-getdata" src="/img/devoops_getdata.gif">');
+            $('#loader').show();
+        },
+        pendingStop: function(){
+            $('.fc-center').html('');
+            $('#loader').hide();
+        }
+    };
+
+    $(function()
+    {
         $('#evenementAnnee option').each(function(){
             if($(this).val() == '{{ annee }}')
             {
@@ -117,10 +129,13 @@ $(document).ready(function()
         droppable: true,
         select: function(start, end, allDay)
         {
+            loader.pendingStart();
             if(start < moment('{{ annee }}-{{ mois }}-01') || end > moment('{{ annee }}-{{ mois }}-31'))
             {
                 console.log('invalid range');
                 calendar.fullCalendar('unselect');
+                loader.pendingStop();
+                Notifier.error('Vous ne pouvez pas éditer d\'évenement en dehors du mois en cours');
                 return;
             }
 
@@ -159,14 +174,21 @@ $(document).ready(function()
             {
                 calendar.fullCalendar('unselect');
             })
+            .always(function()
+            {
+                loader.pendingStop();
+            })
             ;
         },
         eventDrop: function(event, delta, revertFunc)
         {
             console.log('eventDrop');
+            loader.pendingStart();
             if(event.start.format('YYYY-MM-DD') != moment(event.start._i).format('YYYY-MM-DD'))
             {
                 revertFunc();
+                loader.pendingStop();
+                return;
             }
 
             $.ajax({
@@ -190,11 +212,16 @@ $(document).ready(function()
             {
                 revertFunc();
             })
+            .always(function()
+            {
+                loader.pendingStop();
+            })
             ;
         },
         eventResize: function(event, delta, revertFunc)
         {
             console.log('eventResize');
+            loader.pendingStart();
             $.ajax({
                 method: 'POST',
                 url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
@@ -216,16 +243,21 @@ $(document).ready(function()
             {
                 revertFunc();
             })
+            .always(function()
+            {
+                loader.pendingStop();
+            })
             ;
         },
         drop: function(date, allDay)
         {
             console.log('drop');
-
+            loader.pendingStart();
             if(date < moment('{{ annee }}-{{ mois }}-01') || date > moment('{{ annee }}-{{ mois }}-31'))
             {
                 console.log('invalid range');
                 calendar.fullCalendar('unselect');
+                loader.pendingStop();
                 return;
             }
 
@@ -259,13 +291,18 @@ $(document).ready(function()
             })
             .error(function(Xhr, textStatus)
             {
-                calendar.fullCalendar( 'unselect' )
+                calendar.fullCalendar( 'unselect' );
             })
+            .always(function()
+            {
+                loader.pendingStop();
+            });
             ;
         },
         eventClick: function(calEvent, jsEvent, view)
         {
             console.log('eventClick');
+            loader.pendingStart();
             if(confirm('Etes vous sur de vouloir supprimer cet événement ?'))
             {
                 $.ajax({
@@ -279,9 +316,12 @@ $(document).ready(function()
                 {
                     calendar.fullCalendar( 'removeEvents', calEvent._id );
                 })
+                .always(function()
+                {
+                    loader.pendingStop();
+                })
             };
         }
     });
-});
 </script>
 {% endblock %}

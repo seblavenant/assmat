@@ -6,3 +6,13 @@
 .fc-day-grid-event .fc-content {
 	white-space: normal;
 }
+
+#loader {
+    background: #fff none repeat scroll 0 0;
+    height: 100%;
+    opacity: 0.6;
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+    display: none;
+}
