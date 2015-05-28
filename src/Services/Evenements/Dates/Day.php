@@ -2,7 +2,7 @@
 
 namespace Assmat\Services\Evenements\Dates;
 
-class Day implements Period
+class Day implements Date
 {
     private
         $date;
