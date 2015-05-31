@@ -25,41 +25,30 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
         return $this->fetchAll($query);
     }
 
-    private function findLignesFromContextAndPeriode($contratId, $contextId, \DateTime $dateDebut, \DateTime $dateFin)
+    public function countAllFromContratAndContext($contratId, $contextId, \DateTime $date)
     {
-        $query = $this->getBaseQuery();
-        $query
-            ->select('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ) ) AS date')
+        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
+            ->select(array('sum( valeur ) AS count', 'type_id'))
+            ->from(self::TABLE_NAME)
             ->leftJoin(Repositories\Mysql\Bulletin::TABLE_NAME)->on($this->addTableName('bulletin_id'), 'bulletin.id')
             ->where((new Types\Integer('context_id'))->equal($contextId))
             ->where((new Types\Integer('contrat_id'))->equal($contratId))
-            ->having((new Types\String('date'))->between($dateDebut->format('Ym'), $dateFin->format('Ym')))
+            ->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->lowerOrEqualThan($date->format('Ym')))
+            ->groupBy('type_id')
             ;
 
-        return $this->fetchAll($query);
-    }
+        $dataSet = $this->db->fetchAll($query->toString());
 
-    public function findCongePayesFromContratAndDate($contratId, \DateTime $date)
-    {
-        $currentYear = (int) $date->format('Y');
-
-        $yearDebut = $currentYear;
-        $yearFin = $currentYear;
-        if((int) $date->format('m') < 6)
+        $contexts = array();
+        if(! empty($dataSet))
         {
-            $yearDebut -= 1;
-            $yearFin -= 1;
+            foreach($dataSet as $contextLigne)
+            {
+                $contexts[$contextLigne['type_id']] = $contextLigne['count'];
+            }
         }
 
-        $dateDebutPreviousYear = new \DateTime(($yearDebut - 1) . '-06-01');
-        $dateFinPreviousYear = new \DateTime($yearFin . '-05-31');
-        $dateDebutCurrentYear = new \DateTime($yearDebut . '-06-01');
-        $dateFinCurrentYear = new \DateTime($currentYear . '-' . $date->format('m') . '-' . $date->format('t'));
-
-        return array(
-            'N' => $this->findLignesFromContextAndPeriode($contratId, Constants\Lignes\Context::CONGE_PAYE, $dateDebutCurrentYear, $dateFinCurrentYear),
-            'N-1' => $this->findLignesFromContextAndPeriode($contratId, Constants\Lignes\Context::CONGE_PAYE, $dateDebutPreviousYear, $dateFinPreviousYear),
-        );
+        return $contexts;;
     }
 
     private function getBaseQuery()

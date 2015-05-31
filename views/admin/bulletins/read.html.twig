@@ -43,7 +43,7 @@
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>Heures du mois
+                        <i class="fa fa-user"></i>Heures du mois :
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -126,12 +126,17 @@
             </div>
         </div>
     </div>
+    {% if bulletin.congesPayes is not empty%}
+        {% set congesPayes = bulletin.congesPayes %}
+        {% set aquis = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS')] %}
+        {% set pris = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS')] %}
+        {% set restant = aquis - pris %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>Congés payés
+                        <i class="fa fa-user"></i>Congés payés restants : {{ restant | round(2) }} jour(s)
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -142,36 +147,23 @@
                 <div class="box-content">
                     <table class="table">
                         <thead>
-                            <th>Compteurs</td>
                             <th>Acquis</th>
                             <th>Pris</th>
                             <th>Restant</th>
                         </thead>
                         <tbody>
-                        {% for label, periods in bulletin.congesPayes %}
                             <tr>
-                                {% set aquisTotal = 0 %}
-                                {% set prisTotal = 0 %}
-                                <td>{{ label }}</td>
-                                {% for cp in periods %}
-                                    {% if cp.typeId == constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS') %}
-                                        {% set aquisTotal = aquisTotal + cp.valeur %}
-                                    {% endif %}
-                                    {% if cp.typeId == constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS') %}
-                                        {% set prisTotal = prisTotal + cp.valeur %}
-                                    {% endif %}
-                                {% endfor %}
-                                <td>{{ aquisTotal | round(2) }}</td>
-                                <td>{{ prisTotal | round(2) }}</td>
-                                <td>{{ (aquisTotal - prisTotal) | round(2) }}</td>
+                                <td>{{ aquis | round(2)}}</td>
+                                <td>{{ pris | round(2)}}</td>
+                                <td>{{ restant | round(2)}}</td>
                             </tr>
-                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
 
 {% endblock %}
 

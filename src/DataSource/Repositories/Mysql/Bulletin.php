@@ -3,6 +3,7 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Assmat\DataSource\Domains;
+use Assmat\DataSource\Constants;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Assmat\Services\Evenements;
@@ -116,7 +117,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         });
 
         $dto->set('congesPayes', function() use($dto) {
-            return $this->ligneRepository->findCongePayesFromContratAndDate($dto->contratId, new \DateTime($dto->annee . '-' . $dto->mois));
+            return $this->ligneRepository->countAllFromContratAndContext($dto->contratId, Constants\Lignes\Context::CONGE_PAYE, new \DateTime($dto->annee . '-' . $dto->mois));
         });
 
         return new Domains\Bulletin($dto);
