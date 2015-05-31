@@ -57,7 +57,7 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-            'pajeEmploiId' => new Fields\NotNullable(new Fields\UnsignedInteger('paje_emploi_id')),
+            'pajeEmploiId' => new Fields\NotNullable(new Fields\String('paje_emploi_id')),
             'contactId' => new Fields\NotNullable(new Fields\UnsignedInteger('contact_id')),
         );
     }
