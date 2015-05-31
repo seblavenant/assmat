@@ -5,6 +5,7 @@ namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Remunerations;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
+use Spear\Silex\Persistence\DataTransferObject;
 
 class Salaire
 {
@@ -22,7 +23,7 @@ class Salaire
         return new Domains\Ligne($ligneDTO);
     }
 
-    private function hydrateFromBulletin($ligneDTO, $bulletin)
+    private function hydrateFromBulletin(DataTransferObject $ligneDTO, Domains\Bulletin $bulletin)
     {
         $contrat = $bulletin->getContrat();
         $ligneDTO->base = $contrat->getSalaireHoraire();
@@ -31,11 +32,11 @@ class Salaire
         {
             case Constants\Contrats\Salaire::MENSUALISE:
                 $ligneDTO->quantite = $contrat->getHeuresMensuel();
-                $ligneDTO->quantite -= $bulletin->getHeuresNonPayee();
+                $ligneDTO->quantite -= $bulletin->getHeuresNonPayees();
                 break;
             case Constants\Contrats\Salaire::HEURES:
             default:
-                $ligneDTO->quantite = $bulletin->getHeuresPayee();
+                $ligneDTO->quantite = $bulletin->getHeuresPayees();
                 break;
         }
 

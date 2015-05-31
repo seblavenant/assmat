@@ -23,6 +23,12 @@ class Bulletin
     public function __construct(DTO\Bulletin $bulletinDTO)
     {
         $this->fields = $bulletinDTO;
+
+        $this->heuresPayees = 0;
+        $this->heuresNonPayees = 0;
+        $this->joursGardes = 0;
+        $this->heuresGardes = 0;
+        $this->congesPayes = 0;
     }
 
     public function getId()
@@ -132,12 +138,12 @@ class Bulletin
         $this->congesPayes += (int) $congePaye;
     }
 
-    public function getHeuresPayee()
+    public function getHeuresPayees()
     {
         return $this->heuresPayees;
     }
 
-    public function getHeuresNonPayee()
+    public function getHeuresNonPayees()
     {
         return $this->heuresNonPayees;
     }
