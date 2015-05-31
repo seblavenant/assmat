@@ -130,7 +130,8 @@ var loader = {
         select: function(start, end, allDay)
         {
             loader.pendingStart();
-            if(start < moment('{{ annee }}-{{ mois }}-01') || end > moment('{{ annee }}-{{ mois }}-31'))
+
+            if(start < moment('{{ annee }}-{{ mois }}-01') || end >= moment('{{ annee }}-{{ "%02d"|format(mois + 1) }}-01'))
             {
                 console.log('invalid range');
                 calendar.fullCalendar('unselect');
@@ -253,11 +254,12 @@ var loader = {
         {
             console.log('drop');
             loader.pendingStart();
-            if(date < moment('{{ annee }}-{{ mois }}-01') || date > moment('{{ annee }}-{{ mois }}-31'))
+            if(date < moment('{{ annee }}-{{ mois }}-01') || date >= moment('{{ annee }}-{{ "%02d"|format(mois + 1) }}-01'))
             {
                 console.log('invalid range');
                 calendar.fullCalendar('unselect');
                 loader.pendingStop();
+                Notifier.error('Vous ne pouvez pas éditer d\'évenement en dehors du mois en cours');
                 return;
             }
 
@@ -320,7 +322,11 @@ var loader = {
                 {
                     loader.pendingStop();
                 })
-            };
+            }
+            else
+            {
+                loader.pendingStop();
+            }
         }
     });
 </script>
