@@ -30,12 +30,14 @@ class Builder
         $bulletinDTO->set('evenements', $evenements);
         $bulletinDTO->set('contrat', $contrat);
         $bulletinDTO->set('lignes', $lignes);
+        $bulletinDTO->set('congesPayes', null);
         $bulletin = new Domains\Bulletin($bulletinDTO);
 
         foreach($bulletin->getEvenements() as $evenement)
         {
             $evenement->computeFromType();
 
+            $this->setContratType($evenement, $contrat);
             $bulletin->addHeuresPayees($this->computeHeuresPayees($evenement, $contrat));
             $bulletin->addHeuresNonPayees(!$evenement->isJourPaye() ? $contrat->getHeuresJour() : null);
             $bulletin->addJourGarde($evenement->isJourGarde() ? 1 : 0);
@@ -50,7 +52,7 @@ class Builder
         return $bulletin;
     }
 
-    private function computeHeuresPayees($evenement, $contrat)
+    private function computeHeuresPayees(Domains\Evenement $evenement, Domains\Contrat $contrat)
     {
         if(!$evenement->isJourPaye())
         {
@@ -59,13 +61,18 @@ class Builder
 
         if(!$evenement->getType()->isDureeFixe())
         {
-            return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
+            return $this->computeHeuresEvenement($evenement);
         }
 
         return $contrat->getHeuresJour();
     }
 
-    private function hydrateLignes($lignes, $context, $bulletin)
+    private function computeHeuresEvenement(Domains\Evenement $evenement)
+    {
+        return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
+    }
+
+    private function hydrateLignes($lignes, $context, Domains\Bulletin $bulletin)
     {
         $lignesContext = new FilterIterator\Lignes\Action(new \ArrayIterator($lignes), $context);
 
@@ -75,4 +82,11 @@ class Builder
         }
     }
 
+    private function setContratType(Domains\Evenement $evenement, Domains\Contrat $contrat)
+    {
+        if(! $evenement->isJourPaye())
+        {
+            $contrat->setTypeId(Constants\Contrats\Salaire::HEURES);
+        }
+    }
 }
