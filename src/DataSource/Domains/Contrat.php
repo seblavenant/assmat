@@ -86,9 +86,9 @@ class Contrat
         return $this->fields->typeId;
     }
 
-    public function isMensualise()
+    public function setTypeId($typeId)
     {
-        return $this->fields->typeId === Constants\Contrats\Salaire::MENSUALISE;
+        return $this->fields->typeId = $typeId;
     }
 
     public function getIndemnites()
