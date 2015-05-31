@@ -17,6 +17,7 @@ class Type implements Repositories\EvenementType
             Constants\Evenements\Type::CONGE_PAYE => (new Types\CongePaye())->getDomain(),
             Constants\Evenements\Type::ABSENCE_PAYEE => (new Types\AbsencePayee())->getDomain(),
             Constants\Evenements\Type::ABSENCE_NON_PAYEE => (new Types\AbsenceNonPayee())->getDomain(),
+            Constants\Evenements\Type::JOUR_FERIE => (new Types\JourFerie())->getDomain(),
         );
     }
 

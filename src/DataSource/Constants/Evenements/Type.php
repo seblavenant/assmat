@@ -8,5 +8,6 @@ interface Type
         GARDE = 1,
         CONGE_PAYE = 2,
         ABSENCE_PAYEE = 4,
-        ABSENCE_NON_PAYEE = 3;
+        ABSENCE_NON_PAYEE = 3,
+        JOUR_FERIE = 5;
 }
