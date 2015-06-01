@@ -79,9 +79,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
             array(
-                Constants\Contrats\Salaire::MENSUALISE, 122.5, 1225, 940.67,
+                Constants\Contrats\Salaire::MENSUALISE, 8.5, 85, 65.26,
                 array(
-                    $this->getEvenementAbsenceNonPayee()
+                    $this->getEvenementAbsenceNonPayee(),
+                    $this->getEvenementGarde()
                 ),
             ),
             // test absence payee
