@@ -3,7 +3,6 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Assmat\DataSource\Domains;
-use Assmat\DataSource\Constants;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
@@ -40,7 +39,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
         $dataSet = $this->db->fetchAll($query->toString());
 
         $contexts = array();
-        if(! empty($dataSet))
+        if(!empty($dataSet))
         {
             foreach($dataSet as $contextLigne)
             {
@@ -48,7 +47,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
             }
         }
 
-        return $contexts;;
+        return $contexts;
     }
 
     private function getBaseQuery()
