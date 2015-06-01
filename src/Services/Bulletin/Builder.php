@@ -84,7 +84,7 @@ class Builder
 
     private function setContratType(Domains\Evenement $evenement, Domains\Contrat $contrat)
     {
-        if(! $evenement->isJourPaye())
+        if(!$evenement->isJourPaye())
         {
             $contrat->setTypeId(Constants\Contrats\Salaire::HEURES);
         }
