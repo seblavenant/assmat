@@ -33,6 +33,11 @@ source /home/vagrant/.bashrc
 # SERVICE LAUNCH
 service apache2 restart
 
+# MYSQL
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password passwd'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password passwd'
+apt-get -y install mysql-server
+
 apt-get install -y wkhtmltopdf
 apt-get install -y openssl build-essential xorg libssl-dev
 apt-get install -y xvfb
