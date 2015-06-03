@@ -12,7 +12,8 @@ class ContactUser implements AdvancedUserInterface
         $enabled,
         $accountNonExpired,
         $credentialsNonExpired,
-        $accountNonLocked;
+        $accountNonLocked,
+        $roles;
 
     public function __construct(Domains\Contact $contact, $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
     {
@@ -26,6 +27,7 @@ class ContactUser implements AdvancedUserInterface
         $this->accountNonExpired = $userNonExpired;
         $this->credentialsNonExpired = $credentialsNonExpired;
         $this->accountNonLocked = $userNonLocked;
+        $this->roles = array('ROLE_ADMIN');
     }
 
     public function getContact()
@@ -33,9 +35,14 @@ class ContactUser implements AdvancedUserInterface
         return $this->contact;
     }
 
+    public function addRoles($role)
+    {
+        $this->roles[] = $role;
+    }
+
     public function getRoles()
     {
-        return array('ROLE_ADMIN');
+        return $this->roles;
     }
 
     public function getPassword()
