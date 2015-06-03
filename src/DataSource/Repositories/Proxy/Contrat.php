@@ -27,6 +27,11 @@ class Contrat implements Repositories\Contrat
         return $this->getContratRepository()->findFromEmploye($employeId);
     }
 
+    public function findFromEmployeur($employeurId)
+    {
+        return $this->getContratRepository()->findFromEmployeur($employeurId);
+    }
+
     public function getContratRepository()
     {
         if($this->contratRepository === null)

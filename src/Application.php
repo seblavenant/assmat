@@ -81,11 +81,19 @@ class Application extends AbstractApplication
     private function initializeRepositories()
     {
         $this['repository.employeur'] = function() {
-            return new Repositories\Mysql\Employeur($this['db.default'], $this['repository.contact'], $this['repository.employe']);
+            return new Repositories\Mysql\Employeur($this['db.default'], $this['repository.contact'], $this['repository.employe.proxy'], $this['repository.contrat.proxy']);
         };
 
+        $this['repository.employe.closure'] = $this->protect(function() {
+            return new Repositories\Mysql\Employe($this['db.default'], $this['repository.contact'], $this['repository.contrat.proxy'], $this['repository.employeur']);
+        });
+
         $this['repository.employe'] = function() {
-            return new Repositories\Mysql\Employe($this['db.default'], $this['repository.contact'], $this['repository.contrat.proxy']);
+            return $this['repository.employe.closure']();
+        };
+
+        $this['repository.employe.proxy'] = function() {
+            return new Repositories\Proxy\Employe($this['repository.employe.closure']);
         };
 
         $this['repository.contact'] = function() {

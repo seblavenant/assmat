@@ -46,6 +46,14 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         return $this->fetchAll($query);
     }
 
+    public function findFromEmployeur($employeurId)
+    {
+        $query = $this->getBaseQuery();
+        $query->where((new Types\Integer('employeur_id'))->equal($employeurId));
+
+        return $this->fetchAll($query);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())

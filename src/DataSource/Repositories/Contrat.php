@@ -7,4 +7,6 @@ interface Contrat
     public function find($id);
 
     public function findFromEmploye($employeId);
+
+    public function findFromEmployeur($employeurId);
 }

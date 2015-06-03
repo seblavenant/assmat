@@ -18,14 +18,16 @@ class Employe extends AbstractMysql implements Repositories\Employe
 
     private
         $contactRepository,
-        $contratRepository;
+        $contratRepository,
+        $employeurRepository;
 
-    public function __construct(Mysql $db, Repositories\Contact $contactRepository, Repositories\Contrat $contratRepository)
+    public function __construct(Mysql $db, Repositories\Contact $contactRepository, Repositories\Contrat $contratRepository, Repositories\Employeur $employeurRepository)
     {
         parent::__construct($db);
 
         $this->contactRepository = $contactRepository;
         $this->contratRepository = $contratRepository;
+        $this->employeurRepository = $employeurRepository;
     }
 
     public function find($id)
@@ -36,18 +38,39 @@ class Employe extends AbstractMysql implements Repositories\Employe
         return $this->fetchOne($query);
     }
 
-    public function findFromEmployeur($employeurId)
+    public function findFromContact($contactId)
     {
         $query = $this->getBaseQuery();
-        $query->where((new Types\Integer('employeur_id'))->equal($employeurId));
+        $query->where((new Types\Integer('contact_id'))->equal($contactId));
+
+        return $this->fetchOne($query);
+    }
+
+    public function findFromEmployeur($employeurId)
+    {
+        $fields = array('id', 'ss_id', 'contact_id');
+        $fieldsNamed = array_map(array($this, 'addTableName'), $fields);
+
+         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
+            ->select($fieldsNamed)
+            ->from('contrat')
+            ->leftJoin('employe')->on('employe.id', 'contrat.employe_id')
+            ->leftJoin('contact')->on('contact.id', 'employe.contact_id')
+            ->groupBy('employe.id')
+            ->where((new Types\Integer('contrat.employeur_id'))->equal($employeurId));
 
         return $this->fetchAll($query);
+    }
+
+    public function addTableName($field)
+    {
+        return self::TABLE_NAME . '.' . $field;
     }
 
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'ss_id', 'contact_id', 'employeur_id'))
+            ->select(array('id', 'ss_id', 'contact_id'))
             ->from(self::TABLE_NAME);
 
         return $query;
@@ -69,6 +92,9 @@ class Employe extends AbstractMysql implements Repositories\Employe
         });
         $dto->set('contrats', function() use($dto) {
             return $this->contratRepository->findFromEmploye($dto->id);
+        });
+        $dto->set('employeurs', function() use($dto) {
+            return $this->employeurRepository->findFromEmploye($dto->id);
         });
 
         return new Domains\Employe($dto);

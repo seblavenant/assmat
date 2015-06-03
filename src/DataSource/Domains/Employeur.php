@@ -19,18 +19,23 @@ class Employeur
         return $this->fields->id;
     }
 
+    public function getPajeEmploiId()
+    {
+        return $this->fields->pajeEmploiId;
+    }
+    
     public function getContact()
     {
         return $this->fields->load('contact');
     }
 
+    public function getContrats()
+    {
+        return $this->fields->load('contrats');
+    }
+    
     public function getEmployes()
     {
         return $this->fields->load('employes');
-    }
-
-    public function getPajeEmploiId()
-    {
-        return $this->fields->pajeEmploiId;
     }
 }

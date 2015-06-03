@@ -10,13 +10,26 @@
         </div>
     </div>
 
-    {% for employe in employes %}
+    {% if employeur %}
+    <h3>Liste des employes</h3>
+    {{ _self.displayContrats(employeur.employes) }}
+    {% endif %}
+    {% if employe %}
+    <h3>Liste des employeurs</h3>
+    {{ _self.displayContrats(employe.employeurs) }}
+    {% endif %}
+
+{% endblock %}
+
+{% macro displayContrats(elements) %}
+
+    {% for element in elements %}
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
                     <div clas="box-header">
                         <div class="box-name">
-                            <i class="fa fa-user"></i> {{ employe.contact.prenom | capitalize }} {{ employe.contact.nom | upper }}
+                            <i class="fa fa-user"></i> {{ element.contact.prenom | capitalize }} {{ element.contact.nom | upper }}
                         </div>
                     </div>
                     <div class="box-content">
@@ -27,7 +40,7 @@
                                 <th></th>
                             </thead>
                             <tbody>
-                            {% for contrat in employe.contrats %}
+                            {% for contrat in element.contrats %}
                                 <tr>
                                     <td><a href="{{ path('admin_contrats_read', { id : contrat.id }) }}">{{ contrat.id }}</a></td>
                                     <td>{{ contrat.nom }}</td>
@@ -46,4 +59,4 @@
         </div>
     {% endfor %}
 
-{% endblock %}
+{% endmacro %}

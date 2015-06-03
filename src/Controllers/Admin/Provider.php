@@ -40,6 +40,7 @@ class Provider implements ControllerProviderInterface
                 $app['twig'],
                 $app['security'],
                 $app['repository.employeur'],
+                $app['repository.employe'],
                 $app['repository.contrat']
             );
         });

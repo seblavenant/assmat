@@ -12,25 +12,27 @@ class Contrat
         $twig,
         $security,
         $employeurRepository,
-        $contratRepository;
+        $contratRepository,
+        $employeRepository;
 
-    public function __construct(\Twig_Environment $twig, SecurityContextInterface $security, Repositories\Employeur $employeurRepository, Repositories\Contrat $contratRepository)
+    public function __construct(\Twig_Environment $twig, SecurityContextInterface $security, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository)
     {
         $this->twig = $twig;
         $this->security = $security;
         $this->employeurRepository = $employeurRepository;
         $this->contratRepository = $contratRepository;
+        $this->employeRepository = $employeRepository;
     }
 
     public function indexAction()
     {
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
         $employeur = $this->employeurRepository->findFromContact($contactId);
-
-        $employes = $employeur->getEmployes();
+        $employe = $this->employeRepository->findFromContact($contactId);
 
         return new Response($this->twig->render('admin/contrats/list.html.twig', array(
-            'employes' => $employes,
+            'employeur' => $employeur,
+            'employe' => $employe,
         )));
     }
 

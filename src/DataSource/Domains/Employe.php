@@ -33,4 +33,9 @@ class Employe
     {
         return $this->fields->load('contrats');
     }
+
+    public function getEmployeurs()
+    {
+        return $this->fields->load('employeurs');
+    }
 }

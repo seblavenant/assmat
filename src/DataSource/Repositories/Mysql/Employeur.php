@@ -18,14 +18,16 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
 
     private
         $contactRepository,
-        $employeRepository;
+        $employeRepository,
+        $contratRepository;
 
-    public function __construct(Mysql $db, Repositories\Contact $contactRepository, Repositories\Employe $employeRepository)
+    public function __construct(Mysql $db, Repositories\Contact $contactRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository)
     {
         parent::__construct($db);
 
         $this->contactRepository = $contactRepository;
         $this->employeRepository = $employeRepository;
+        $this->contratRepository = $contratRepository;
     }
 
     public function find($id)
@@ -42,6 +44,27 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
         $query->where((new Types\Integer('contact_id'))->equal($contactId));
 
         return $this->fetchOne($query);
+    }
+
+    public function findFromEmploye($employeId)
+    {
+        $fields = array('id', 'paje_emploi_id', 'contact_id');
+        $fieldsNamed = array_map(array($this, 'addTableName'), $fields);
+
+        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
+            ->select($fieldsNamed)
+            ->from('contrat')
+            ->leftJoin('employeur')->on('employeur.id', 'contrat.employeur_id')
+            ->leftJoin('contact')->on('contact.id', 'employeur.contact_id')
+            ->groupBy('employeur.id')
+            ->where((new Types\Integer('contrat.employe_id'))->equal($employeId));
+
+        return $this->fetchAll($query);
+    }
+
+    public function addTableName($field)
+    {
+        return self::TABLE_NAME . '.' . $field;
     }
 
     private function getBaseQuery()
@@ -67,7 +90,9 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
         $dto->set('contact', function() use($dto) {
             return $this->contactRepository->find($dto->contactId);
         });
-
+        $dto->set('contrats', function() use($dto) {
+            return $this->contratRepository->findFromEmployeur($dto->id);
+        });
         $dto->set('employes', function() use($dto) {
             return $this->employeRepository->findFromEmployeur($dto->id);
         });
