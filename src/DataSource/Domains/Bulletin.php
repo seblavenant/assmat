@@ -27,7 +27,6 @@ class Bulletin
         $this->heuresPayees = 0;
         $this->heuresNonPayees = 0;
         $this->joursGardes = 0;
-        $this->heuresGardes = 0;
         $this->congesPayes = 0;
     }
 
