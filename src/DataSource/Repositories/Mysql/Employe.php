@@ -51,7 +51,7 @@ class Employe extends AbstractMysql implements Repositories\Employe
         $fields = array('id', 'ss_id', 'contact_id');
         $fieldsNamed = array_map(array($this, 'addTableName'), $fields);
 
-         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
+        $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
             ->select($fieldsNamed)
             ->from('contrat')
             ->leftJoin('employe')->on('employe.id', 'contrat.employe_id')
