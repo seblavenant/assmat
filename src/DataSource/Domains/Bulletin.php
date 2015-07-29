@@ -12,6 +12,7 @@ class Bulletin
     private
         $fields,
         $heuresPayees,
+        $heuresPayeesParSemaine,
         $heuresNonPayees,
         $joursGardes,
         $congesPayes,
@@ -25,6 +26,7 @@ class Bulletin
         $this->fields = $bulletinDTO;
 
         $this->heuresPayees = 0;
+        $this->heuresPayeesParSemaine = array();
         $this->heuresNonPayees = 0;
         $this->joursGardes = 0;
         $this->congesPayes = 0;
@@ -117,9 +119,34 @@ class Bulletin
         return $salaireBrut;
     }
 
-    public function addHeuresPayees($heuresPayees)
+    public function addHeuresPayees($heuresPayees, $evenement)
     {
+        $this->addHeuresPayeesParSemaine($heuresPayees, $evenement);
+
+        if((int) $evenement->getDate()->format('n') !== (int) $this->getMois())
+        {
+            return;
+        }
+
         $this->heuresPayees += (float) $heuresPayees;
+    }
+
+    public function addHeuresPayeesParSemaine($heuresPayees, $evenement)
+    {
+        $lastDayOfWeek = new \DateTime(date('Y-m-d', strtotime($evenement->getDate()->format('Y-m-d') . ' sunday this week')));
+
+        if((int) $lastDayOfWeek->format('n') !== (int) $this->getMois())
+        {
+            return;
+        }
+
+        $week = $evenement->getDate()->format('W');
+        if(! isset($this->heuresPayeesParSemaine[$week]))
+        {
+            $this->heuresPayeesParSemaine[$week] = 0;
+        }
+
+        $this->heuresPayeesParSemaine[$week] += (float) $heuresPayees;
     }
 
     public function addHeuresNonPayees($heuresNonPayees)
@@ -142,6 +169,22 @@ class Bulletin
         return $this->heuresPayees;
     }
 
+    public function getHeuresPayeesParSemaine()
+    {
+        return $this->heuresPayeesParSemaine;
+    }
+
+    public function getHeuresComplementaires()
+    {
+        $heuresComplementaires = 0;
+        foreach($this->heuresPayeesParSemaine as $week => $heures)
+        {
+            $heuresComplementaires += max(0, $heures - $this->getContrat()->getHeuresHebdo());
+        }
+
+        return $heuresComplementaires;
+    }
+
     public function getHeuresNonPayees()
     {
         return $this->heuresNonPayees;
@@ -154,13 +197,6 @@ class Bulletin
 
     public function persist(Repositories\Bulletin $bulletinRepository)
     {
-        if($this->fields->id === null)
-        {
-            return $bulletinRepository->create($this->fields);
-        }
-        else
-        {
-            //return $bulletinRepository->update($this->fields);
-        }
+        return $bulletinRepository->persist($this->fields);
     }
 }

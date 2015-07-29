@@ -39,34 +39,44 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
 
     public function findOneFromContratAndDay($contratId, \DateTime $date = null)
     {
-        $query = $this->getQueryFromContrat($contratId, new \Assmat\Services\Evenements\Dates\Day($date));
+        $query = $this->getQueryFromContrat($contratId, $date);
 
         return $this->fetchOne($query);
     }
 
-    public function findAllFromContrat($contratId, Date $date = null)
+    public function findAllFromContrat($contratId, \DateTime $date = null, $fullWeek = false)
     {
-        $query = $this->getQueryFromContrat($contratId, $date);
+        $query = $this->getQueryFromContrat($contratId, $date, $fullWeek);
 
         return $this->fetchAll($query);
     }
 
-    private function getQueryFromContrat($contratId, Date $date = null)
+    private function getQueryFromContrat($contratId, \DateTime $date = null, $fullWeek = false)
     {
         $query = $this->getBaseQuery();
         $query->where((new Types\Integer('contrat_id'))->equal($contratId));
 
-        if($date instanceof Date)
+        $dateDebut = $date;
+        $dateFin = null;
+
+        if($date !== null)
         {
-            $this->getDateQuery($query, $date);
+            if($fullWeek === true)
+            {
+                $dateDebut = new \DateTime(date('Y-m-d', strtotime($date->format('Y-m') .' last monday of previous month')));
+            }
+
+            $dateFin = new \DateTime($date->format('Y-m-t'));
+            $this->getDateQuery($query, $dateDebut, $dateFin);
         }
 
         return $query;
     }
 
-    public function getDateQuery(Query $query, Date $date)
+    public function getDateQuery(Query $query, \DateTime $dateDebut, \DateTime $dateFin)
     {
-        $query->where((new Types\Datetime('date'))->like($date->getDate() . '%'));
+        $query->where((new Types\Datetime('date'))->greaterOrEqualThan($dateDebut->format('Y-m-d')));
+        $query->where((new Types\DateTime('date'))->lowerOrEqualThan($dateFin->format('Y-m-d')));
 
         return $query;
     }

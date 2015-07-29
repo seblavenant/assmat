@@ -88,6 +88,41 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i>Heures par semaine complète :
+                    </div>
+                    <div class="box-icons">
+                        <a class="collapse-link" data-toggle="collapse">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-content" style="display: none">
+                    <table class="table">
+                        <thead>
+                            <th>Semaine</td>
+                            <th>Heures effectuées</th>
+                            <th>Heures complémentaires</th>
+                        </thead>
+                        <tbody>
+                            {% for semaine, heuresPayees in bulletin.heuresPayeesParSemaine %}
+                            <tr>
+                                <td>{{ semaine }}</td>
+                                <td>{{ heuresPayees }}</td>
+                                <td>{{ heuresPayees - bulletin.contrat.getHeuresHebdo}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <div class="box">

@@ -6,6 +6,7 @@ interface Type
 {
     const
         SALAIRE = 100,
+        HEURES_COMPLEMENTAIRES = 101,
 
         CSG_RDS = 200,
         CSG_DEDUCTIBLE = 201,

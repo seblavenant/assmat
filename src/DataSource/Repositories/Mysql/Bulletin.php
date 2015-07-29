@@ -60,6 +60,27 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         return $this->fetchOne($query);
     }
 
+    public function persist(DTO\Bulletin $bulletinDTO)
+    {
+        if($bulletinDTO->id !== null)
+        {
+            $bulletin = $this->update($bulletinDTO);
+        }
+        else
+        {
+            $bulletin = $this->create($bulletinDTO);
+        }
+
+        $lignes = $bulletinDTO->load('lignes');
+        foreach($lignes as $ligne)
+        {
+            $ligne->setBulletinId($bulletinDTO->id);
+            $ligne->persist($this->ligneRepository);
+        }
+
+        return $bulletin;
+    }
+
     public function create(DTO\Bulletin $bulletinDTO)
     {
         $this->db->insert(
@@ -79,6 +100,11 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         $bulletinDTO->id = (int) $this->db->lastInsertId();
 
         return new Domains\Bulletin($bulletinDTO);
+    }
+
+    public function update(DTO\Bulletin $bulletinDTO)
+    {
+        throw new \Exception('Bulletin update not implemented yet !');
     }
 
     private function getBaseQuery()
@@ -105,7 +131,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     public function getDomain(DataTransferObject $dto)
     {
         $dto->set('evenements', function() use($dto) {
-            return $this->evenementRepository->findAllFromContrat($dto->contratId, new Evenements\Dates\Month(new \DateTime($dto->annee . '-' . $dto->mois)));
+            return $this->evenementRepository->findAllFromContrat($dto->contratId, new \DateTime(sprintf('%d-%d', $dto->annee, $dto->mois)), true);
         });
 
         $dto->set('contrat', function() use($dto) {
@@ -117,7 +143,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         });
 
         $dto->set('congesPayes', function() use($dto) {
-            return $this->ligneRepository->countAllFromContratAndContext($dto->contratId, Constants\Lignes\Context::CONGE_PAYE, new \DateTime($dto->annee . '-' . $dto->mois));
+            return $this->ligneRepository->countAllFromContratAndContext($dto->contratId, Constants\Lignes\Context::CONGE_PAYE, new \DateTime(sprintf('%d-%d', $dto->annee, $dto-mois)));
         });
 
         return new Domains\Bulletin($dto);

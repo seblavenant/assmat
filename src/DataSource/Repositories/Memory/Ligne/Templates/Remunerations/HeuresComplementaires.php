@@ -7,13 +7,13 @@ use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
 use Spear\Silex\Persistence\DataTransferObject;
 
-class Salaire
+class HeuresComplementaires
 {
     public function getDomain()
     {
         $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'Salaire';
-        $ligneDTO->typeId = Constants\Lignes\Type::HEURES_COMPLEMENTAIRES;
+        $ligneDTO->label = 'Heures complementaires';
+        $ligneDTO->typeId = Constants\Lignes\Type::SALAIRE;
         $ligneDTO->actionId = Constants\Lignes\Action::GAIN;
         $ligneDTO->contextId = Constants\Lignes\Context::REMUNERATION;
         $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
@@ -27,19 +27,7 @@ class Salaire
     {
         $contrat = $bulletin->getContrat();
         $ligneDTO->base = $contrat->getSalaireHoraire();
-
-        switch($contrat->getTypeId())
-        {
-            case Constants\Contrats\Salaire::MENSUALISE:
-                $ligneDTO->quantite = $contrat->getHeuresMensuel();
-                $ligneDTO->quantite -= $bulletin->getHeuresNonPayees();
-                break;
-            case Constants\Contrats\Salaire::HEURES:
-            default:
-                $ligneDTO->quantite = $bulletin->getHeuresPayees();
-                break;
-        }
-
+        $ligneDTO->quantite = $bulletin->getHeuresComplementaires();
         $ligneDTO->valeur = $ligneDTO->base * $ligneDTO->quantite;
     }
 }

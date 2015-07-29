@@ -62,12 +62,12 @@ class Bulletin
 
         $contrat = $this->contratRepository->find($contratId);
         $contrat->validateContactAutorisation($this->getContact());
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Dates\Month(new \DateTime($annee . '-' . $mois)));
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), true);
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
         return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
             'contrat' => $contrat,
-            'evenements' => $evenements,
+            'evenements' => $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois))),
             'annee' => $annee,
             'mois' => $mois,
             'bulletin' => $bulletin,
@@ -84,7 +84,7 @@ class Bulletin
         $contrat = $this->contratRepository->find($contratId);
         $contrat->validateContactAutorisation($this->getContact());
 
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new Services\Evenements\Dates\Month(new \DateTime($annee . '-' . $mois)));
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), false);
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
         try

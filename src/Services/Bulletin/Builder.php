@@ -21,6 +21,7 @@ class Builder
 
     public function build(Domains\Contrat $contrat, array $evenements, $annee, $mois)
     {
+        // TODO : remplace ligneRepository par lignesCollector
         $lignes = $this->ligneTemplateRepository->findAll();
 
         $bulletinDTO = new DTO\Bulletin();
@@ -38,16 +39,17 @@ class Builder
             $evenement->computeFromType();
 
             $this->setContratType($evenement, $contrat);
-            $bulletin->addHeuresPayees($this->computeHeuresPayees($evenement, $contrat));
+            $heuresPayees = $this->computeHeuresPayees($evenement, $contrat);
+            $bulletin->addHeuresPayees($heuresPayees, $evenement);
             $bulletin->addHeuresNonPayees(!$evenement->isJourPaye() ? $contrat->getHeuresJour() : null);
             $bulletin->addJourGarde($evenement->isJourGarde() ? 1 : 0);
             $bulletin->addCongePaye($evenement->isCongePaye() ? 1 : 0);
         }
 
-        $this->hydrateLignes($lignes, Constants\Lignes\Context::REMUNERATION, $bulletin);
-        $this->hydrateLignes($lignes, Constants\Lignes\Context::COTISATION, $bulletin);
-        $this->hydrateLignes($lignes, Constants\Lignes\Context::INDEMNITE, $bulletin);
-        $this->hydrateLignes($lignes, Constants\Lignes\Context::CONGE_PAYE, $bulletin);
+        foreach($lignes as $ligne)
+        {
+            $ligne->compute($bulletin);
+        }
 
         return $bulletin;
     }
@@ -70,16 +72,6 @@ class Builder
     private function computeHeuresEvenement(Domains\Evenement $evenement)
     {
         return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
-    }
-
-    private function hydrateLignes($lignes, $context, Domains\Bulletin $bulletin)
-    {
-        $lignesContext = new FilterIterator\Lignes\Action(new \ArrayIterator($lignes), $context);
-
-        foreach($lignesContext as $ligne)
-        {
-            $ligne->compute($bulletin);
-        }
     }
 
     private function setContratType(Domains\Evenement $evenement, Domains\Contrat $contrat)
