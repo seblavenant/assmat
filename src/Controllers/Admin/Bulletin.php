@@ -84,18 +84,12 @@ class Bulletin
         $contrat = $this->contratRepository->find($contratId);
         $contrat->validateContactAutorisation($this->getContact());
 
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), false);
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), true);
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
 
         try
         {
-            $bulletin = $bulletin->persist($this->bulletinRepository);
-
-            foreach($bulletin->getLignes() as $ligne)
-            {
-                $ligne->setBulletinId($bulletin->getId());
-                $ligne->persist($this->ligneRepository);
-            }
+            $bulletin->persist($this->bulletinRepository);
 
             return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_read', array('id' => $bulletin->getId())));
         }
@@ -140,7 +134,7 @@ class Bulletin
 
         return $this->twig->render($view, array(
             'contrat' => $bulletin->getContrat(),
-            'evenements' => $bulletin->getEvenements(),
+            'evenements' => $this->evenementRepository->findAllFromContrat($this->getContact()->getId(), new \DateTime(sprintf('%d-%d-01', $bulletin->getAnnee(), $bulletin->getMois()))),
             'annee' => $bulletin->getAnnee(),
             'mois' => $bulletin->getMois(),
             'bulletin' => $bulletin,

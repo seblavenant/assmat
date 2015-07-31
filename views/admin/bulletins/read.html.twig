@@ -110,11 +110,11 @@
                             <th>Heures complémentaires</th>
                         </thead>
                         <tbody>
-                            {% for semaine, heuresPayees in bulletin.heuresPayeesParSemaine %}
+                            {% for semaine in bulletin.semainesCompletes %}
                             <tr>
                                 <td>{{ semaine }}</td>
-                                <td>{{ heuresPayees }}</td>
-                                <td>{{ heuresPayees - bulletin.contrat.getHeuresHebdo}}</td>
+                                <td>{{ bulletin.heuresPayeesParSemaine(semaine) }}</td>
+                                <td>{{ bulletin.heuresComplementairesParSemaine(semaine) }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

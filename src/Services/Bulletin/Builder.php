@@ -41,9 +41,9 @@ class Builder
             $this->setContratType($evenement, $contrat);
             $heuresPayees = $this->computeHeuresPayees($evenement, $contrat);
             $bulletin->addHeuresPayees($heuresPayees, $evenement);
-            $bulletin->addHeuresNonPayees(!$evenement->isJourPaye() ? $contrat->getHeuresJour() : null);
-            $bulletin->addJourGarde($evenement->isJourGarde() ? 1 : 0);
-            $bulletin->addCongePaye($evenement->isCongePaye() ? 1 : 0);
+            $bulletin->addHeuresNonPayees($evenement);
+            $bulletin->addJourGarde($evenement);
+            $bulletin->addCongePaye($evenement);
         }
 
         foreach($lignes as $ligne)

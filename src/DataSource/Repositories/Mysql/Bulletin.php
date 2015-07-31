@@ -143,7 +143,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         });
 
         $dto->set('congesPayes', function() use($dto) {
-            return $this->ligneRepository->countAllFromContratAndContext($dto->contratId, Constants\Lignes\Context::CONGE_PAYE, new \DateTime(sprintf('%d-%d', $dto->annee, $dto-mois)));
+            return $this->ligneRepository->countAllFromContratAndContext($dto->contratId, Constants\Lignes\Context::CONGE_PAYE, new \DateTime(sprintf('%d-%d', $dto->annee, $dto->mois)));
         });
 
         return new Domains\Bulletin($dto);

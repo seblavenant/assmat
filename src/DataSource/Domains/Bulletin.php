@@ -123,7 +123,7 @@ class Bulletin
     {
         $this->addHeuresPayeesParSemaine($heuresPayees, $evenement);
 
-        if((int) $evenement->getDate()->format('n') !== (int) $this->getMois())
+        if(! $this->isCurrentMonth($evenement))
         {
             return;
         }
@@ -149,19 +149,34 @@ class Bulletin
         $this->heuresPayeesParSemaine[$week] += (float) $heuresPayees;
     }
 
-    public function addHeuresNonPayees($heuresNonPayees)
+    public function addHeuresNonPayees($evenement)
     {
-        $this->heuresNonPayees += (float) $heuresNonPayees;
+        if($evenement->isJourPaye() || ! $this->isCurrentMonth($evenement))
+        {
+            return;
+        }
+
+        $this->heuresNonPayees += (float) $this->getContrat()->getHeuresJour();
     }
 
-    public function addJourGarde($jourGarde)
+    public function addJourGarde($evenement)
     {
-        $this->joursGardes += (int) $jourGarde;
+        if(! $evenement->isJourGarde() || ! $this->isCurrentMonth($evenement))
+        {
+            return;
+        }
+
+        $this->joursGardes++;
     }
 
-    public function addCongePaye($congePaye)
+    public function addCongePaye($evenement)
     {
-        $this->congesPayes += (int) $congePaye;
+        if(! $evenement->isCongePaye() || ! $this->isCurrentMonth($evenement))
+        {
+            return;
+        }
+
+        $this->congesPayes++;
     }
 
     public function getHeuresPayees()
@@ -169,9 +184,19 @@ class Bulletin
         return $this->heuresPayees;
     }
 
-    public function getHeuresPayeesParSemaine()
+    public function getSemainesCompletes()
     {
-        return $this->heuresPayeesParSemaine;
+        return array_keys($this->heuresPayeesParSemaine);
+    }
+
+    public function getHeuresPayeesParSemaine($semaine)
+    {
+        if(! isset($this->heuresPayeesParSemaine[$semaine]))
+        {
+            return;
+        }
+
+        return $this->heuresPayeesParSemaine[$semaine];
     }
 
     public function getHeuresComplementaires()
@@ -183,6 +208,16 @@ class Bulletin
         }
 
         return $heuresComplementaires;
+    }
+
+    public function getHeuresComplementairesParSemaine($semaine)
+    {
+        if(! isset($this->heuresPayeesParSemaine[$semaine]))
+        {
+            return;
+        }
+
+        return max(0, $this->heuresPayeesParSemaine[$semaine] - $this->getContrat()->getHeuresHebdo());
     }
 
     public function getHeuresNonPayees()
@@ -198,5 +233,10 @@ class Bulletin
     public function persist(Repositories\Bulletin $bulletinRepository)
     {
         return $bulletinRepository->persist($this->fields);
+    }
+
+    private function isCurrentMonth($evenement)
+    {
+        return (int) $evenement->getDate()->format('n') === (int) $this->getMois();
     }
 }
