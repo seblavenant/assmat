@@ -27,8 +27,6 @@ class Contrat
     public function indexAction()
     {
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
-        var_dump('');
-        var_dump($contactId);
         $employeur = $this->employeurRepository->findFromContact($contactId);
         $employe = $this->employeRepository->findFromContact($contactId);
 
