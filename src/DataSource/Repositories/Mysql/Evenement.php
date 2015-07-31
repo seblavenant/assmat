@@ -56,11 +56,9 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         $query = $this->getBaseQuery();
         $query->where((new Types\Integer('contrat_id'))->equal($contratId));
 
-        $dateDebut = $date;
-        $dateFin = null;
-
         if($date !== null)
         {
+            $dateDebut = $date;
             if($fullWeek === true)
             {
                 $dateDebut = new \DateTime(date('Y-m-d', strtotime($date->format('Y-m') .' last monday of previous month')));
