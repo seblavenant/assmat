@@ -125,6 +125,8 @@ class Bulletin
     {
         $bulletin = $this->bulletinRepository->find($id);
 
+        $bulletin->compute();
+
         if(!$bulletin instanceof Domains\Bulletin)
         {
             throw new \Exception('Aucun bulletin ne correspond à cet identifiant');

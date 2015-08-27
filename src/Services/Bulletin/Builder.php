@@ -34,17 +34,7 @@ class Builder
         $bulletinDTO->set('congesPayes', null);
         $bulletin = new Domains\Bulletin($bulletinDTO);
 
-        foreach($bulletin->getEvenements() as $evenement)
-        {
-            $evenement->computeFromType();
-
-            $this->setContratType($evenement, $contrat);
-            $heuresPayees = $this->computeHeuresPayees($evenement, $contrat);
-            $bulletin->addHeuresPayees($heuresPayees, $evenement);
-            $bulletin->addHeuresNonPayees($evenement);
-            $bulletin->addJourGarde($evenement);
-            $bulletin->addCongePaye($evenement);
-        }
+        $bulletin->compute();
 
         foreach($lignes as $ligne)
         {
@@ -52,33 +42,5 @@ class Builder
         }
 
         return $bulletin;
-    }
-
-    private function computeHeuresPayees(Domains\Evenement $evenement, Domains\Contrat $contrat)
-    {
-        if(!$evenement->isJourPaye())
-        {
-            return;
-        }
-
-        if(!$evenement->getType()->isDureeFixe())
-        {
-            return $this->computeHeuresEvenement($evenement);
-        }
-
-        return $contrat->getHeuresJour();
-    }
-
-    private function computeHeuresEvenement(Domains\Evenement $evenement)
-    {
-        return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
-    }
-
-    private function setContratType(Domains\Evenement $evenement, Domains\Contrat $contrat)
-    {
-        if(!$evenement->isJourPaye())
-        {
-            $contrat->setTypeId(Constants\Contrats\Salaire::HEURES);
-        }
     }
 }

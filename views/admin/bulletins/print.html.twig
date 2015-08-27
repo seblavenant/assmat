@@ -167,7 +167,7 @@
             <div id="contenu" class="clear">
                 <div id="heures" class="column">
                     <ul>
-                    {% for evenement in bulletin.evenements %}
+                        {% for evenement in evenements  %}
                         {% set class = "" %}
                         {% if evenement.type.id == constant('Assmat\\DataSource\\Constants\\Evenements\\Type::GARDE') %}
                             {% set class = 'colored' %}

@@ -235,6 +235,46 @@ class Bulletin
         return $bulletinRepository->persist($this->fields);
     }
 
+    public function compute()
+    {
+        $contrat = $this->getContrat();
+
+        foreach($this->getEvenements() as $evenement)
+        {
+            $evenement->computeFromType();
+
+            if(!$evenement->isJourPaye())
+            {
+                $contrat->setTypeId(Constants\Contrats\Salaire::HEURES);
+            }
+            $heuresPayees = $this->computeHeuresPayees($evenement);
+            $this->addHeuresPayees($heuresPayees, $evenement);
+            $this->addHeuresNonPayees($evenement);
+            $this->addJourGarde($evenement);
+            $this->addCongePaye($evenement);
+        }
+    }
+
+    private function computeHeuresPayees(Evenement $evenement)
+    {
+        if(!$evenement->isJourPaye())
+        {
+            return;
+        }
+
+        if(!$evenement->getType()->isDureeFixe())
+        {
+            return $this->computeHeuresEvenement($evenement);
+        }
+
+        return $this->getContrat()->getHeuresJour();
+    }
+
+    private function computeHeuresEvenement(Evenement $evenement)
+    {
+        return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
+    }
+
     private function isCurrentMonth($evenement)
     {
         return (int) $evenement->getDate()->format('n') === (int) $this->getMois();
