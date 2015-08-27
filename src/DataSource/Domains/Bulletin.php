@@ -123,7 +123,7 @@ class Bulletin
     {
         $this->addHeuresPayeesParSemaine($heuresPayees, $evenement);
 
-        if(! $this->isCurrentMonth($evenement))
+        if(!$this->isCurrentMonth($evenement))
         {
             return;
         }
@@ -141,7 +141,7 @@ class Bulletin
         }
 
         $week = $evenement->getDate()->format('W');
-        if(! isset($this->heuresPayeesParSemaine[$week]))
+        if(!isset($this->heuresPayeesParSemaine[$week]))
         {
             $this->heuresPayeesParSemaine[$week] = 0;
         }
@@ -151,7 +151,7 @@ class Bulletin
 
     public function addHeuresNonPayees($evenement)
     {
-        if($evenement->isJourPaye() || ! $this->isCurrentMonth($evenement))
+        if($evenement->isJourPaye() || !$this->isCurrentMonth($evenement))
         {
             return;
         }
@@ -161,7 +161,7 @@ class Bulletin
 
     public function addJourGarde($evenement)
     {
-        if(! $evenement->isJourGarde() || ! $this->isCurrentMonth($evenement))
+        if(!$evenement->isJourGarde() || !$this->isCurrentMonth($evenement))
         {
             return;
         }
@@ -171,7 +171,7 @@ class Bulletin
 
     public function addCongePaye($evenement)
     {
-        if(! $evenement->isCongePaye() || ! $this->isCurrentMonth($evenement))
+        if(!$evenement->isCongePaye() || !$this->isCurrentMonth($evenement))
         {
             return;
         }
@@ -191,7 +191,7 @@ class Bulletin
 
     public function getHeuresPayeesParSemaine($semaine)
     {
-        if(! isset($this->heuresPayeesParSemaine[$semaine]))
+        if(!isset($this->heuresPayeesParSemaine[$semaine]))
         {
             return;
         }
@@ -212,7 +212,7 @@ class Bulletin
 
     public function getHeuresComplementairesParSemaine($semaine)
     {
-        if(! isset($this->heuresPayeesParSemaine[$semaine]))
+        if(!isset($this->heuresPayeesParSemaine[$semaine]))
         {
             return;
         }
