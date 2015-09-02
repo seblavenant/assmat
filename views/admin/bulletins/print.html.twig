@@ -64,6 +64,7 @@
             }
             #heures {
                 width: 200px;
+                height: 100%;
             }
             #heures li {
                 list-style: none;
@@ -90,30 +91,39 @@
             #heures .duree {
                 background: #eee;
             }
-            #lignes table, #conges-payes table {
+            #lignes table, #conges-payes table, #heures-semaine table {
                 width: 99%;
                 border-collapse: collapse;
             }
             #lignes {
                 min-height: 300px;
             }
-            #lignes, #conges-payes {
+            #lignes, #conges-payes, #heures-semaine {
                 width: 770px;
                 padding: 5px;
                 border: 1px solid #eee;
                 margin-left: 15px;
             }
-            #lignes th, #conges-payes th {
+            #lignes th, #conges-payes th, #heures-semaine th {
                 background: #eee;
-                font-weight: normal;
+                font-weight: bold;
                 height: 30px;
                 padding: 2px 5px;
             }
-            #lignes td, #conges-payes td {
+            #heures-semaine th {
+            	width: 10%;
+            }
+            #heures-semaine th.right {
+            	width: 45%;
+            }
+            #lignes td, #conges-payes td, #heures-semaine td {
                 padding: 2px 5px;
                 height: 30px;
                 min-width: 100px;
                 border-bottom: 1px solid #eee;
+            }
+            #heures-semaine td {
+                height: 10px;
             }
             #lignes .subtotal {
                 padding: 5px;
@@ -130,10 +140,9 @@
             #lignes .subtotal, #lignes .total {
                 border: none;
             }
-            #conges-payes {
+            #conges-payes, #heures-semaine {
                 margin-left: 215px;
                 margin-top: 15px;
-                margin-bottom: 20px;
             }
         </style>
 
@@ -240,6 +249,24 @@
                                 <td class="right">{{ pris | round(2)}}</td>
                                 <td class="right">{{ restant | round(2)}}</td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="heures-semaine" class="column clear">
+                    <table class="table">
+                        <thead>
+                            <th class="left">HEURES/SEMAINE COMPLETE</td>
+                            <th class="right">HEURES EFFECTUEES</th>
+                            <th class="right">HEURES COMPLEMENTAIRES</th>
+                        </thead>
+                        <tbody>
+                            {% for semaine in bulletin.semainesCompletes %}
+                            <tr>
+                                <td class="left">{{ semaine }}</td>
+                                <td class="right">{{ bulletin.heuresPayeesParSemaine(semaine) }}</td>
+                                <td class="right">{{ bulletin.heuresComplementairesParSemaine(semaine) }}</td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
