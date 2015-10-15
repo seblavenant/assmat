@@ -7,3 +7,4 @@ assets/compiled/
 www/js
 www/css
 cache
+.vagrant/machines
