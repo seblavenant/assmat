@@ -82,7 +82,7 @@ class Bulletin
         $annee = $this->request->get('annee');
 
         $contrat = $this->contratRepository->find($contratId);
-        $contrat->validateContactAutorisation($this->getContact());
+        $contrat->validateIsGrantedEmployeur($this->getContact());
 
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), true);
         $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);

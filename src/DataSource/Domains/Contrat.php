@@ -104,6 +104,11 @@ class Contrat
         return $baseJour / 12;
     }
 
+    public function isGrantedEmployeur(Domains\Contact $contact)
+    {
+        return $contact->getId() === $this->getEmployeur()->getContact()->getId();
+    }
+
     public function validateContactAutorisation(Domains\Contact $contact)
     {
         if(
@@ -111,6 +116,14 @@ class Contrat
             && $contact->getId() !== $this->getEmployeur()->getContact()->getId()
         ) {
             throw new \Exception('Vous n\'êtes pas autorisé à adminitrer ce contrat');
+        }
+    }
+
+    public function validateIsGrantedEmployeur(Domains\Contact $contact)
+    {
+        if(! $this->isGrantedEmployeur($contact))
+        {
+            throw new \Exception('Vous devez avoir les droits employeur sur ce contrat pour l\'administrer');
         }
     }
 }

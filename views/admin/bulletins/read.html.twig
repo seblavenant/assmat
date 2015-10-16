@@ -24,7 +24,7 @@
                     </a>
                     {% endif %}
 
-                    {% if saveEnable %}
+                    {% if saveEnable and contrat.isGrantedEmployeur(app.security.token.user.contact) %}
                     <form action="{{ path('admin_bulletins_create', { contratId : contrat.id, mois : mois, annee : annee}) }}" method="post">
                     <button class="btn btn-primary btn-label-left" type="submit">
                         <span><i class="fa fa-check"></i></span> Valider
