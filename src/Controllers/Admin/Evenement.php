@@ -56,7 +56,7 @@ class Evenement
         }
 
         return new Response($this->twig->render('admin/evenements/list.html.twig', array(
-            'contratId' => $contratId,
+            'contrat' => $contrat,
             'evenements' => $evenements,
             'evenementsType' => new FilterIterators\Evenements\Types\DureeFixe(new \ArrayIterator($this->evenementTypeRepository->findAll())),
             'mois' => $mois,
