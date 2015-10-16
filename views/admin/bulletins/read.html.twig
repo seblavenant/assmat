@@ -38,6 +38,14 @@
             </div>
         </div>
     </div>
+
+    {% if not bulletin.id and not contrat.isGrantedEmployeur(app.security.token.user.contact) %}
+    <div class="bs-callout bs-callout-info box" id="callout-helper-bg-specificity">
+      <h4>Bulletin non finalisé</h4>
+      <p>Ce bulletin n'a pas été finalisé, il peut encore être modifié/validé par l'employeur</p>
+    </div>
+    {% endif %}
+
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
