@@ -15,7 +15,9 @@
         <div class="col-xs-12">
             <div class="box">
                 <div id="actions" class="box-content">
-                   <a href="{{ path('admin_bulletins_new', {contratId : contratId}) }}"><i class="fa fa-plus-square-o"></i> Créer un nouvau bulletin</a>
+                    <a class="btn btn-label-left btn-primary" href="{{ path('admin_bulletins_new', { contratId : contratId, mois : date() | date('m'), annee : date() | date('Y')}) }}">
+                        <span><i class="fa fa-plus-square-o"></i></span> Créer un nouveau bulletin
+                    </a>
                 </div>
             </div>
         </div>
