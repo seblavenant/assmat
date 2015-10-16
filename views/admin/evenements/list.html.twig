@@ -15,16 +15,16 @@
         <div class="col-xs-12">
             <div class="box">
                 <div id="actions" class="box-content">
-                    {% if bulletinId %}
-                    <a class="btn btn-label-left btn-primary" href="{{ path('admin_bulletins_read', { id: bulletinId }) }}">
-                        <span><i class="fa fa-eye"></i></span> Voir le bulletin
+                    <a class="btn btn-label-left btn-primary" href="{{ path('admin_bulletins_new', { contratId: contrat.id, mois : mois, annee : annee}) }}">
+                        <span><i class="fa fa-plus-square-o"></i></span> 
+                        {% if bulletinId is empty and contrat.isGrantedEmployeur(app.security.token.user.contact) %}
+                        Créer 
+                        {% else %}
+                        Voir
+                        {% endif %}
+                        le bulletin
                     </a>
-                    {% else %}
-                    <a class="btn btn-label-left btn-primary" href="{{ path('admin_bulletins_new', { contratId: contratId, mois : mois, annee : annee}) }}">
-                        <span><i class="fa fa-plus-square-o"></i></span> Créer le bulletin
-                    </a>
-                    {% endif %}
-                    <form id="evenementPeriode" action="{{ path('admin_evenements_list', { contratId : contratId}) }}" method="get">
+                    <form id="evenementPeriode" action="{{ path('admin_evenements_list', { contratId : contrat.id}) }}" method="get">
                         {% include 'admin/common/date.select.html.twig' %}
                     </form>
                 </div>
@@ -35,6 +35,7 @@
 
 
 <div class="row full-calendar">
+    {% if contrat.isGrantedEmployeur(app.security.token.user.contact) %}
     <div class="col-sm-3">
         <div id="external-events">
             <h4 class="page-header" id="events-templates-header">Evénements</h4>
@@ -44,7 +45,8 @@
             {% endfor %}
         </div>
     </div>
-    <div class="col-sm-9">
+    {% endif %}
+    <div class="col-sm-{{ contrat.isGrantedEmployeur(app.security.token.user.contact) ? '9' : '12' }}">
         <div id="loader"></div>
         <div id="calendar"></div>
     </div>
@@ -143,13 +145,13 @@ var loader = {
             console.log('select');
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
                     evenement: {
                         date : start.format('YYYY-MM-DD'),
                         heureDebut : start.format('HH:mm'),
                         heureFin : end.format('HH:mm'),
-                        contratId : '{{ contratId }}',
+                        contratId : '{{ contrat.id }}',
                         typeId : 1
                     }
                 }
@@ -194,13 +196,13 @@ var loader = {
 
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
                     evenement: {
                         date : event.start.format('YYYY-MM-DD'),
                         heureDebut : event.start.format('HH:mm'),
                         heureFin : event.end.format('HH:mm'),
-                        contratId : '{{ contratId }}',
+                        contratId : '{{ contrat.id }}',
                         typeId : 1
                     }
                 }
@@ -225,13 +227,13 @@ var loader = {
             loader.pendingStart();
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
                     evenement: {
                         date : event.start.format('YYYY-MM-DD'),
                         heureDebut : event.start.format('HH:mm'),
                         heureFin : event.end.format('HH:mm'),
-                        contratId : '{{ contratId }}',
+                        contratId : '{{ contrat.id }}',
                         typeId : 1
                     }
                 }
@@ -270,11 +272,11 @@ var loader = {
 
             $.ajax({
                 method: 'POST',
-                url: '{{ path('admin_evenements_set', {contratId: contratId}) }}',
+                url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
                     evenement: {
                         date : date.format('YYYY-MM-DD'),
-                        contratId : '{{ contratId }}',
+                        contratId : '{{ contrat.id }}',
                         typeId : copiedEventObject.typeId
                     }
                 }
@@ -309,7 +311,7 @@ var loader = {
             {
                 $.ajax({
                     method: 'DELETE',
-                    url: '{{ path('admin_evenements_delete', {contratId: contratId}) }}',
+                    url: '{{ path('admin_evenements_delete', {contratId: contrat.id}) }}',
                     data: {
                         date : calEvent.start.format('YYYY-MM-DD'),
                     }
