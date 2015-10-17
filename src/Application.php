@@ -9,6 +9,8 @@ use Spear\Silex\Application\AbstractApplication;
 use Symfony\Component\HttpFoundation\Request;
 use Assmat\DataSource\Repositories;
 use Assmat\Services;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Assmat\Services\Form;
 
 class Application extends AbstractApplication
 {
@@ -17,6 +19,7 @@ class Application extends AbstractApplication
         $this->configureTwig();
         $this->initializeRepositories();
         $this->initializeSecurity();
+        $this->initializeForms();
 
         $this['bulletin.builder'] = function($c) {
             return new Services\Bulletin\Builder($c['repository.ligneTemplate']);
@@ -28,7 +31,8 @@ class Application extends AbstractApplication
         $this->register(new SilexProvider\SessionServiceProvider());
         $this->register(new SilexProvider\UrlGeneratorServiceProvider());
         $this->register(new SilexProvider\FormServiceProvider());
-        $this->register(new SilexProvider\TranslationServiceProvider());
+        $this->register(new SilexProvider\ValidatorServiceProvider());
+        $this->register(new SilexProvider\TranslationServiceProvider(), array('locale' => 'fr'));
         $this->register(new SilexProvider\HttpFragmentServiceProvider());
         $this->register(new SpearProvider\Twig());
         $this->register(new SpearProvider\AsseticServiceProvider());
@@ -47,6 +51,18 @@ class Application extends AbstractApplication
         $this['twig.path.manager']->addPath(array(
             $this['root.path'] . 'views/',
         ));
+
+        $this['twig.form.templates'] = array(
+            'form_div_layout.html.twig',
+            'common/form.html.twig',
+        );
+
+        $this['translator'] = $this->share($this->extend('translator', function($translator, $app) {
+            $translator->addLoader('yaml', new YamlFileLoader());
+            $translator->addResource('yaml', $app['root.path'] . 'src/DataSource/Forms/Labels.yml', 'fr');
+
+            return $translator;
+        }));
 
         $this['twig']->addExtension(new Services\Twig\AdminExtension());
     }
@@ -77,7 +93,6 @@ class Application extends AbstractApplication
             ));
         })->bind('user_login');
     }
-
 
     private function initializeRepositories()
     {
@@ -135,6 +150,13 @@ class Application extends AbstractApplication
 
         $this['repository.ligne'] = function() {
             return new Repositories\Mysql\Ligne($this['db.default']);
+        };
+    }
+
+    private function initializeForms()
+    {
+        $this['form.errors'] = function() {
+            return new Form\Errors($this['translator']);
         };
     }
 }

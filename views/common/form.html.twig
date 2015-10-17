@@ -1,0 +1,90 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_label %}
+{% spaceless %}
+ 	<label for="{{ id }}" class="control-label">
+ 	{{ label|trans }}
+ 	{% if help is defined %}
+       	<span title="" data-content="{{ help }}" data-placement="{% if dataPlacement is defined %}{{ dataPlacement }}{% else %}right{% endif %}" data-trigger="hover" data-rel="popover" class="help-button" >?</span>
+    {% endif %}</label>
+{% endspaceless %}
+{% endblock %}
+
+{% block form_row %}
+{% spaceless %}
+	<div class="control-group">
+		{{ parent() }}
+	</div>
+{% endspaceless %}
+{% endblock %}
+
+{% block form_widget %}
+{% spaceless %}
+	<div class="controls">
+		{{ parent() }}
+	</div>
+{% endspaceless %}
+{% endblock %}
+
+{% block password_widget %}
+{% spaceless %}
+	<div class="controls">
+		{{ parent() }}
+	</div>
+{% endspaceless %}
+{% endblock %}
+
+{% block textarea_widget %}
+{% spaceless %}
+	<div class="controls">
+		{{ parent() }}
+	</div>
+{% endspaceless %}
+{% endblock %}
+
+{% block choice_widget %}
+{% spaceless %}
+    {% if expanded %}
+    <fieldset>
+        <div {{ block('widget_container_attributes') }}>
+	        {% for child in form %}
+	        	<div style="clear:both;">
+	    	        {{ form_widget(child, {form : form}) }}
+	            </div>
+	        {% endfor %}
+        </div>
+    </fieldset>
+    {% else %}
+    	<div class="controls">
+	   		{{ parent() }}
+	   	</div>
+    {% endif %}
+{% endspaceless %}
+{% endblock choice_widget %}
+
+{% block checkbox_widget %}
+{% spaceless %}
+	<input type="checkbox" {% if checked %} checked="checked"{% endif %} id="{{ id }}" name="{{ full_name }}" {% if value is not empty %}value="{{ value }}" {% endif %} />
+	<label for="{{ id }}" class="lbl"></label>
+	{% if form|length > 1 %}{{ block('form_label') }} {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{% block radio_widget %}
+{% spaceless %}
+	<input type="radio" {% if checked %} checked="checked"{% endif %} id="{{ id }}" name="{{ full_name }}" {% if value is not empty %}value="{{ value }}" {% endif %} />
+	<label for="{{ id }}" class="lbl"></label>
+	{{ block('form_label') }}
+{% endspaceless %}
+{% endblock %}
+
+{% block date_widget %}
+	<div class="controls">
+		<div class="row-fluid input-append">
+			<input class="date-picker" id="{{ id }}" name="{{ full_name }}" type="text" value="{{ value }}" data-date-format="dd/mm/yyyy" />
+			<span class="add-on">
+				<i class="icon-calendar"></i>
+			</span>
+		</div>
+	</div>
+{% endblock %}

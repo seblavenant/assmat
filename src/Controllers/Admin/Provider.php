@@ -38,7 +38,10 @@ class Provider implements ControllerProviderInterface
         $app['contrat.controller'] = $app->share(function() use($app) {
             return new Contrat(
                 $app['twig'],
+                $app['request'],
                 $app['security'],
+                $app['form.factory'],
+                $app['form.errors'],
                 $app['repository.employeur'],
                 $app['repository.employe'],
                 $app['repository.contrat']
@@ -47,6 +50,12 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/contrats', 'contrat.controller:indexAction')
                     ->bind('admin_contrats');
+
+        $controllers->get('/contrats/new', 'contrat.controller:newAction')
+                    ->bind('admin_contrats_new');
+
+        $controllers->post('/contrats/', 'contrat.controller:createAction')
+                    ->bind('admin_contrats_create');
 
         $controllers->get('/contrats/{id}', 'contrat.controller:readAction')
                     ->bind('admin_contrats_read');
