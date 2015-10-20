@@ -17,6 +17,14 @@
                     <form novalidate method="post" data-ajax-form="true" action="{{ path('admin_contrats_create') }}">
                         {% spaceless %}
                         {{ form_row(form.nom) }}
+                        {{ form_row(form.salaireHoraire) }}
+                        {{ form_row(form.joursGarde) }}
+                        {{ form_row(form.heuresHebdo) }}
+                        {{ form_row(form.nombreSemainesAn) }}
+                        {{ form_row(form.typeId) }}
+                        {{ form_row(form.employeId) }}
+                        {{ form_row(form.employeurId) }}
+                        {{ form_rest(form) }}
                         <input type="submit" value="Enregistrer" />
                         {% endspaceless %}
                     </form>

@@ -1,2 +1,8 @@
 contrats:
     nom: Nom du contrat
+    salaireHoraire : Taux horaire
+    joursGarde: Nombre de jour de garde hebdo
+    heuresHebdo: Nombre d'heures hebdomadaire
+    nombreSemainesAn: Nombre de semaine d'accueil par an
+    typeId: Type de contrat
+    employeId: Employé
