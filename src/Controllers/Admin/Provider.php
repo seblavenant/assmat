@@ -17,6 +17,7 @@ class Provider implements ControllerProviderInterface
         $this->initializeContratsControllers($controllers, $app);
         $this->initializeBulletinsControllers($controllers, $app);
         $this->initializeEvenementControllers($controllers, $app);
+        $this->initializeEmployeControllers($controllers, $app);
 
         return $controllers;
     }
@@ -127,5 +128,23 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:listAction')
                     ->bind('admin_evenements_list');
+    }
+
+    private function initializeEmployeControllers(ControllerCollection $controllers, Application $app)
+    {
+        $app['employe.controller'] = $app->share(function() use($app) {
+            return new Employe(
+                $app['twig'],
+                $app['request'],
+                $app['security'],
+                $app['url_generator'],
+                $app['form.factory'],
+                $app['form.errors'],
+                $app['form.employe']
+            );
+        });
+
+        $controllers->get('/employes/new', 'employe.controller:newAction')
+                    ->bind('admin_employes_new');
     }
 }

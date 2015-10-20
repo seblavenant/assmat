@@ -160,6 +160,14 @@ class Application extends AbstractApplication
             return new Forms\Contrat($this['repository.employe']);
         };
 
+        $this['form.contact'] = function() {
+            return new Forms\Contact();
+        };
+
+        $this['form.employe'] = function() {
+            return new Forms\Employe($this['form.contact']);
+        };
+
         $this['form.errors'] = function() {
             return new Form\Errors($this['translator']);
         };

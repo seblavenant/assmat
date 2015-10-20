@@ -1,8 +1,17 @@
 contrats:
-    nom: Nom du contrat
+    nom: Nom
     salaireHoraire : Taux horaire
-    joursGarde: Nombre de jour de garde hebdo
-    heuresHebdo: Nombre d'heures hebdomadaire
-    nombreSemainesAn: Nombre de semaine d'accueil par an
-    typeId: Type de contrat
+    joursGarde: Jours de garde /sem
+    heuresHebdo: Heures /sem
+    nombreSemainesAn: Semaine de garde /an
+    typeId: Type
     employeId: Employé
+employes:
+    ssId: SSID
+contacts:
+    email: Email
+    nom: Nom
+    prenom: Prénom
+    adresse: Adresse
+    codePostal: Code postal
+    ville: Ville
