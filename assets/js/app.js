@@ -23,6 +23,11 @@ var App = {
                     $('.error').removeClass('error');
                     Notifier.success(response.msg);
 
+                    if(response.hasOwnProperty('location'))
+                    {
+                        window.location.href = response.location;
+                    }
+
                     var event = jQuery.Event('ajaxForm.done');
                     event.datas = response.data;
                     $(document).trigger(event);
