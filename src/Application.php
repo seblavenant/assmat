@@ -11,6 +11,7 @@ use Assmat\DataSource\Repositories;
 use Assmat\Services;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Assmat\Services\Form;
+use Assmat\DataSource\Forms;
 
 class Application extends AbstractApplication
 {
@@ -155,6 +156,10 @@ class Application extends AbstractApplication
 
     private function initializeForms()
     {
+        $this['form.contrat'] = function() {
+            return new Forms\Contrat($this['repository.employe']);
+        };
+
         $this['form.errors'] = function() {
             return new Form\Errors($this['translator']);
         };

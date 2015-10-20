@@ -40,8 +40,10 @@ class Provider implements ControllerProviderInterface
                 $app['twig'],
                 $app['request'],
                 $app['security'],
+                $app['url_generator'],
                 $app['form.factory'],
                 $app['form.errors'],
+                $app['form.contrat'],
                 $app['repository.employeur'],
                 $app['repository.employe'],
                 $app['repository.contrat']
@@ -50,6 +52,9 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/contrats', 'contrat.controller:indexAction')
                     ->bind('admin_contrats');
+
+        $controllers->get('/contrats', 'contrat.controller:listAction')
+                    ->bind('admin_contrats_list');
 
         $controllers->get('/contrats/new', 'contrat.controller:newAction')
                     ->bind('admin_contrats_new');

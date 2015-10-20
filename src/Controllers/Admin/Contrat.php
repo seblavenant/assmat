@@ -10,6 +10,9 @@ use Assmat\DataSource\Forms;
 use Assmat\Services\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\DataSource\Domains;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Contrat
 {
@@ -17,25 +20,34 @@ class Contrat
         $twig,
         $request,
         $security,
+        $urlGenerator,
         $formFactory,
         $formErrors,
+        $contratForm,
         $employeurRepository,
         $contratRepository,
         $employeRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, FormFactoryInterface $formFactory, Form\Errors $formErrors, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory, Form\Errors $formErrors, Forms\Contrat $contratForm, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->security = $security;
+        $this->urlGenerator = $urlGenerator;
         $this->formFactory = $formFactory;
         $this->formErrors = $formErrors;
+        $this->contratForm = $contratForm;
         $this->employeurRepository = $employeurRepository;
         $this->contratRepository = $contratRepository;
         $this->employeRepository = $employeRepository;
     }
 
     public function indexAction()
+    {
+        return $this->listAction();
+    }
+
+    public function listAction()
     {
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
         $employeur = $this->employeurRepository->findFromContact($contactId);
@@ -49,7 +61,14 @@ class Contrat
 
     public function newAction()
     {
-        $form = $this->formFactory->create(new Forms\Contrat());
+        $contactId = $this->security->getToken()->getUser()->getContact()->getId();
+        $employeur = $this->employeurRepository->findFromContact($contactId);
+
+        $form = $this->formFactory->create(
+            $this->contratForm,
+            null,
+            array('employeur' => $employeur)
+        );
 
         return new Response($this->twig->render('admin/contrats/new.html.twig', array(
            'form' => $form->createView(),
@@ -58,16 +77,38 @@ class Contrat
 
     public function createAction()
     {
-        $form = $this->formFactory->create(new Forms\Contrat());
+        $contactId = $this->security->getToken()->getUser()->getContact()->getId();
+        $employeur = $this->employeurRepository->findFromContact($contactId);
+
+        $form = $this->formFactory->create(
+            $this->contratForm,
+            null,
+            array('employeur' => $employeur)
+        );
 
         $form->bind($this->request);
 
         if($form->isValid())
         {
+            $contratDTO = new DTO\Contrat();
+            $contratDTO->employeId = (int) $form->get('employeId')->getData();
+            $contratDTO->employeurId = (int) $employeur->getId();
+            $contratDTO->heuresHebdo = (int) $form->get('heuresHebdo')->getData();
+            $contratDTO->indemnites = array();
+            $contratDTO->joursGarde = (int) $form->get('joursGarde')->getData();
+            $contratDTO->nom = $form->get('nom')->getData();
+            $contratDTO->nombreSemainesAn = (int) $form->get('nombreSemainesAn')->getData();
+            $contratDTO->salaireHoraire = (float) $form->get('salaireHoraire')->getData();
+            $contratDTO->typeId = (int) $form->get('typeId')->getData();
+
+            $contrat = new Domains\Contrat($contratDTO);
+            $contrat->persist($this->contratRepository);
+
             $response = new JsonResponse(
                 array(
                     'msg' => 'Contrat créé',
                     'data' => array(),
+                    'location' => $this->urlGenerator->generate('admin_contrats_list'),
                 )
                 , 200
             );
@@ -84,7 +125,6 @@ class Contrat
         }
 
         return $response;
-
     }
 
     public function readAction()
