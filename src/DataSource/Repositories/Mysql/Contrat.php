@@ -54,6 +54,52 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         return $this->fetchAll($query);
     }
 
+    public function persist(DTO\Contrat $contratDTO)
+    {
+        if($contratDTO->id !== null)
+        {
+            return $this->update($contratDTO);
+        }
+
+        return $this->create($contratDTO);
+    }
+
+    private function update(DTO\Contrat $contratDTO)
+    {
+        return;
+    }
+
+    private function create(DTO\Contrat $contratDTO)
+    {
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'nom' => $contratDTO->nom,
+                'salaire_horaire' => $contratDTO->salaireHoraire,
+                'jours_garde' => $contratDTO->joursGarde,
+                'heures_hebdo' => $contratDTO->heuresHebdo,
+                'nb_semaines_an' => $contratDTO->nombreSemainesAn,
+                'type_id' => $contratDTO->typeId,
+                'employe_id' => $contratDTO->employeId,
+                'employeur_id' => $contratDTO->employeurId,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+            )
+        );
+
+        $contratDTO->id = (int) $this->db->lastInsertId();
+
+        return new Domains\Contrat($contratDTO);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())

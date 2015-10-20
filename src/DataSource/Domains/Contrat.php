@@ -5,6 +5,7 @@ namespace Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
+use Assmat\DataSource\Repositories;
 
 class Contrat
 {
@@ -125,5 +126,10 @@ class Contrat
         {
             throw new \Exception('Vous devez avoir les droits employeur sur ce contrat pour l\'administrer');
         }
+    }
+
+    public function persist(Repositories\Contrat $contratRepository)
+    {
+        return $contratRepository->persist($this->fields);
     }
 }

@@ -4,6 +4,7 @@ namespace Assmat\DataSource\Repositories\Proxy;
 
 use Assmat\DataSource\Repositories;
 use Spear\Silex\Persistence\DataTransferObject;
+use Assmat\DataSource\DataTransferObjects as DTO;
 
 class Contrat implements Repositories\Contrat
 {
@@ -30,6 +31,11 @@ class Contrat implements Repositories\Contrat
     public function findFromEmployeur($employeurId)
     {
         return $this->getContratRepository()->findFromEmployeur($employeurId);
+    }
+
+    public function persist(DTO\Contrat $contratDTO)
+    {
+        return $this->getContratRepository()->persist($contratDTO);
     }
 
     public function getContratRepository()
