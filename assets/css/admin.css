@@ -1,10 +1,10 @@
 #actions i {
-	font-size: 20px;
-	vertical-align: middle;
+    font-size: 20px;
+    vertical-align: middle;
 }
 
 .fc-day-grid-event .fc-content {
-	white-space: normal;
+    white-space: normal;
 }
 
 #loader {
@@ -30,6 +30,10 @@ label {
 }
 
 .control-group {
-	clear: both;
-	padding-top: 15px;
+    clear: both;
+    padding-top: 15px;
+}
+
+.nopadding {
+    padding: 0 !important;
 }
