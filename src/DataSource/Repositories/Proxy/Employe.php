@@ -32,6 +32,11 @@ class Employe implements Repositories\Employe
         return $this->getEmployeRepository()->findFromEmployeur($employeurId);
     }
 
+    public function findFromKey($key)
+    {
+        return $this->getEmployeRepository()->findFromKey($key);
+    }
+
     public function getEmployeRepository()
     {
         if($this->employeRepository === null)

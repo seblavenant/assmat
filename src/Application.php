@@ -161,11 +161,15 @@ class Application extends AbstractApplication
         };
 
         $this['form.contact'] = function() {
-            return new Forms\Contact();
+            return new Forms\Contacts\Base();
+        };
+
+        $this['form.contact.employe'] = function() {
+            return new Forms\Contacts\Employe();
         };
 
         $this['form.employe'] = function() {
-            return new Forms\Employe($this['form.contact']);
+            return new Forms\Employe($this['form.contact.employe']);
         };
 
         $this['form.errors'] = function() {

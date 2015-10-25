@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Domains;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 
 class Contrat
 {
@@ -88,10 +90,17 @@ class Contrat
 
         $form->bind($this->request);
 
+        $employeId = $this->retreiveEmployeId($form);
+
+        if(empty($employeId))
+        {
+            $form->addError(new FormError('Vous devez selectionner un employé ou indiquer une clé d\'identification valide'));
+        }
+
         if($form->isValid())
         {
             $contratDTO = new DTO\Contrat();
-            $contratDTO->employeId = (int) $form->get('employeId')->getData();
+            $contratDTO->employeId = (int) $employeId;
             $contratDTO->employeurId = (int) $employeur->getId();
             $contratDTO->heuresHebdo = (int) $form->get('heuresHebdo')->getData();
             $contratDTO->indemnites = array();
@@ -125,6 +134,20 @@ class Contrat
         }
 
         return $response;
+    }
+
+    private function retreiveEmployeId(FormInterface $form)
+    {
+        $employeId = $form->get('employeId')->getData();
+        $employeKey = $form->get('employeKey')->getData();
+
+        $employe = $this->employeRepository->findFromKey($employeKey);
+        if($employe instanceof Domains\Employe)
+        {
+            $employeId = $employe->getId();
+        }
+
+        return $employeId;
     }
 
     public function readAction()

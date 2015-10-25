@@ -9,4 +9,6 @@ interface Employe
     public function findFromContact($contactId);
 
     public function findFromEmployeur($employeurId);
+
+    public function findFromKey($key);
 }

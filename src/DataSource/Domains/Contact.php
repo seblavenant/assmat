@@ -19,6 +19,11 @@ class Contact
         return $this->fields->id;
     }
 
+    public function getKey()
+    {
+        return $this->fields->key;
+    }
+
     public function getEmail()
     {
         return $this->fields->email;

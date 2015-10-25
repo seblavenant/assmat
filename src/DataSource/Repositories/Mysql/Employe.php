@@ -62,6 +62,16 @@ class Employe extends AbstractMysql implements Repositories\Employe
         return $this->fetchAll($query);
     }
 
+    public function findFromKey($key)
+    {
+        $query = $this->getBaseQuery();
+        $query
+            ->leftJoin('contact')->on('contact_id', 'contact.id')
+            ->where((new Types\String('contact.key'))->equal($key));
+
+        return $this->fetchOne($query);
+    }
+
     public function addTableName($field)
     {
         return self::TABLE_NAME . '.' . $field;
@@ -69,8 +79,11 @@ class Employe extends AbstractMysql implements Repositories\Employe
 
     private function getBaseQuery()
     {
+        $fields = array('id', 'ss_id', 'contact_id');
+        $fieldsNamed = array_map(array($this, 'addTableName'), $fields);
+
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'ss_id', 'contact_id'))
+            ->select($fieldsNamed)
             ->from(self::TABLE_NAME);
 
         return $query;

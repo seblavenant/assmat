@@ -79,12 +79,11 @@ class Contrat extends AbstractType
             ))
             ->add('employeId', 'choice', array(
                  'label' => 'contrats.employeId',
-                 'required' => true,
                  'choices' => $this->retrieveEmployees($options),
                  'placeholder' => '-- Sélectionnez un employé --',
-                 'constraints' => array(
-                      new Constraints\NotBlank(),
-                 )
+            ))
+            ->add('employeKey', 'text', array(
+                 'label' => 'contacts.key',
             ))
             ->add('employeurId', 'hidden')
             ;

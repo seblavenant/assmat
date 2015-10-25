@@ -23,10 +23,10 @@ class Errors
         $errors = array();
         foreach ($form->getErrors() as $error)
         {
-            return array(
+            return array('form' => array(
                 'label' => addSlashes($this->translator->trans(implode('.', $parentForm))),
                 'error' => $error->getMessage()
-            );
+            ));
         }
 
         foreach ($form->all() as $fieldName => $child)

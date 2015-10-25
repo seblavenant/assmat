@@ -14,16 +14,18 @@
         <div class="col-xs-12">
             <div class="box">
                 <div id="actions" class="box-content">
-                    <a class="btn btn-label-left btn-primary" href="">
-                        <span><i class="fa fa-plus-square-o"></i></span> Ajouter un employé
-                    </a>
                 </div>
             </div>
         </div>
         <div class="col-xs-12">
-            <div class="box">
-                <div id="actions" class="box-content">
-                    <form novalidate class="form-horizontal" method="post" data-ajax-form="true" action="{{ path('admin_contrats_create') }}">
+            <form novalidate class="form-horizontal" method="post" data-ajax-form="true" action="{{ path('admin_contrats_create') }}">
+                <div class="box">
+                	<div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Contrat :
+                        </div>
+                    </div>
+                    <div class="box-content">
                         {% spaceless %}
                         <div class="form-group">
                             <div class="col-xs-3">{{ form_label(form.nom) }}</div><div class="col-xs-9">{{ form_widget(form.nom) }}</div>
@@ -43,15 +45,29 @@
                         <div class="form-group">
                             <div class="col-xs-3">{{ form_label(form.nombreSemainesAn) }}</div><div class="col-xs-9">{{ form_widget(form.nombreSemainesAn) }}</div>
                         </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Employé :
+                        </div>
+                    </div>
+                    <div class="box-content">
                         <div class="form-group">
                             <div class="col-xs-3">{{ form_label(form.employeId) }}</div><div class="col-xs-9">{{ form_widget(form.employeId) }}</div>
                         </div>
-                        {{ form_rest(form) }}
-                        <input type="submit" value="Enregistrer" />
-                        {% endspaceless %}
-                    </form>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.employeKey) }}</div><div class="col-xs-9">{{ form_widget(form.employeKey) }}</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="box">
+                    {{ form_rest(form) }}
+                    <input type="submit" value="Enregistrer" />
+                    {% endspaceless %}
+                </div>
+            </form>
         </div>
     </div>
 

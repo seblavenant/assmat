@@ -9,6 +9,7 @@ contrats:
 employes:
     ssId: SSID
 contacts:
+    key: Clé d'identification
     email: Email
     nom: Nom
     prenom: Prénom
