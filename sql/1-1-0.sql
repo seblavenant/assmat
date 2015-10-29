@@ -1,0 +1,1 @@
+ALTER TABLE `contact` ADD `key` VARCHAR( 128 ) NOT NULL AFTER `id`;
