@@ -19,54 +19,63 @@
                 </div>
             </div>
         </div>
-        {% if employeur and employeur.employes is not empty %} 
-            <h3>Liste des employes</h3>
-            {{ _self.displayContrats(employeur.employes) }}
-        {% endif %}
-        {% if employe and employe.employeurs is not empty %}
-            <h3>Liste des employeurs</h3>
-            {{ _self.displayContrats(employe.employeurs) }}
-        {% endif %}
-    </div>
-
-{% endblock %}
-
-{% macro displayContrats(elements) %}
-
-    {% for element in elements %}
-        <div class="col-xs-12">
+         <div class="col-xs-12">
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i> {{ element.contact.prenom | capitalize }} {{ element.contact.nom | upper }}
+                        <i class="fa fa-user"></i> En tant qu'employeur
                     </div>
                 </div>
                 <div class="box-content">
                     <table class="table">
                         <thead>
-                            <th>Id</th>
                             <th>Nom du contrat</td>
-                            <th></th>
+                            <th>Nom de l'employé</th>
                         </thead>
                         <tbody>
-                        {% for contrat in element.contrats %}
-                            <tr>
-                                <td><a href="{{ path('admin_contrats_read', { id : contrat.id }) }}">{{ contrat.id }}</a></td>
-                                <td>{{ contrat.nom }}</td>
-                                <td>
-                                    <a href="{{ path('admin_bulletins', { contratId : contrat.id }) }}"><i class="fa fa-list"></i></a>
-                                    <a href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i></a>
-                                    {% if contrat.isGrantedEmployeur(app.security.token.user.contact) %}
-                                    <a href="{{ path('admin_bulletins_new', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-plus-square-o"></i></a>
-                                    {% endif %}
-                                </td>
-                            </tr>
+                        {% for contrat in employeur.contrats %}
+                            {{ _self.displayContrat(contrat, contrat.employe) }}
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    {% endfor %}
+        <div class="col-xs-12">
+            <div class="box">
+                <div clas="box-header">
+                    <div class="box-name">
+                        <i class="fa fa-user"></i> En tant qu'employé
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <th>Nom du contrat</td>
+                            <th>Nom de l'employeur</th>
+                        </thead>
+                        <tbody>
+                        {% for contrat in employe.contrats %}
+                            {{ _self.displayContrat(contrat, contrat.employeur) }}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
+{% macro displayContrat(contrat, contratContact) %}
+    <tr>
+        <td>{{ contrat.nom }}</td>
+        <td>{{ contratContact.contact.nom | upper }} {{ contratContact.contact.prenom | capitalize }}</td>
+        <td>
+            <a href="{{ path('admin_bulletins', { contratId : contrat.id }) }}"><i class="fa fa-list"></i></a>
+            <a href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i></a>
+            {% if contrat.isGrantedEmployeur(app.security.token.user.contact) %}
+            <a href="{{ path('admin_bulletins_new', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-plus-square-o"></i></a>
+            {% endif %}
+        </td>
+    </tr>
 {% endmacro %}
