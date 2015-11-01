@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        {% if employeur %}
+        {% if employeur and employeur.contrats is not empty %}
         <div class="col-xs-12">
             <div class="box">
                 <div clas="box-header">
@@ -43,7 +43,7 @@
             </div>
         </div>
         {% endif %}
-        {% if employe %}
+        {% if employe and employe.contrats is not empty %}
         <div class="col-xs-12">
             <div class="box">
                 <div clas="box-header">
