@@ -55,13 +55,29 @@ class Evenement
             $bulletinId = $bulletin->getId();
         }
 
-        return new Response($this->twig->render('admin/evenements/list.html.twig', array(
+        return new Response($this->twig->render('admin/evenements/contrat.html.twig', array(
             'contrat' => $contrat,
             'evenements' => $evenements,
             'evenementsType' => new FilterIterators\Evenements\Types\DureeFixe(new \ArrayIterator($this->evenementTypeRepository->findAll())),
             'mois' => $mois,
             'annee' => $annee,
             'bulletinId' => $bulletinId,
+        )));
+    }
+
+    public function ContactListAction()
+    {
+        $this->validateRangeDateParams();
+        $mois = $this->request->get('mois');
+        $annee = $this->request->get('annee');
+
+        $evenements = array(); //$this->bulletinRepository->findAllFromContact($this->getContact()->getId());
+
+        return new Response($this->twig->render('admin/evenements/contact.html.twig', array(
+            'evenements' => $evenements,
+            'evenementsType' => new FilterIterators\Evenements\Types\DureeFixe(new \ArrayIterator($this->evenementTypeRepository->findAll())),
+            'mois' => $mois,
+            'annee' => $annee,
         )));
     }
 

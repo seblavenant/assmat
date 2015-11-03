@@ -24,7 +24,7 @@
                         {% endif %}
                         le bulletin
                     </a>
-                    <form id="evenementPeriode" action="{{ path('admin_evenements_list', { contratId : contrat.id}) }}" method="get">
+                    <form id="evenementPeriode" action="{{ path('admin_evenements_contrat_list', { contratId : contrat.id}) }}" method="get">
                         {% include 'admin/common/date.select.html.twig' %}
                     </form>
                 </div>
@@ -32,32 +32,28 @@
         </div>
     </div>
 
+    <div class="row full-calendar">
+        {% if contrat.isGrantedEmployeur(app.security.token.user.contact) %}
+        <div class="col-sm-3">
+            <div id="external-events">
+                <h4 class="page-header" id="events-templates-header">Evénements</h4>
 
-
-<div class="row full-calendar">
-    {% if contrat.isGrantedEmployeur(app.security.token.user.contact) %}
-    <div class="col-sm-3">
-        <div id="external-events">
-            <h4 class="page-header" id="events-templates-header">Evénements</h4>
-
-            {% for evenementType in evenementsType %}
-                <div class="external-event" data-id="{{ evenementType.id }}">{{ evenementType.label }}</div>
-            {% endfor %}
+                {% for evenementType in evenementsType %}
+                    <div class="external-event" data-id="{{ evenementType.id }}">{{ evenementType.label }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-sm-{{ contrat.isGrantedEmployeur(app.security.token.user.contact) ? '9' : '12' }}">
+            <div id="loader"></div>
+            <div id="calendar"></div>
         </div>
     </div>
-    {% endif %}
-    <div class="col-sm-{{ contrat.isGrantedEmployeur(app.security.token.user.contact) ? '9' : '12' }}">
-        <div id="loader"></div>
-        <div id="calendar"></div>
-    </div>
-</div>
-
 {% endblock %}
 
 {% block specificsJavascripts %}
 <script>
-
-var loader = {
+    var loader = {
         pendingStart: function(){
             $('.fc-center').html('<img alt="preloader" class="devoops-getdata" src="/img/devoops_getdata.gif">');
             $('#loader').show();

@@ -127,7 +127,10 @@ class Provider implements ControllerProviderInterface
                     ->bind('admin_evenements_delete');
 
         $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:listAction')
-                    ->bind('admin_evenements_list');
+                    ->bind('admin_evenements_contrat_list');
+
+        $controllers->get('/evenements/', 'evenement.controller:contactListAction')
+                    ->bind('admin_evenements_contact_list');
     }
 
     private function initializeEmployeControllers(ControllerCollection $controllers, Application $app)
