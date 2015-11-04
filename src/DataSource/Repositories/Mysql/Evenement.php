@@ -56,11 +56,13 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     {
         $query = $this->getBaseQuery();
 
-        $orSet = new OrSet();
-        $orSet->add((new Types\Integer('employe_id'))->equal($contactId));
-        $orSet->add((new Types\Integer('employeur_id'))->equal($contactId));
-
         $query->leftJoin('contrat')->on('contrat_id', 'contrat.id');
+        $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
+        $query->leftJoin('contact', 'employeur_contact')->on('contrat.employeur_id', 'employeur_contact.id');
+
+        $orSet = new OrSet();
+        $orSet->add((new Types\Integer('employe_contact.id'))->equal($contactId));
+        $orSet->add((new Types\Integer('employeur_contact.id'))->equal($contactId));
         $query->where($orSet);
 
         return $this->fetchAll($query);
