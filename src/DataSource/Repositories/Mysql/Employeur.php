@@ -48,11 +48,8 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
 
     public function findFromEmploye($employeId)
     {
-        $fields = array('id', 'paje_emploi_id', 'contact_id');
-        $fieldsNamed = array_map(array($this, 'addTableName'), $fields);
-
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select($fieldsNamed)
+            ->select($this->prefixTableFields(array('id', 'paje_emploi_id', 'contact_id')))
             ->from('contrat')
             ->leftJoin('employeur')->on('employeur.id', 'contrat.employeur_id')
             ->leftJoin('contact')->on('contact.id', 'employeur.contact_id')
@@ -60,11 +57,6 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
             ->where((new Types\Integer('contrat.employe_id'))->equal($employeId));
 
         return $this->fetchAll($query);
-    }
-
-    public function addTableName($field)
-    {
-        return self::TABLE_NAME . '.' . $field;
     }
 
     private function getBaseQuery()

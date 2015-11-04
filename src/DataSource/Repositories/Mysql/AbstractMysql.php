@@ -71,4 +71,16 @@ abstract class AbstractMysql
 
         return $dto;
     }
+
+    protected function prefixTableFields($fields)
+    {
+        $prefixTableFields = array_map(
+            function($field){
+                return static::TABLE_NAME . '.' . $field;
+            },
+            $fields
+        );
+
+        return $prefixTableFields;
+    }
 }

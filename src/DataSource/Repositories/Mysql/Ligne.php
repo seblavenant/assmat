@@ -27,9 +27,9 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
     public function countAllFromContratAndContext($contratId, $contextId, \DateTime $date)
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('sum( valeur ) AS count', 'type_id'))
+            ->select($this->prefixTableFields(array('sum( valeur ) AS count', 'type_id')))
             ->from(self::TABLE_NAME)
-            ->leftJoin(Repositories\Mysql\Bulletin::TABLE_NAME)->on($this->addTableName('bulletin_id'), 'bulletin.id')
+            ->leftJoin(Repositories\Mysql\Bulletin::TABLE_NAME)->on($this->prefixTableFields(array('bulletin_id')), 'bulletin.id')
             ->where((new Types\Integer('context_id'))->equal($contextId))
             ->where((new Types\Integer('contrat_id'))->equal($contratId))
             ->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->lowerOrEqualThan($date->format('Ym')))
@@ -52,19 +52,11 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
 
     private function getBaseQuery()
     {
-        $fields = array('id', 'label', 'type_id', 'action_id', 'context_id', 'base', 'taux', 'quantite', 'valeur', 'bulletin_id');
-        $fieldsNamed = array_map(array($this, 'addTableName'), $fields);
-
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select($fieldsNamed)
+            ->select($this->prefixTableFields(array('id', 'label', 'type_id', 'action_id', 'context_id', 'base', 'taux', 'quantite', 'valeur', 'bulletin_id')))
             ->from(self::TABLE_NAME);
 
         return $query;
-    }
-
-    public function addTableName($field)
-    {
-        return self::TABLE_NAME . '.' . $field;
     }
 
     public function create(DTO\Ligne $ligneDTO)

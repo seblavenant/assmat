@@ -110,7 +110,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'mois', 'annee', 'contrat_id'))
+            ->select($this->prefixTableFields(array('id', 'mois', 'annee', 'contrat_id')))
             ->from(self::TABLE_NAME)
             ->orderBy('annee', OrderBy::DESC)
             ->orderBy('mois', OrderBy::DESC);
