@@ -13,6 +13,7 @@ use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
 use Assmat\Services\Evenements\Dates\Date;
+use Muffin\Conditions\Sets\OrSet;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
@@ -47,6 +48,20 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     public function findAllFromContrat($contratId, \DateTime $date = null, $fullWeek = false)
     {
         $query = $this->getQueryFromContrat($contratId, $date, $fullWeek);
+
+        return $this->fetchAll($query);
+    }
+
+    public function findAllFromContact($contactId)
+    {
+        $query = $this->getBaseQuery();
+
+        $orSet = new OrSet();
+        $orSet->add((new Types\Integer('employe_id'))->equal($contactId));
+        $orSet->add((new Types\Integer('employeur_id'))->equal($contactId));
+
+        $query->leftJoin('contrat')->on('contrat_id', 'contrat.id');
+        $query->where($orSet);
 
         return $this->fetchAll($query);
     }
@@ -112,7 +127,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'date', 'heure_debut', 'heure_fin', 'type_id'))
+            ->select($this->prefixTableFields(array('id', 'date', 'heure_debut', 'heure_fin', 'type_id')))
             ->from(self::TABLE_NAME)
             ->orderBy('date', OrderBy::ASC)
             ->orderBy('heure_debut', OrderBy::DESC);
