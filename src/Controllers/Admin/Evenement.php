@@ -67,11 +67,10 @@ class Evenement
 
     public function ContactListAction()
     {
-        $this->validateRangeDateParams();
-        $mois = $this->request->get('mois');
-        $annee = $this->request->get('annee');
+        $mois = $this->request->get('mois') ? $this->request->get('mois') : date('m');
+        $annee = $this->request->get('annee') ? $this->request->get('annee') : date('Y');
 
-        $evenements = array(); //$this->bulletinRepository->findAllFromContact($this->getContact()->getId());
+        $evenements = $this->evenementRepository->findAllFromContact($this->getContact()->getId());
 
         return new Response($this->twig->render('admin/evenements/contact.html.twig', array(
             'evenements' => $evenements,

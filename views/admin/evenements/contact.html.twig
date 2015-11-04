@@ -14,7 +14,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div id="actions" class="box-content">
-                    <form id="evenementPeriode" action="{{ path('admin_evenements_contact_list', { mois : mois, annee : annee}) }}" method="get">
+                    <form id="evenementPeriode" action="{{ path('admin_evenements_contact_list') }}" method="get">
                         {% include 'admin/common/date.select.html.twig' %}
                     </form>
                 </div>
@@ -32,6 +32,32 @@
 
 {% block specificsJavascripts %}
 <script>
+    $(function()
+    {
+        $('#evenementAnnee option').each(function(){
+            if($(this).val() == '{{ annee }}')
+            {
+                $(this).attr('selected', true);
+            }
+        });
+
+        $('#evenementMois option').each(function(){
+            if($(this).val() == '{{ mois }}')
+            {
+                $(this).attr('selected', true);
+            }
+        });
+
+        $('#evenementPeriode').submit(function(e){
+            e.preventDefault();
+            var params = new Array();
+            params['annee'] = $('#evenementAnnee').val();
+            params['mois'] = $('#evenementMois').val();
+
+            window.location.href=$(this).attr('action') + '?' + http_build_query(params);
+        });
+    });
+
     var calendar = $('#calendar').fullCalendar({
         events: [
             {% for evenement in evenements %}
