@@ -21,7 +21,7 @@
                         <span><i class="fa fa-check"></i></span> Valider
                     </button>
                     {% endif %}
-                    <a class="btn btn-label-left" href="{{ path('admin_evenements_list', { contratId : contrat.id, mois : "%02d"|format(mois), annee : annee}) }}">
+                    <a class="btn btn-label-left" href="{{ path('admin_evenements_contrat_list', { contratId : contrat.id, mois : "%02d"|format(mois), annee : annee}) }}">
                         <span><i class="fa fa-calendar"></i></span> Voir le planning
                     </a>
                     {% if bulletin.id %}
