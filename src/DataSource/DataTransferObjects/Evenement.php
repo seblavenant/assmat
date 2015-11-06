@@ -17,7 +17,8 @@ class Evenement extends Related
     public function __construct()
     {
         parent::__construct(array(
-            'type'
+            'type',
+            'contrat',
         ));
     }
 }

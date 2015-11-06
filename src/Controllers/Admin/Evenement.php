@@ -70,9 +70,12 @@ class Evenement
         $mois = $this->request->get('mois') ? $this->request->get('mois') : date('m');
         $annee = $this->request->get('annee') ? $this->request->get('annee') : date('Y');
 
-        $evenements = $this->evenementRepository->findAllFromContact($this->getContact()->getId());
+        $contactId = $this->getContact()->getId();
+        $evenements = $this->evenementRepository->findAllFromContact($contactId);
+        $contrats = $this->contratRepository->findFromContact($contactId);
 
         return new Response($this->twig->render('admin/evenements/contact.html.twig', array(
+            'contrats' => $contrats,
             'evenements' => $evenements,
             'evenementsType' => new FilterIterators\Evenements\Types\DureeFixe(new \ArrayIterator($this->evenementTypeRepository->findAll())),
             'mois' => $mois,

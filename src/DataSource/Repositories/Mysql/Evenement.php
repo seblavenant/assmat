@@ -21,13 +21,15 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         TABLE_NAME = 'evenement';
 
     private
-        $evenementTypeRepository;
+        $evenementTypeRepository,
+        $contratRepository;
 
-    public function __construct(Mysql $db, Repositories\EvenementType $evenementTypeRepository)
+    public function __construct(Mysql $db, Repositories\EvenementType $evenementTypeRepository, Repositories\Contrat $contratRepository)
     {
         parent::__construct($db);
 
         $this->evenementTypeRepository = $evenementTypeRepository;
+        $this->contratRepository = $contratRepository;
     }
 
     public function find($id)
@@ -129,7 +131,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select($this->prefixTableFields(array('id', 'date', 'heure_debut', 'heure_fin', 'type_id')))
+            ->select($this->prefixTableFields(array('id', 'date', 'heure_debut', 'heure_fin', 'type_id', 'contrat_id')))
             ->from(self::TABLE_NAME)
             ->orderBy('date', OrderBy::ASC)
             ->orderBy('heure_debut', OrderBy::DESC);
@@ -145,6 +147,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
             'heureDebut' => new Fields\NotNullable(new Fields\DateTime('heure_debut', 'H:i:s')),
             'heureFin' => new Fields\NotNullable(new Fields\DateTime('heure_fin', 'H:i:s')),
             'typeId' => new Fields\NotNullable(new Fields\Integer('type_id')),
+            'contratId' => new Fields\NotNullable(new Fields\Integer('contrat_id')),
         );
     }
 
@@ -152,6 +155,10 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
     {
         $dto->set('type', function() use($dto) {
             return $this->evenementTypeRepository->find($dto->typeId);
+        });
+
+        $dto->set('contrat', function() use($dto) {
+            return $this->contratRepository->find($dto->contratId);
         });
 
         return new Domains\Evenement($dto);

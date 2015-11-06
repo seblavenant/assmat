@@ -61,6 +61,11 @@ class Evenement
         return $this->fields->load('type');
     }
 
+    public function getContrat()
+    {
+        return $this->fields->load('contrat');
+    }
+
     public function computeFromType()
     {
         $this->getType()->compute($this);

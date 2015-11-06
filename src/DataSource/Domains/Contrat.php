@@ -120,6 +120,15 @@ class Contrat
         }
     }
 
+    public function getColorHex()
+    {
+        $colors = array('00aedb', 'a200ff', 'f47835', 'd41243', '8ec127');
+
+        srand($this->getId());
+
+        return $colors[rand(0, count($colors) - 1)];
+    }
+
     public function validateIsGrantedEmployeur(Domains\Contact $contact)
     {
         if(! $this->isGrantedEmployeur($contact))

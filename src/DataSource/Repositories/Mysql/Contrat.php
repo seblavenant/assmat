@@ -10,6 +10,7 @@ use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
+use Muffin\Conditions\Sets\OrSet;
 
 class Contrat extends AbstractMysql implements Repositories\Contrat
 {
@@ -50,6 +51,20 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     {
         $query = $this->getBaseQuery();
         $query->where((new Types\Integer('employeur_id'))->equal($employeurId));
+
+        return $this->fetchAll($query);
+    }
+
+    public function findFromContact($contactId)
+    {
+        $query = $this->getBaseQuery();
+        $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
+        $query->leftJoin('contact', 'employeur_contact')->on('contrat.employeur_id', 'employeur_contact.id');
+
+        $orSet = new OrSet();
+        $orSet->add((new Types\Integer('employe_contact.id'))->equal($contactId));
+        $orSet->add((new Types\Integer('employeur_contact.id'))->equal($contactId));
+        $query->where($orSet);
 
         return $this->fetchAll($query);
     }
@@ -103,7 +118,7 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'nom', 'salaire_horaire', 'jours_garde', 'heures_hebdo', 'type_id', 'employe_id', 'employeur_id'))
+            ->select($this->prefixTableFields(array('id', 'nom', 'salaire_horaire', 'jours_garde', 'heures_hebdo', 'type_id', 'employe_id', 'employeur_id')))
             ->from(self::TABLE_NAME);
 
         return $query;

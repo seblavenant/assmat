@@ -33,6 +33,11 @@ class Contrat implements Repositories\Contrat
         return $this->getContratRepository()->findFromEmployeur($employeurId);
     }
 
+    public function findFromContact($contactId)
+    {
+        return $this->getContratRepository()->findFromContact($contactId);
+    }
+
     public function persist(DTO\Contrat $contratDTO)
     {
         return $this->getContratRepository()->persist($contratDTO);
