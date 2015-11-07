@@ -10,7 +10,6 @@ use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject;
-use Muffin\Conditions\Sets\OrSet;
 
 class Contrat extends AbstractMysql implements Repositories\Contrat
 {
@@ -61,10 +60,11 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
         $query->leftJoin('contact', 'employeur_contact')->on('contrat.employeur_id', 'employeur_contact.id');
 
-        $orSet = new OrSet();
-        $orSet->add((new Types\Integer('employe_contact.id'))->equal($contactId));
-        $orSet->add((new Types\Integer('employeur_contact.id'))->equal($contactId));
-        $query->where($orSet);
+        $contactCondition = (
+            (new Types\Integer('employe_contact.id'))->equal($contactId)
+            ->or((new Types\Integer('employeur_contact.id'))->equal($contactId))
+        );
+        $query->where($contactCondition);
 
         return $this->fetchAll($query);
     }
