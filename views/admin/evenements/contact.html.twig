@@ -29,7 +29,7 @@
             <div class="box">
                 <div id="actions" class="box-content clearfix">
                 {% for contrat in contrats %}
-                    <a href="{{ path('admin_evenements_contrat_list', {contratId: contrat.id}) }}" class="col-xs-3" style="background-color:#{{ contrat.colorHex }}; color:#FFF">{{ contrat.nom }}</a>
+                    <a href="{{ path('admin_evenements_contrat_list', {contratId: contrat.id, mois: mois, annee: annee}) }}" class="col-xs-3" style="background-color:#{{ contrat.colorHex }}; color:#FFF">{{ contrat.nom }}</a>
                 {% endfor %}
                 </div>
             </div>
@@ -81,13 +81,28 @@
                 end: '{{ evenement.date | date('Y-m-d') }}T{{ evenement.heureFin | date('H:i:s') }}',
                 title: '{{ evenement.type.label }}',
                 allDay: {% if evenement.heureDebut | date('H:i') == '00:00' and evenement.heureFin | date('H:i') == '00:00' %}true{% else %}false{% endif %},
-                backgroundColor: '#{{ evenement.contrat.colorHex }}'
+                color: '#{{ evenement.contrat.colorHex }}'
             },
             {% endfor %}
+            // borne de date non editable
+            {
+                start: '2000-01-01T00:00:00',
+                end: '{{ annee }}-{{ mois }}-01T00:00:00',
+                overlap: false,
+                rendering: 'background',
+                color: '#ddd'
+            },
+            {
+                start: '{{ annee }}-{{ "%02d"|format(mois + 1) }}-01T00:00:00',
+                end: '2100-01-01T00:00:00',
+                overlap: false,
+                rendering: 'background',
+                color: '#ddd'
+            },
         ],
         defaultDate: moment('{{ annee }}-{{ mois }}-01'),
         header: {
-            left: 'prev,next today',
+            left: 'prev,next',
             center: '',
             right: ''
         },

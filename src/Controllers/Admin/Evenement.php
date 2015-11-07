@@ -42,9 +42,9 @@ class Evenement
         $contrat = $this->contratRepository->find($contratId);
         $contrat->validateContactAutorisation($this->getContact());
 
-        $this->validateRangeDateParams();
-        $mois = $this->request->get('mois');
-        $annee = $this->request->get('annee');
+        $mois = $this->request->get('mois') ? $this->request->get('mois') : date('m');
+        $annee = $this->request->get('annee') ? $this->request->get('annee') : date('Y');
+        $this->validateRangeDateParams($mois, $annee);
 
         $evenements = $this->evenementRepository->findAllFromContrat($contratId);
 
@@ -69,9 +69,10 @@ class Evenement
     {
         $mois = $this->request->get('mois') ? $this->request->get('mois') : date('m');
         $annee = $this->request->get('annee') ? $this->request->get('annee') : date('Y');
+        $this->validateRangeDateParams($mois, $annee);
 
         $contactId = $this->getContact()->getId();
-        $evenements = $this->evenementRepository->findAllFromContact($contactId);
+        $evenements = $this->evenementRepository->findAllFromContact($contactId, new \DateTime(sprintf('%s-%s', $annee, $mois)));
         $contrats = $this->contratRepository->findFromContact($contactId);
 
         return new Response($this->twig->render('admin/evenements/contact.html.twig', array(
@@ -153,14 +154,14 @@ class Evenement
         }
     }
 
-    private function validateRangeDateParams()
+    private function validateRangeDateParams($mois, $annee)
     {
-        if(!in_array((int) $this->request->get('mois'), range(1, 12)))
+        if(!in_array((int) $mois, range(1, 12)))
         {
             throw new \Exception('Le mois ' . $this->request->get('mois') . ' est invalide !');
         }
 
-        if((int) $this->request->get('annee') < 2000)
+        if((int) $annee < 2000)
         {
             throw new \Exception('L\'année ' . $this->request->get('annee') . ' est invalide !');
         }

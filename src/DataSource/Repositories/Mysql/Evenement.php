@@ -54,9 +54,15 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         return $this->fetchAll($query);
     }
 
-    public function findAllFromContact($contactId)
+    public function findAllFromContact($contactId, \DateTime $date = null)
     {
         $query = $this->getBaseQuery();
+
+        if($date === null)
+        {
+            $date = new \DateTime();
+        }
+        $this->buildDateQuery($query, new \DateTime($date->format('Y-m-01')), new \DateTime($date->format('Y-m-t')));
 
         $query->leftJoin('contrat')->on('contrat_id', 'contrat.id');
         $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
@@ -84,18 +90,16 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
             }
 
             $dateFin = new \DateTime($date->format('Y-m-t'));
-            $this->getDateQuery($query, $dateDebut, $dateFin);
+            $this->buildDateQuery($query, $dateDebut, $dateFin);
         }
 
         return $query;
     }
 
-    public function getDateQuery(Query $query, \DateTime $dateDebut, \DateTime $dateFin)
+    public function builDateQuery(Query $query, \DateTime $dateDebut, \DateTime $dateFin)
     {
         $query->where((new Types\Datetime('date'))->greaterOrEqualThan($dateDebut->format('Y-m-d')));
         $query->where((new Types\DateTime('date'))->lowerOrEqualThan($dateFin->format('Y-m-d')));
-
-        return $query;
     }
 
     public function persist(DTO $evenementDTO)
