@@ -26,10 +26,13 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
 
     public function countAllFromContratAndContext($contratId, $contextId, \DateTime $date)
     {
+        $fields = $this->prefixTableFields(array('type_id'));
+        array_push($fields, 'sum( valeur ) AS count');
+
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select($this->prefixTableFields(array('sum( valeur ) AS count', 'type_id')))
+            ->select($fields)
             ->from(self::TABLE_NAME)
-            ->leftJoin(Repositories\Mysql\Bulletin::TABLE_NAME)->on($this->prefixTableFields(array('bulletin_id')), 'bulletin.id')
+            ->leftJoin(Repositories\Mysql\Bulletin::TABLE_NAME)->on($this->prefixTableField('bulletin_id'), 'bulletin.id')
             ->where((new Types\Integer('context_id'))->equal($contextId))
             ->where((new Types\Integer('contrat_id'))->equal($contratId))
             ->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->lowerOrEqualThan($date->format('Ym')))

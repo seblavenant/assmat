@@ -89,7 +89,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
             }
 
             $dateFin = new \DateTime($date->format('Y-m-t'));
-            $query->add($this->buildDateCondition($dateDebut, $dateFin));
+            $query->where($this->buildDateCondition($dateDebut, $dateFin));
         }
 
         return $query;

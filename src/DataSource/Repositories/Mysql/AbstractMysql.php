@@ -76,11 +76,16 @@ abstract class AbstractMysql
     {
         $prefixTableFields = array_map(
             function($field){
-                return static::TABLE_NAME . '.' . $field;
+                return $this->prefixTableField($field);
             },
             $fields
         );
 
         return $prefixTableFields;
+    }
+
+    protected function prefixTableField($field)
+    {
+        return static::TABLE_NAME . '.' . $field;
     }
 }
