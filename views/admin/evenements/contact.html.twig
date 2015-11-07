@@ -29,7 +29,7 @@
             <div class="box">
                 <div id="actions" class="box-content clearfix">
                 {% for contrat in contrats %}
-                    <div class="col-xs-3"><input type="button" style="background-color:#{{ contrat.colorHex }}" value="{{ contrat.nom }}" /></div>
+                    <a href="{{ path('admin_evenements_contrat_list', {contratId: contrat.id}) }}" class="col-xs-3" style="background-color:#{{ contrat.colorHex }}; color:#FFF">{{ contrat.nom }}</a>
                 {% endfor %}
                 </div>
             </div>
