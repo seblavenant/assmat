@@ -7,13 +7,10 @@ use Assmat\DataSource\DataTransferObjects;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
 use Muffin\Types;
-use Muffin\Query;
 use Muffin\Tests\Escapers\SimpleEscaper;
 use Muffin\Queries\Snippets\OrderBy;
 use Spear\Silex\Persistence\Fields;
 use Spear\Silex\Persistence\DataTransferObject as DTO;
-use Assmat\Services\Evenements\Dates\Date;
-use Muffin\Conditions\Sets\OrSet;
 
 class Evenement extends AbstractMysql implements Repositories\Evenement
 {
@@ -62,16 +59,18 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         {
             $date = new \DateTime();
         }
-        $this->buildDateQuery($query, new \DateTime($date->format('Y-m-01')), new \DateTime($date->format('Y-m-t')));
 
         $query->leftJoin('contrat')->on('contrat_id', 'contrat.id');
         $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
         $query->leftJoin('contact', 'employeur_contact')->on('contrat.employeur_id', 'employeur_contact.id');
 
-        $orSet = new OrSet();
-        $orSet->add((new Types\Integer('employe_contact.id'))->equal($contactId));
-        $orSet->add((new Types\Integer('employeur_contact.id'))->equal($contactId));
-        $query->where($orSet);
+        $dateCondition = $this->buildDateCondition(new \DateTime($date->format('Y-m-01')), new \DateTime($date->format('Y-m-t')));
+        $contactCondition = (
+            (new Types\Integer('employe_contact.id'))->equal($contactId)
+            ->or((new Types\Integer('employeur_contact.id'))->equal($contactId))
+        );
+
+        $query->where($dateCondition->and($contactCondition));
 
         return $this->fetchAll($query);
     }
@@ -90,16 +89,18 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
             }
 
             $dateFin = new \DateTime($date->format('Y-m-t'));
-            $this->buildDateQuery($query, $dateDebut, $dateFin);
+            $query->add($this->buildDateCondition($dateDebut, $dateFin));
         }
 
         return $query;
     }
 
-    public function builDateQuery(Query $query, \DateTime $dateDebut, \DateTime $dateFin)
+    private function buildDateCondition(\DateTime $dateDebut, \DateTime $dateFin)
     {
-        $query->where((new Types\Datetime('date'))->greaterOrEqualThan($dateDebut->format('Y-m-d')));
-        $query->where((new Types\DateTime('date'))->lowerOrEqualThan($dateFin->format('Y-m-d')));
+        return (
+            (new Types\Datetime('date'))->greaterOrEqualThan($dateDebut->format('Y-m-d'))
+            ->and((new Types\DateTime('date'))->lowerOrEqualThan($dateFin->format('Y-m-d')))
+        );
     }
 
     public function persist(DTO $evenementDTO)
