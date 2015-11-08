@@ -57,8 +57,10 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
     public function findFromContact($contactId)
     {
         $query = $this->getBaseQuery();
-        $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
-        $query->leftJoin('contact', 'employeur_contact')->on('contrat.employeur_id', 'employeur_contact.id');
+        $query->leftJoin('employe')->on('contrat.employe_id', 'employe.id');
+        $query->leftJoin('employeur')->on('contrat.employeur_id', 'employeur.id');
+        $query->leftJoin('contact', 'employe_contact')->on('employe.contact_id', 'employe_contact.id');
+        $query->leftJoin('contact', 'employeur_contact')->on('employeur.contact_id', 'employeur_contact.id');
 
         $contactCondition = (
             (new Types\Integer('employe_contact.id'))->equal($contactId)
