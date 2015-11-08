@@ -136,7 +136,7 @@ class Bulletin
 
         return $this->twig->render($view, array(
             'contrat' => $bulletin->getContrat(),
-            'evenements' => $this->evenementRepository->findAllFromContrat($this->getContact()->getId(), new \DateTime(sprintf('%d-%d-01', $bulletin->getAnnee(), $bulletin->getMois()))),
+            'evenements' => $this->evenementRepository->findAllFromContrat($bulletin->getContrat()->getId(), new \DateTime(sprintf('%d-%d-01', $bulletin->getAnnee(), $bulletin->getMois()))),
             'annee' => $bulletin->getAnnee(),
             'mois' => $bulletin->getMois(),
             'bulletin' => $bulletin,
