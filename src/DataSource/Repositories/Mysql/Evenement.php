@@ -61,8 +61,10 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
         }
 
         $query->leftJoin('contrat')->on('contrat_id', 'contrat.id');
-        $query->leftJoin('contact', 'employe_contact')->on('contrat.employe_id', 'employe_contact.id');
-        $query->leftJoin('contact', 'employeur_contact')->on('contrat.employeur_id', 'employeur_contact.id');
+        $query->leftJoin('employe')->on('contrat.employe_id', 'employe.id');
+        $query->leftJoin('employeur')->on('contrat.employeur_id', 'employeur.id');
+        $query->leftJoin('contact', 'employe_contact')->on('employe.contact_id', 'employe_contact.id');
+        $query->leftJoin('contact', 'employeur_contact')->on('employeur.contact_id', 'employeur_contact.id');
 
         $dateCondition = $this->buildDateCondition(new \DateTime($date->format('Y-m-01')), new \DateTime($date->format('Y-m-t')));
         $contactCondition = (
