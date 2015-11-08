@@ -46,7 +46,7 @@ class Evenement
         $annee = $this->request->get('annee') ? $this->request->get('annee') : date('Y');
         $this->validateRangeDateParams($mois, $annee);
 
-        $evenements = $this->evenementRepository->findAllFromContrat($contratId);
+        $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%s-%s', $annee, $mois)));
 
         $bulletinId = null;
         $bulletin = $this->bulletinRepository->findOneFromContratAndDate($contratId, $annee, $mois);
