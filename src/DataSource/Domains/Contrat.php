@@ -42,6 +42,11 @@ class Contrat
         return $this->fields->load('employeur');
     }
 
+    public function getEmployeurId()
+    {
+        return $this->fields->employeurId;
+    }
+
     public function getSalaireHoraire()
     {
         return $this->fields->salaireHoraire;
