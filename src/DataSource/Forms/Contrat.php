@@ -12,6 +12,10 @@ use Assmat\DataSource\Domains;
 
 class Contrat extends AbstractType
 {
+    const
+        TYPE_NEW = 'new',
+        TYPE_EDIT = 'edit';
+
     private
         $employesRepository;
 
@@ -21,6 +25,15 @@ class Contrat extends AbstractType
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $this->buildEditForm($builder, $options);
+        if($options['type'] === self::TYPE_NEW)
+        {
+            $this->buildNewForm($builder, $options);
+        }
+    }
+
+    public function buildEditForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('nom', 'text', array(
@@ -41,6 +54,13 @@ class Contrat extends AbstractType
                     )),
                 )
             ))
+            ->add('employeurId', 'hidden')
+            ;
+    }
+
+    private function buildNewForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
             ->add('joursGarde', 'choice', array(
                 'label' => 'contrats.joursGarde',
                 'required' => true,
@@ -78,14 +98,13 @@ class Contrat extends AbstractType
                 )
             ))
             ->add('employeId', 'choice', array(
-                 'label' => 'contrats.employeId',
-                 'choices' => $this->retrieveEmployees($options),
-                 'placeholder' => '-- Sélectionnez un employé --',
+                'label' => 'contrats.employeId',
+                'choices' => $this->retrieveEmployees($options),
+                'placeholder' => '-- Sélectionnez un employé --',
             ))
             ->add('employeKey', 'text', array(
-                 'label' => 'contacts.key',
+                'label' => 'contacts.key',
             ))
-            ->add('employeurId', 'hidden')
             ;
     }
 
@@ -98,12 +117,13 @@ class Contrat extends AbstractType
     {
         $resolver->setDefaults(array(
             'employeur' => null,
+            'type' => self::TYPE_NEW,
         ));
     }
 
     private function retrieveEmployees(array $options)
     {
-        if(! array_key_exists('employeur', $options) || ! $options['employeur'] instanceof Domains\Employeur)
+        if(! $options['employeur'] instanceof Domains\Employeur)
         {
             return array();
         }
