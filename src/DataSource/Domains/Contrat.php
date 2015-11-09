@@ -146,4 +146,9 @@ class Contrat
     {
         return $contratRepository->persist($this->fields);
     }
+
+    public function getDTO()
+    {
+        return $this->fields;
+    }
 }
