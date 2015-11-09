@@ -83,7 +83,20 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
 
     private function update(DTO\Contrat $contratDTO)
     {
-        return;
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'nom' => $contratDTO->nom,
+                'salaire_horaire' => $contratDTO->salaireHoraire,
+            ),
+            array(
+                'id' => $contratDTO->id,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+            )
+        );
     }
 
     private function create(DTO\Contrat $contratDTO)
