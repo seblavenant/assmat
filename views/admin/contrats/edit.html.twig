@@ -1,0 +1,41 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div id="breadcrumb" class="col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
+                <li><a href="{{ path('admin_contrats') }}">Mes contrats</a></li>
+                <li>{{ contrat.nom }}</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form novalidate class="form-horizontal" method="post" data-ajax-form="true" action="{{ path('admin_contrats_update', { id: contrat.id}) }}">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Contrat :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        {% spaceless %}
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.nom) }}</div><div class="col-xs-9">{{ form_widget(form.nom) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.salaireHoraire) }}</div><div class="col-xs-9">{{ form_widget(form.salaireHoraire) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    {{ form_rest(form) }}
+                    <input type="submit" value="Enregistrer" />
+                    {% endspaceless %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -79,7 +79,9 @@
             <a href="{{ path('admin_evenements_contrat_list', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-calendar"></i></a>
             {% if contrat.isGrantedEmployeur(app.security.token.user.contact) %}
             <a href="{{ path('admin_bulletins_new', { contratId : contrat.id, mois : date() | date('m'), annee : date() | date('Y')}) }}"><i class="fa fa-plus-square-o"></i></a>
+            <a href="{{ path('admin_contrats_edit', { id : contrat.id }) }}"><i class="fa fa-pencil"></i></a>
             {% endif %}
+            
         </td>
     </tr>
 {% endmacro %}

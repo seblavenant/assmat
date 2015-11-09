@@ -136,6 +136,62 @@ class Contrat
         return $response;
     }
 
+    public function editAction($id)
+    {
+        $contrat = $this->contratRepository->find($id);
+
+        $form = $this->formFactory->create(
+            $this->contratForm,
+            $contrat,
+            array('type' => Forms\Contrat::TYPE_EDIT)
+        );
+
+        return new Response($this->twig->render('admin/contrats/edit.html.twig', array(
+            'contrat' => $contrat,
+            'form' => $form->createView(),
+        )));
+    }
+
+    public function updateAction($id)
+    {
+        $form = $this->formFactory->create(
+            $this->contratForm,
+            null,
+            array('type' => Forms\Contrat::TYPE_EDIT)
+        );
+
+        $form->bind($this->request);
+
+        if($form->isValid())
+        {
+            $contrat = $this->contratRepository->find($id);
+            $contratDTO = $contrat->getDTO();
+            $contratDTO->nom = $form->get('nom')->getData();
+            $contratDTO->salaireHoraire = $form->get('salaireHoraire')->getData();
+            (new Domains\Contrat($contratDTO))->persist($this->contratRepository);
+
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Contrat mis à jour',
+                    'data' => array(),
+                )
+                , 200
+            );
+        }
+        else
+        {
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Une erreur s\'est produite lors de l\'enregistrement',
+                    'data' => $this->formErrors->getMessages($form),
+                )
+                , 400
+            );
+        }
+
+        return $response;
+    }
+
     private function retreiveEmployeId(FormInterface $form)
     {
         $employeId = $form->get('employeId')->getData();
