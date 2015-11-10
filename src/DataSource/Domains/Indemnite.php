@@ -3,6 +3,7 @@
 namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\DataSource\Repositories;
 
 class Indemnite
 {
@@ -32,5 +33,17 @@ class Indemnite
     public function getContratId()
     {
         return $this->fields->contratId;
+    }
+
+    public function setContratId($contratId)
+    {
+        $this->fields->contratId = $contratId;
+
+        return $this;
+    }
+
+    public function persist(Repositories\Indemnite $indemniteRepository)
+    {
+        return $indemniteRepository->persist($this->fields);
     }
 }

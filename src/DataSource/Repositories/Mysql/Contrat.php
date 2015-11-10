@@ -127,6 +127,13 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
 
         $contratDTO->id = (int) $this->db->lastInsertId();
 
+        $indemnites = $contratDTO->load('indemnites');
+        foreach($indemnites as $indemnites)
+        {
+            $indemnites->setContratId($contratDTO->id);
+            $indemnites->persist($this->indemniteRepository);
+        }
+
         return new Domains\Contrat($contratDTO);
     }
 
