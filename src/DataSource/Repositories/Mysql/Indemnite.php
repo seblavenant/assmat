@@ -32,6 +32,42 @@ class Indemnite extends AbstractMysql implements Repositories\Indemnite
         return $this->fetchAll($query);
     }
 
+    public function persist(DTO\Indemnite $indemniteDTO)
+    {
+        if($indemniteDTO->id !== null)
+        {
+            return $this->update($indemniteDTO);
+        }
+
+        return $this->create($indemniteDTO);
+    }
+
+    private function create(DTO\Indemnite $indemniteDTO)
+    {
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'type_id' => $indemniteDTO->typeId,
+                'montant' => $indemniteDTO->montant,
+                'contrat_id' => $indemniteDTO->contratId,
+            ),
+            array(
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+            )
+        );
+
+        $indemniteDTO->id = (int) $this->db->lastInsertId();
+
+        return new Domains\Indemnite($indemniteDTO);
+    }
+
+    private function update(DTO\Indemnite $indemniteDTO)
+    {
+
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
