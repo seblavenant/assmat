@@ -17,11 +17,13 @@ class Contrat extends AbstractType
         TYPE_EDIT = 'edit';
 
     private
-        $employesRepository;
+        $employesRepository,
+        $indemniteForm;
 
-    public function __construct(Repositories\Employe $employeRepository)
+    public function __construct(Repositories\Employe $employeRepository, Indemnite $indemniteForm)
     {
         $this->employeRepository = $employeRepository;
+        $this->indemniteForm = $indemniteForm;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -106,6 +108,8 @@ class Contrat extends AbstractType
                 'label' => 'contacts.key',
             ))
             ;
+
+            $this->indemniteForm->buildForm($builder, $options);
     }
 
     public function getName()
