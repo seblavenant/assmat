@@ -34,16 +34,16 @@
                             <div class="col-xs-3">{{ form_label(form.typeId) }}</div><div class="col-xs-9">{{ form_widget(form.typeId) }}</div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-3">{{ form_label(form.salaireHoraire) }}</div><div class="col-xs-9">{{ form_widget(form.salaireHoraire) }}</div>
+                            <div class="col-xs-3">{{ form_label(form.salaireHoraire) }}</div><div class="col-xs-3">{{ form_widget(form.salaireHoraire) }}</div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3">{{ form_label(form.joursGarde) }}</div><div class="col-xs-9">{{ form_widget(form.joursGarde) }}</div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-3">{{ form_label(form.heuresHebdo) }}</div><div class="col-xs-9">{{ form_widget(form.heuresHebdo) }}</div>
+                            <div class="col-xs-3">{{ form_label(form.heuresHebdo) }}</div><div class="col-xs-3">{{ form_widget(form.heuresHebdo) }}</div>
                         </div>
                         <div class="form-group">
-                            <div class="col-xs-3">{{ form_label(form.nombreSemainesAn) }}</div><div class="col-xs-9">{{ form_widget(form.nombreSemainesAn) }}</div>
+                            <div class="col-xs-3">{{ form_label(form.nombreSemainesAn) }}</div><div class="col-xs-3">{{ form_widget(form.nombreSemainesAn) }}</div>
                         </div>
                     </div>
                 </div>
@@ -59,6 +59,23 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3">{{ form_label(form.employeKey) }}</div><div class="col-xs-9">{{ form_widget(form.employeKey) }}</div>
+                        </div>
+                    </div>
+                </div>
+				<div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Indemnités :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::INDEMNITES_NOURRITURE')]) }}</div>
+                            <div class="col-xs-3">{{ form_widget(form[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::INDEMNITES_NOURRITURE')]) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::INDEMNITES_ENTRETIEN')]) }}</div>
+                            <div class="col-xs-3">{{ form_widget(form[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::INDEMNITES_ENTRETIEN')]) }}</div>
                         </div>
                     </div>
                 </div>

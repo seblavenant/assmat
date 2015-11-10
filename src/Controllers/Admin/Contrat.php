@@ -15,6 +15,7 @@ use Assmat\DataSource\Domains;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Assmat\DataSource\Constants;
 
 class Contrat
 {
@@ -28,9 +29,10 @@ class Contrat
         $contratForm,
         $employeurRepository,
         $contratRepository,
-        $employeRepository;
+        $employeRepository,
+        $ligneTemplateRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory, Form\Errors $formErrors, Forms\Contrat $contratForm, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory, Form\Errors $formErrors, Forms\Contrat $contratForm, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository, Repositories\LigneTemplate $ligneTemplateRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -42,6 +44,7 @@ class Contrat
         $this->employeurRepository = $employeurRepository;
         $this->contratRepository = $contratRepository;
         $this->employeRepository = $employeRepository;
+        $this->ligneTemplateRepository = $ligneTemplateRepository;
     }
 
     public function indexAction()
@@ -109,6 +112,19 @@ class Contrat
             $contratDTO->nombreSemainesAn = (int) $form->get('nombreSemainesAn')->getData();
             $contratDTO->salaireHoraire = (float) $form->get('salaireHoraire')->getData();
             $contratDTO->typeId = (int) $form->get('typeId')->getData();
+
+            $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
+            $indemnites = array();
+            foreach($indemnitesTemplate as $indemniteTemplate)
+            {
+                $indemniteDTO = new DTO\Indemnite();
+                $indemniteDTO->montant = $form->get($indemniteTemplate->getTypeId())->getData();
+                $indemniteDTO->typeId = $indemniteTemplate->getTypeId();
+
+                $indemnites[] = new Domains\Indemnite($indemniteDTO);
+            }
+
+            $contratDTO->set('indemnites', $indemnites);
 
             $contrat = new Domains\Contrat($contratDTO);
             $contrat->persist($this->contratRepository);

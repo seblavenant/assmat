@@ -47,7 +47,8 @@ class Provider implements ControllerProviderInterface
                 $app['form.contrat'],
                 $app['repository.employeur'],
                 $app['repository.employe'],
-                $app['repository.contrat']
+                $app['repository.contrat'],
+                $app['repository.ligneTemplate']
             );
         });
 
