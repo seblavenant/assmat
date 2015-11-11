@@ -58,6 +58,8 @@ class Contrat extends AbstractType
             ))
             ->add('employeurId', 'hidden')
             ;
+
+            $builder->add('indemnites', 'collection', array('type' => new Indemnite()));
     }
 
     private function buildNewForm(FormBuilderInterface $builder, array $options)
@@ -108,8 +110,6 @@ class Contrat extends AbstractType
                 'label' => 'contacts.key',
             ))
             ;
-
-            $this->indemniteForm->buildForm($builder, $options);
     }
 
     public function getName()

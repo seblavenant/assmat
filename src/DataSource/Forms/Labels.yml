@@ -6,8 +6,11 @@ contrats:
     nombreSemainesAn: Semaine de garde /an
     typeId: Type
     employeId: Employé
-    300: Nourriture
-    301: Entretien
+    indemnites:
+        300: 
+            montant: Idemn. nourriture
+        301:
+            montant: Idemn. entretien
 employes:
     ssId: SSID
 contacts:
@@ -18,6 +21,3 @@ contacts:
     adresse: Adresse
     codePostal: Code postal
     ville: Ville
-indemnites:
-    300: Nourriture
-    301: Entretien

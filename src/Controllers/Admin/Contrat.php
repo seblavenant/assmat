@@ -69,9 +69,19 @@ class Contrat
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
         $employeur = $this->employeurRepository->findFromContact($contactId);
 
+        $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
+        $indemnites = array();
+        foreach($indemnitesTemplate as $indemniteTemplate)
+        {
+            $indemniteDTO = new DTO\Indemnite();
+            $indemnites[$indemniteTemplate->getTypeId()] = new Domains\Indemnite($indemniteDTO);
+        }
+
         $form = $this->formFactory->create(
             $this->contratForm,
-            null,
+            array(
+                'indemnites' => $indemnites,
+            ),
             array('employeur' => $employeur)
         );
 
@@ -85,9 +95,19 @@ class Contrat
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
         $employeur = $this->employeurRepository->findFromContact($contactId);
 
+        $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
+        $indemnites = array();
+        foreach($indemnitesTemplate as $indemniteTemplate)
+        {
+            $indemniteDTO = new DTO\Indemnite();
+            $indemnites[$indemniteTemplate->getTypeId()] = new Domains\Indemnite($indemniteDTO);
+        }
+
         $form = $this->formFactory->create(
             $this->contratForm,
-            null,
+            array(
+                'indemnites' => $indemnites,
+            ),
             array('employeur' => $employeur)
         );
 
@@ -113,13 +133,13 @@ class Contrat
             $contratDTO->salaireHoraire = (float) $form->get('salaireHoraire')->getData();
             $contratDTO->typeId = (int) $form->get('typeId')->getData();
 
-            $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
             $indemnites = array();
-            foreach($indemnitesTemplate as $indemniteTemplate)
+
+            foreach($form->get('indemnites')->getData() as $typeId => $indemnite)
             {
                 $indemniteDTO = new DTO\Indemnite();
-                $indemniteDTO->montant = $form->get($indemniteTemplate->getTypeId())->getData();
-                $indemniteDTO->typeId = $indemniteTemplate->getTypeId();
+                $indemniteDTO->montant = $indemnite->getMontant();
+                $indemniteDTO->typeId = $typeId;
 
                 $indemnites[] = new Domains\Indemnite($indemniteDTO);
             }

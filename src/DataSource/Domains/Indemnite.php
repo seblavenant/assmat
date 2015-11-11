@@ -25,6 +25,13 @@ class Indemnite
         return $this->fields->montant;
     }
 
+    public function setMontant($montant)
+    {
+        $this->fields->montant = $montant;
+
+        return $this;
+    }
+
     public function getTypeId()
     {
         return $this->fields->typeId;

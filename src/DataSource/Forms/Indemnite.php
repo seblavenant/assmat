@@ -12,17 +12,14 @@ use Assmat\DataSource\Repositories\LigneTemplate;
 
 class Indemnite extends AbstractType
 {
-    private
-        $ligneTemplateRepository;
-
-    public function __construct(Repositories\LigneTemplate $ligneTemplateRepository)
-    {
-        $this->ligneTemplateRepository = $ligneTemplateRepository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->addIndemnites($builder, $options);
+        $builder->add('montant', 'text', array(
+            'label' => sprintf('contrats.indemnites.%s.montant', $builder->getName()),
+            'constraints' => array(
+                new Constraints\NotBlank(),
+            )
+        ));
     }
 
     public function getName()
@@ -32,21 +29,8 @@ class Indemnite extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array());
-    }
-
-    private function addIndemnites(FormBuilderInterface $builder, array $options)
-    {
-        $indemnites = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
-
-        foreach($indemnites as $indemnite)
-        {
-            $builder->add($indemnite->getTypeId(), 'text', array(
-                'label' => sprintf('%s.%s', $this->getName(), $indemnite->getTypeId()),
-                'constraints' => array(
-                    new Constraints\NotBlank(),
-                )
-            ));
-        }
+        $resolver->setDefaults(array(
+             'data_class' => 'Assmat\DataSource\Domains\Indemnite',
+        ));
     }
 }

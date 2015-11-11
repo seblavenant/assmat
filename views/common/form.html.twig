@@ -88,3 +88,16 @@
 		</div>
 	</div>
 {% endblock %}
+
+{% block collection_widget %}
+{% spaceless %}
+    {% for rows in form %}
+        {% for row in rows %}
+            <div class="collection-row"">
+                {{ form_label(row) }}
+                {{ form_widget(row)}}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endspaceless %}
+{% endblock collection_widget %}
