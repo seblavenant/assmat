@@ -29,7 +29,15 @@ class Indemnite extends AbstractMysql implements Repositories\Indemnite
         $query = $this->getBaseQuery();
         $query->where((new Types\String('contrat_id'))->equal($contratId));
 
-        return $this->fetchAll($query);
+        $indemnites = $this->fetchAll($query);
+
+        $indemnitesIndexed = array();
+        foreach($indemnites as $indemnite)
+        {
+            $indemnitesIndexed[$indemnite->getTypeId()] = $indemnite;
+        }
+
+        return $indemnitesIndexed; 
     }
 
     public function persist(DTO\Indemnite $indemniteDTO)
@@ -65,7 +73,22 @@ class Indemnite extends AbstractMysql implements Repositories\Indemnite
 
     private function update(DTO\Indemnite $indemniteDTO)
     {
-
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'type_id' => $indemniteDTO->typeId,
+                'montant' => $indemniteDTO->montant,
+                'contrat_id' => $indemniteDTO->contratId,
+            ),
+            array(
+                'id' => $indemniteDTO->id,
+            ),
+            array(
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+            )
+        );
     }
 
     private function getBaseQuery()

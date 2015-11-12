@@ -176,6 +176,11 @@ class Contrat
     {
         $contrat = $this->contratRepository->find($id);
 
+        if(! $contrat instanceof Domains\Contrat)
+        {
+            throw new \Exception('Aucun contrat ne correspond à cet identifiant');
+        }
+
         $form = $this->formFactory->create(
             $this->contratForm,
             $contrat,
@@ -190,9 +195,23 @@ class Contrat
 
     public function updateAction($id)
     {
+        $contrat = $this->contratRepository->find($id);
+
+        if(! $contrat instanceof Domains\Contrat)
+        {
+            return new JsonResponse(
+                array(
+                    'msg' => 'Le contrat n\'existe pas',
+                    'data' => array(),
+                )
+            );
+        }
+
         $form = $this->formFactory->create(
             $this->contratForm,
-            null,
+            array(
+                'indemnites' => $contrat->getIndemnites(),
+            ),
             array('type' => Forms\Contrat::TYPE_EDIT)
         );
 
@@ -200,7 +219,6 @@ class Contrat
 
         if($form->isValid())
         {
-            $contrat = $this->contratRepository->find($id);
             $contratDTO = $contrat->getDTO();
             $contratDTO->nom = $form->get('nom')->getData();
             $contratDTO->salaireHoraire = $form->get('salaireHoraire')->getData();

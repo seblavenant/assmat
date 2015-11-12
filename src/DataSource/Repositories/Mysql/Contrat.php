@@ -97,6 +97,11 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
                 \PDO::PARAM_STR,
             )
         );
+
+        foreach($contratDTO->load('indemnites') as $indemnite)
+        {
+            $indemnite->persist($this->indemniteRepository);
+        }
     }
 
     private function create(DTO\Contrat $contratDTO)

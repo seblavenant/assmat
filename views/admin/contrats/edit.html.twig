@@ -1,5 +1,27 @@
 {% extends 'admin/layout.html.twig' %}
 
+{% block specificStylesheets %}
+    <style>
+        #indemnites .control-label {
+            float: left;
+            padding: 0 15px;
+            width: 25%;
+        }
+        #indemnites .controls {
+            float: left;
+            width: 75%;
+            padding: 0 15px;
+        }
+        #indemnites .controls > input {
+            width: 33%;
+        }
+        #indemnites .collection-row {
+            padding: 15px 0;
+            clear: both;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <div id="breadcrumb" class="col-xs-12">
@@ -26,6 +48,18 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3">{{ form_label(form.salaireHoraire) }}</div><div class="col-xs-9">{{ form_widget(form.salaireHoraire) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Indemnités :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div id="indemnites" class="form-group">
+                            <div>{{ form_widget(form.indemnites) }}</div>
                         </div>
                     </div>
                 </div>
