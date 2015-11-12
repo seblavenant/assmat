@@ -69,19 +69,9 @@ class Contrat
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
         $employeur = $this->employeurRepository->findFromContact($contactId);
 
-        $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
-        $indemnites = array();
-        foreach($indemnitesTemplate as $indemniteTemplate)
-        {
-            $indemniteDTO = new DTO\Indemnite();
-            $indemnites[$indemniteTemplate->getTypeId()] = new Domains\Indemnite($indemniteDTO);
-        }
-
         $form = $this->formFactory->create(
             $this->contratForm,
-            array(
-                'indemnites' => $indemnites,
-            ),
+            $this->buildContratBaseData(),
             array('employeur' => $employeur)
         );
 
@@ -95,19 +85,9 @@ class Contrat
         $contactId = $this->security->getToken()->getUser()->getContact()->getId();
         $employeur = $this->employeurRepository->findFromContact($contactId);
 
-        $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
-        $indemnites = array();
-        foreach($indemnitesTemplate as $indemniteTemplate)
-        {
-            $indemniteDTO = new DTO\Indemnite();
-            $indemnites[$indemniteTemplate->getTypeId()] = new Domains\Indemnite($indemniteDTO);
-        }
-
         $form = $this->formFactory->create(
             $this->contratForm,
-            array(
-                'indemnites' => $indemnites,
-            ),
+            $this->buildContratBaseData(),
             array('employeur' => $employeur)
         );
 
@@ -134,7 +114,6 @@ class Contrat
             $contratDTO->typeId = (int) $form->get('typeId')->getData();
 
             $indemnites = array();
-
             foreach($form->get('indemnites')->getData() as $typeId => $indemnite)
             {
                 $indemniteDTO = new DTO\Indemnite();
@@ -258,6 +237,21 @@ class Contrat
         }
 
         return $employeId;
+    }
+
+    private function buildContratBaseData()
+    {
+        $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
+        $indemnites = array();
+        foreach($indemnitesTemplate as $indemniteTemplate)
+        {
+            $indemniteDTO = new DTO\Indemnite();
+            $indemnites[$indemniteTemplate->getTypeId()] = new Domains\Indemnite($indemniteDTO);
+        }
+
+        return array(
+            'indemnites' => $indemnites,
+        );
     }
 
     public function readAction()
