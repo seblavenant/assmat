@@ -12,6 +12,7 @@ use Assmat\Services;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Assmat\Services\Form;
 use Assmat\DataSource\Forms;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class Application extends AbstractApplication
 {
@@ -58,7 +59,7 @@ class Application extends AbstractApplication
             'common/form.html.twig',
         );
 
-        $this['translator'] = $this->share($this->extend('translator', function($translator, $app) {
+        $this['translator'] = $this->share($this->extend('translator', function(TranslatorInterface $translator, \Silex\Application $app) {
             $translator->addLoader('yaml', new YamlFileLoader());
             $translator->addResource('yaml', $app['root.path'] . 'src/DataSource/Forms/Labels.yml', 'fr');
 
