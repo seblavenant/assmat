@@ -3,7 +3,6 @@
 namespace Assmat\DataSource\Repositories\Proxy;
 
 use Assmat\DataSource\Repositories;
-use Spear\Silex\Persistence\DataTransferObject;
 use Assmat\DataSource\DataTransferObjects as DTO;
 
 class Contrat implements Repositories\Contrat

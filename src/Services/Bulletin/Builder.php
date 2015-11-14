@@ -5,9 +5,6 @@ namespace Assmat\Services\Bulletin;
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
-use Assmat\DataSource\Constants;
-use Assmat\Iterators\Filters as FilterIterator;
-use Assmat\DataSource\Repositories\Memory\Lignes\Salaire;
 
 class Builder
 {

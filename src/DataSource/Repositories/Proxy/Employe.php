@@ -3,7 +3,6 @@
 namespace Assmat\DataSource\Repositories\Proxy;
 
 use Assmat\DataSource\Repositories;
-use Spear\Silex\Persistence\DataTransferObject;
 
 class Employe implements Repositories\Employe
 {

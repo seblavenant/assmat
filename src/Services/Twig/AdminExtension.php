@@ -2,8 +2,6 @@
 
 namespace Assmat\Services\Twig;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class AdminExtension extends \Twig_Extension
 {
     public function getName()
