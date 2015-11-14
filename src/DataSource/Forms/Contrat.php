@@ -17,7 +17,7 @@ class Contrat extends AbstractType
         TYPE_EDIT = 'edit';
 
     private
-        $employesRepository,
+        $employeRepository,
         $indemniteForm;
 
     public function __construct(Repositories\Employe $employeRepository, Indemnite $indemniteForm)
