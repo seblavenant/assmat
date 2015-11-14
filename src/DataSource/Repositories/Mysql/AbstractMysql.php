@@ -75,7 +75,7 @@ abstract class AbstractMysql
     protected function prefixTableFields($fields)
     {
         $prefixTableFields = array_map(
-            function($field){
+            function($field) {
                 return $this->prefixTableField($field);
             },
             $fields

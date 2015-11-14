@@ -76,7 +76,7 @@ class Contrat
         );
 
         return new Response($this->twig->render('admin/contrats/new.html.twig', array(
-           'form' => $form->createView(),
+            'form' => $form->createView(),
         )));
     }
 
@@ -155,7 +155,7 @@ class Contrat
     {
         $contrat = $this->contratRepository->find($id);
 
-        if(! $contrat instanceof Domains\Contrat)
+        if(!$contrat instanceof Domains\Contrat)
         {
             throw new \Exception('Aucun contrat ne correspond à cet identifiant');
         }
@@ -176,7 +176,7 @@ class Contrat
     {
         $contrat = $this->contratRepository->find($id);
 
-        if(! $contrat instanceof Domains\Contrat)
+        if(!$contrat instanceof Domains\Contrat)
         {
             return new JsonResponse(
                 array(

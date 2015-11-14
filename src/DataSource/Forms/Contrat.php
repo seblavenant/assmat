@@ -127,7 +127,7 @@ class Contrat extends AbstractType
 
     private function retrieveEmployees(array $options)
     {
-        if(! $options['employeur'] instanceof Domains\Employeur)
+        if(!$options['employeur'] instanceof Domains\Employeur)
         {
             return array();
         }
