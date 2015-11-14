@@ -89,7 +89,6 @@ class Provider implements ControllerProviderInterface
                 $app['repository.bulletin'],
                 $app['repository.evenement'],
                 $app['repository.contrat'],
-                $app['repository.ligne'],
                 $app['bulletin.builder']
             );
         });

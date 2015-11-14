@@ -22,10 +22,9 @@ class Bulletin
         $bulletinRepository,
         $evenementRepository,
         $contratRepository,
-        $ligneRepository,
         $bulletinBuilder;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Repositories\Ligne $ligneRepository, Services\Bulletin\Builder $bulletinBuilder)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder)
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -34,7 +33,6 @@ class Bulletin
         $this->evenementRepository = $evenementRepository;
         $this->contratRepository = $contratRepository;
         $this->bulletinBuilder = $bulletinBuilder;
-        $this->ligneRepository = $ligneRepository;
         $this->urlGenerator = $urlGenerator;
     }
 
