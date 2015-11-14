@@ -136,7 +136,7 @@ class Contrat
 
     public function validateIsGrantedEmployeur(Domains\Contact $contact)
     {
-        if(! $this->isGrantedEmployeur($contact))
+        if(!$this->isGrantedEmployeur($contact))
         {
             throw new \Exception('Vous devez avoir les droits employeur sur ce contrat pour l\'administrer');
         }
