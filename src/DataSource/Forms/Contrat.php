@@ -28,14 +28,14 @@ class Contrat extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->buildEditForm($builder, $options);
+        $this->buildEditForm($builder);
         if($options['type'] === self::TYPE_NEW)
         {
             $this->buildNewForm($builder, $options);
         }
     }
 
-    public function buildEditForm(FormBuilderInterface $builder, array $options)
+    public function buildEditForm(FormBuilderInterface $builder)
     {
         $builder
             ->add('nom', 'text', array(
