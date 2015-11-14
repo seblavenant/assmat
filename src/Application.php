@@ -158,7 +158,7 @@ class Application extends AbstractApplication
     private function initializeForms()
     {
         $this['form.contrat'] = function() {
-            return new Forms\Contrat($this['repository.employe'], $this['form.indemnite']);
+            return new Forms\Contrat($this['repository.employe']);
         };
 
         $this['form.indemnite'] = function() {
