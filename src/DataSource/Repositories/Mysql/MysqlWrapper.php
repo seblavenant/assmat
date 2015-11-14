@@ -95,7 +95,7 @@ class MysqlWrapper implements Mysql
 
     public function lastInsertId($name = null)
     {
-        return $this->mysql->lastInsertId($name = null);
+        return $this->mysql->lastInsertId($name);
     }
 
     public function beginTransaction()
