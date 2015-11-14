@@ -4,23 +4,18 @@ namespace Assmat\Controllers\Home;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Twig_Environment;
-use Assmat\DataSource\Repositories;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Controller
 {
     private
         $twig,
-        $urlGenerator,
-        $employeurRepository,
-        $employeRepository;
+        $urlGenerator;
 
-    public function __construct(Twig_Environment $twig, UrlGeneratorInterface $urlGenerator, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository)
+    public function __construct(Twig_Environment $twig, UrlGeneratorInterface $urlGenerator)
     {
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
-        $this->employeurRepository = $employeurRepository;
-        $this->employeRepository = $employeRepository;
     }
 
     public function indexAction()
