@@ -173,7 +173,7 @@ class Application extends AbstractApplication
         };
 
         $this['form.indemnite'] = function() {
-            return new Forms\Indemnite($this['repository.ligneTemplate']);
+            return new Forms\Indemnite();
         };
 
         $this['form.errors'] = function() {
