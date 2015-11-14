@@ -5,7 +5,6 @@ namespace Assmat\DataSource\Forms;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints;
 
 class Evenement extends AbstractType
 {

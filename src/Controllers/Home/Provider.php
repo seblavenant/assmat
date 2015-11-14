@@ -4,7 +4,7 @@ namespace Assmat\Controllers\Home;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
+
 
 class Provider implements ControllerProviderInterface
 {
