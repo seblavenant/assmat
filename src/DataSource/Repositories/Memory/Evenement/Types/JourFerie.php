@@ -15,7 +15,7 @@ class JourFerie
         $evenementTypeDTO->label = 'Jour Férié';
         $evenementTypeDTO->code = 'JF';
         $evenementTypeDTO->dureeFixe = true;
-        $evenementTypeDTO->computeClosure = function($evenement) {
+        $evenementTypeDTO->computeClosure = function(Domains\Evenement $evenement) {
             $evenement->setJourPaye();
         };
 

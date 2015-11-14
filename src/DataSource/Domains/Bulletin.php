@@ -4,6 +4,7 @@ namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
+use Assmat\DataSource\Domains;
 use Assmat\Iterators\Filters as FilterIterators;
 use Assmat\DataSource\Repositories;
 
@@ -119,7 +120,7 @@ class Bulletin
         return $salaireBrut;
     }
 
-    public function addHeuresPayees($heuresPayees, $evenement)
+    public function addHeuresPayees($heuresPayees, Domains\Evenement $evenement)
     {
         $this->addHeuresPayeesParSemaine($heuresPayees, $evenement);
 
@@ -131,7 +132,7 @@ class Bulletin
         $this->heuresPayees += (float) $heuresPayees;
     }
 
-    public function addHeuresPayeesParSemaine($heuresPayees, $evenement)
+    public function addHeuresPayeesParSemaine($heuresPayees, Domains\Evenement $evenement)
     {
         $lastDayOfWeek = new \DateTime(date('Y-m-d', strtotime($evenement->getDate()->format('Y-m-d') . ' sunday this week')));
 
@@ -149,7 +150,7 @@ class Bulletin
         $this->heuresPayeesParSemaine[$week] += (float) $heuresPayees;
     }
 
-    public function addHeuresNonPayees($evenement)
+    public function addHeuresNonPayees(Domains\Evenement $evenement)
     {
         if($evenement->isJourPaye() || !$this->isCurrentMonth($evenement))
         {
@@ -159,7 +160,7 @@ class Bulletin
         $this->heuresNonPayees += (float) $this->getContrat()->getHeuresJour();
     }
 
-    public function addJourGarde($evenement)
+    public function addJourGarde(Domains\Evenement $evenement)
     {
         if(!$evenement->isJourGarde() || !$this->isCurrentMonth($evenement))
         {
@@ -169,7 +170,7 @@ class Bulletin
         $this->joursGardes++;
     }
 
-    public function addCongePaye($evenement)
+    public function addCongePaye(Domains\Evenement $evenement)
     {
         if(!$evenement->isCongePaye() || !$this->isCurrentMonth($evenement))
         {
@@ -255,7 +256,7 @@ class Bulletin
         }
     }
 
-    private function computeHeuresPayees(Evenement $evenement)
+    private function computeHeuresPayees(Domains\Evenement $evenement)
     {
         if(!$evenement->isJourPaye())
         {
@@ -270,12 +271,12 @@ class Bulletin
         return $this->getContrat()->getHeuresJour();
     }
 
-    private function computeHeuresEvenement(Evenement $evenement)
+    private function computeHeuresEvenement(Domains\Evenement $evenement)
     {
         return (int) $evenement->getDuree()->format('%h') + ((int) $evenement->getDuree()->format('%i') / 60);
     }
 
-    private function isCurrentMonth($evenement)
+    private function isCurrentMonth(Domains\Evenement $evenement)
     {
         return (int) $evenement->getDate()->format('n') === (int) $this->getMois();
     }
