@@ -60,7 +60,7 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/contrats/{id}', 'contrat.controller:readAction')
                     ->bind('admin_contrats_read')
-                    ->assert('id', '\d+');;
+                    ->assert('id', '\d+');
 
         $controllers->get('/contrats/new', 'contrat.controller:newAction')
                     ->bind('admin_contrats_new');
@@ -74,7 +74,7 @@ class Provider implements ControllerProviderInterface
 
         $controllers->post('/contrats/{id}', 'contrat.controller:updateAction')
                     ->bind('admin_contrats_update')
-                    ->assert('id', '\d+');;
+                    ->assert('id', '\d+');
 
         return $controllers;
     }
