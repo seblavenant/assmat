@@ -160,18 +160,6 @@ class Application extends AbstractApplication
             return new Forms\Contrat($this['repository.employe'], $this['form.indemnite']);
         };
 
-        $this['form.contact'] = function() {
-            return new Forms\Contacts\Base();
-        };
-
-        $this['form.contact.employe'] = function() {
-            return new Forms\Contacts\Employe();
-        };
-
-        $this['form.employe'] = function() {
-            return new Forms\Employe($this['form.contact.employe']);
-        };
-
         $this['form.indemnite'] = function() {
             return new Forms\Indemnite();
         };
