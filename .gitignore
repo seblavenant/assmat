@@ -4,7 +4,7 @@ config/*
 !config/*.yml-dist
 var/
 assets/compiled/
-www/js
-www/css
+web/js
+web/css
 cache
 .vagrant/machines

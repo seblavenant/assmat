@@ -15,7 +15,7 @@ class Garde
         $evenementTypeDTO->label = 'Garde';
         $evenementTypeDTO->code = 'GRD';
         $evenementTypeDTO->dureeFixe = false;
-        $evenementTypeDTO->computeClosure = function($evenement) {
+        $evenementTypeDTO->computeClosure = function(Domains\Evenement $evenement) {
             $evenement->setJourPaye();
             $evenement->setjourGarde();
         };

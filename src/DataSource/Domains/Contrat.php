@@ -3,7 +3,6 @@
 namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
-use Assmat\DataSource\Constants;
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\Repositories;
 

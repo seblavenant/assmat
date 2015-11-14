@@ -15,7 +15,7 @@ class CongePaye
         $evenementTypeDTO->label = 'Congé payé';
         $evenementTypeDTO->code = 'CP';
         $evenementTypeDTO->dureeFixe = true;
-        $evenementTypeDTO->computeClosure = function($evenement) {
+        $evenementTypeDTO->computeClosure = function(Domains\Evenement $evenement) {
             $evenement->setJourPaye();
             $evenement->setCongePaye();
         };

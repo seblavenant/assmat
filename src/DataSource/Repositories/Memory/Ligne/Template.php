@@ -2,9 +2,7 @@
 
 namespace Assmat\DataSource\Repositories\Memory\Ligne;
 
-use Assmat\DataSource\Domains;
 use Assmat\DataSource\Repositories;
-use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
 use Assmat\Iterators;
 

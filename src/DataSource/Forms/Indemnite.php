@@ -6,9 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints;
-use Assmat\DataSource\Constants;
-use Assmat\DataSource\Repositories;
-use Assmat\DataSource\Repositories\LigneTemplate;
 
 class Indemnite extends AbstractType
 {

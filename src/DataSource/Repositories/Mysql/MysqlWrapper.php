@@ -5,6 +5,7 @@ namespace Assmat\DataSource\Repositories\Mysql;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Assmat\Services;
+use Doctrine\DBAL\Cache\QueryCacheProfile;
 
 class MysqlWrapper implements Mysql
 {
@@ -12,7 +13,7 @@ class MysqlWrapper implements Mysql
         $mysql,
         $dispatcher;
 
-    public function __construct(\Doctrine\DBAL\Connection $mysql, EventDispatcherInterface $dispatcher)
+    public function __construct(Connection $mysql, EventDispatcherInterface $dispatcher)
     {
         $this->mysql = $mysql;
         $this->dispatcher = $dispatcher;

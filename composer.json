@@ -1,4 +1,6 @@
 {
+    "name": "seblavenant/assmat",
+    "description": "A childminder manager",
     "autoload": {
         "psr-4": { "Assmat\\": "src/" }
     },

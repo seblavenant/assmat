@@ -3,6 +3,7 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Cache\QueryCacheProfile;
 
 interface Mysql extends Connection
 {
