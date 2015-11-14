@@ -157,7 +157,7 @@ class Application extends AbstractApplication
     private function initializeForms()
     {
         $this['form.contrat'] = function() {
-            return new Forms\Contrat($this['repository.employe']);
+            return new Forms\Contrat($this['repository.employe'], $this['form.indemnite']);
         };
 
         $this['form.contact'] = function() {
@@ -170,6 +170,10 @@ class Application extends AbstractApplication
 
         $this['form.employe'] = function() {
             return new Forms\Employe($this['form.contact.employe']);
+        };
+
+        $this['form.indemnite'] = function() {
+            return new Forms\Indemnite();
         };
 
         $this['form.errors'] = function() {

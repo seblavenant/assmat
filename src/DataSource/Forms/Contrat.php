@@ -12,15 +12,30 @@ use Assmat\DataSource\Domains;
 
 class Contrat extends AbstractType
 {
-    private
-        $employesRepository;
+    const
+        TYPE_NEW = 'new',
+        TYPE_EDIT = 'edit';
 
-    public function __construct(Repositories\Employe $employeRepository)
+    private
+        $employeRepository,
+        $indemniteForm;
+
+    public function __construct(Repositories\Employe $employeRepository, Indemnite $indemniteForm)
     {
         $this->employeRepository = $employeRepository;
+        $this->indemniteForm = $indemniteForm;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $this->buildEditForm($builder);
+        if($options['type'] === self::TYPE_NEW)
+        {
+            $this->buildNewForm($builder, $options);
+        }
+    }
+
+    public function buildEditForm(FormBuilderInterface $builder)
     {
         $builder
             ->add('nom', 'text', array(
@@ -41,6 +56,15 @@ class Contrat extends AbstractType
                     )),
                 )
             ))
+            ->add('employeurId', 'hidden')
+            ;
+
+            $builder->add('indemnites', 'collection', array('type' => new Indemnite()));
+    }
+
+    private function buildNewForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
             ->add('joursGarde', 'choice', array(
                 'label' => 'contrats.joursGarde',
                 'required' => true,
@@ -78,14 +102,13 @@ class Contrat extends AbstractType
                 )
             ))
             ->add('employeId', 'choice', array(
-                 'label' => 'contrats.employeId',
-                 'choices' => $this->retrieveEmployees($options),
-                 'placeholder' => '-- Sélectionnez un employé --',
+                'label' => 'contrats.employeId',
+                'choices' => $this->retrieveEmployees($options),
+                'placeholder' => '-- Sélectionnez un employé --',
             ))
             ->add('employeKey', 'text', array(
-                 'label' => 'contacts.key',
+                'label' => 'contacts.key',
             ))
-            ->add('employeurId', 'hidden')
             ;
     }
 
@@ -98,12 +121,13 @@ class Contrat extends AbstractType
     {
         $resolver->setDefaults(array(
             'employeur' => null,
+            'type' => self::TYPE_NEW,
         ));
     }
 
     private function retrieveEmployees(array $options)
     {
-        if(! array_key_exists('employeur', $options) || ! $options['employeur'] instanceof Domains\Employeur)
+        if(!$options['employeur'] instanceof Domains\Employeur)
         {
             return array();
         }

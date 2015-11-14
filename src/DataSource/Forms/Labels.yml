@@ -6,6 +6,11 @@ contrats:
     nombreSemainesAn: Semaine de garde /an
     typeId: Type
     employeId: Employé
+    indemnites:
+        300: 
+            montant: Idemn. nourriture
+        301:
+            montant: Idemn. entretien
 employes:
     ssId: SSID
 contacts:

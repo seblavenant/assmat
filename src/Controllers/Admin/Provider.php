@@ -47,7 +47,8 @@ class Provider implements ControllerProviderInterface
                 $app['form.contrat'],
                 $app['repository.employeur'],
                 $app['repository.employe'],
-                $app['repository.contrat']
+                $app['repository.contrat'],
+                $app['repository.ligneTemplate']
             );
         });
 
@@ -57,14 +58,23 @@ class Provider implements ControllerProviderInterface
         $controllers->get('/contrats', 'contrat.controller:listAction')
                     ->bind('admin_contrats_list');
 
+        $controllers->get('/contrats/{id}', 'contrat.controller:readAction')
+                    ->bind('admin_contrats_read')
+                    ->assert('id', '\d+');
+
         $controllers->get('/contrats/new', 'contrat.controller:newAction')
                     ->bind('admin_contrats_new');
 
         $controllers->post('/contrats/', 'contrat.controller:createAction')
                     ->bind('admin_contrats_create');
 
-        $controllers->get('/contrats/{id}', 'contrat.controller:readAction')
-                    ->bind('admin_contrats_read');
+        $controllers->get('/contrats/edit/{id}', 'contrat.controller:editAction')
+                    ->bind('admin_contrats_edit')
+                    ->assert('id', '\d+');
+
+        $controllers->post('/contrats/{id}', 'contrat.controller:updateAction')
+                    ->bind('admin_contrats_update')
+                    ->assert('id', '\d+');
 
         return $controllers;
     }

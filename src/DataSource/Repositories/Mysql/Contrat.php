@@ -83,7 +83,25 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
 
     private function update(DTO\Contrat $contratDTO)
     {
-        return;
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'nom' => $contratDTO->nom,
+                'salaire_horaire' => $contratDTO->salaireHoraire,
+            ),
+            array(
+                'id' => $contratDTO->id,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+            )
+        );
+
+        foreach($contratDTO->load('indemnites') as $indemnite)
+        {
+            $indemnite->persist($this->indemniteRepository);
+        }
     }
 
     private function create(DTO\Contrat $contratDTO)
@@ -113,6 +131,13 @@ class Contrat extends AbstractMysql implements Repositories\Contrat
         );
 
         $contratDTO->id = (int) $this->db->lastInsertId();
+
+        $indemnites = $contratDTO->load('indemnites');
+        foreach($indemnites as $indemnites)
+        {
+            $indemnites->setContratId($contratDTO->id);
+            $indemnites->persist($this->indemniteRepository);
+        }
 
         return new Domains\Contrat($contratDTO);
     }

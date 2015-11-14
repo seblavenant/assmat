@@ -2,6 +2,7 @@
 namespace Assmat\Services\Form;
 
 use Silex\Translator;
+use Symfony\Component\Form\FormInterface;
 
 class Errors
 {
@@ -12,12 +13,13 @@ class Errors
     {
         $this->translator = $translator;
     }
-    public function getMessages(\Symfony\Component\Form\Form $form)
+
+    public function getMessages(FormInterface $form)
     {
         return $this->getErrors($form);
     }
 
-    private function getErrors(\Symfony\Component\Form\Form $form, $parentForm = array())
+    private function getErrors(FormInterface $form, $parentForm = array())
     {
         $parentForm[] = $form->getName();
         $errors = array();

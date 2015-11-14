@@ -42,6 +42,11 @@ class Contrat
         return $this->fields->load('employeur');
     }
 
+    public function getEmployeurId()
+    {
+        return $this->fields->employeurId;
+    }
+
     public function getSalaireHoraire()
     {
         return $this->fields->salaireHoraire;
@@ -131,7 +136,7 @@ class Contrat
 
     public function validateIsGrantedEmployeur(Domains\Contact $contact)
     {
-        if(! $this->isGrantedEmployeur($contact))
+        if(!$this->isGrantedEmployeur($contact))
         {
             throw new \Exception('Vous devez avoir les droits employeur sur ce contrat pour l\'administrer');
         }
@@ -140,5 +145,10 @@ class Contrat
     public function persist(Repositories\Contrat $contratRepository)
     {
         return $contratRepository->persist($this->fields);
+    }
+
+    public function getDTO()
+    {
+        return $this->fields;
     }
 }

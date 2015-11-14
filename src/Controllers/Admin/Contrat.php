@@ -15,6 +15,7 @@ use Assmat\DataSource\Domains;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Assmat\DataSource\Constants;
 
 class Contrat
 {
@@ -28,9 +29,10 @@ class Contrat
         $contratForm,
         $employeurRepository,
         $contratRepository,
-        $employeRepository;
+        $employeRepository,
+        $ligneTemplateRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory, Form\Errors $formErrors, Forms\Contrat $contratForm, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory, Form\Errors $formErrors, Forms\Contrat $contratForm, Repositories\Employeur $employeurRepository, Repositories\Employe $employeRepository, Repositories\Contrat $contratRepository, Repositories\LigneTemplate $ligneTemplateRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -42,6 +44,7 @@ class Contrat
         $this->employeurRepository = $employeurRepository;
         $this->contratRepository = $contratRepository;
         $this->employeRepository = $employeRepository;
+        $this->ligneTemplateRepository = $ligneTemplateRepository;
     }
 
     public function indexAction()
@@ -68,12 +71,12 @@ class Contrat
 
         $form = $this->formFactory->create(
             $this->contratForm,
-            null,
+            $this->buildContratBaseData(),
             array('employeur' => $employeur)
         );
 
         return new Response($this->twig->render('admin/contrats/new.html.twig', array(
-           'form' => $form->createView(),
+            'form' => $form->createView(),
         )));
     }
 
@@ -84,7 +87,7 @@ class Contrat
 
         $form = $this->formFactory->create(
             $this->contratForm,
-            null,
+            $this->buildContratBaseData(),
             array('employeur' => $employeur)
         );
 
@@ -110,6 +113,18 @@ class Contrat
             $contratDTO->salaireHoraire = (float) $form->get('salaireHoraire')->getData();
             $contratDTO->typeId = (int) $form->get('typeId')->getData();
 
+            $indemnites = array();
+            foreach($form->get('indemnites')->getData() as $typeId => $indemnite)
+            {
+                $indemniteDTO = new DTO\Indemnite();
+                $indemniteDTO->montant = $indemnite->getMontant();
+                $indemniteDTO->typeId = $typeId;
+
+                $indemnites[] = new Domains\Indemnite($indemniteDTO);
+            }
+
+            $contratDTO->set('indemnites', $indemnites);
+
             $contrat = new Domains\Contrat($contratDTO);
             $contrat->persist($this->contratRepository);
 
@@ -118,6 +133,80 @@ class Contrat
                     'msg' => 'Contrat créé',
                     'data' => array(),
                     'location' => $this->urlGenerator->generate('admin_contrats_list'),
+                )
+                , 200
+            );
+        }
+        else
+        {
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Une erreur s\'est produite lors de l\'enregistrement',
+                    'data' => $this->formErrors->getMessages($form),
+                )
+                , 400
+            );
+        }
+
+        return $response;
+    }
+
+    public function editAction($id)
+    {
+        $contrat = $this->contratRepository->find($id);
+
+        if(!$contrat instanceof Domains\Contrat)
+        {
+            throw new \Exception('Aucun contrat ne correspond à cet identifiant');
+        }
+
+        $form = $this->formFactory->create(
+            $this->contratForm,
+            $contrat,
+            array('type' => Forms\Contrat::TYPE_EDIT)
+        );
+
+        return new Response($this->twig->render('admin/contrats/edit.html.twig', array(
+            'contrat' => $contrat,
+            'form' => $form->createView(),
+        )));
+    }
+
+    public function updateAction($id)
+    {
+        $contrat = $this->contratRepository->find($id);
+
+        if(!$contrat instanceof Domains\Contrat)
+        {
+            return new JsonResponse(
+                array(
+                    'msg' => 'Le contrat n\'existe pas',
+                    'data' => array(),
+                )
+            );
+        }
+
+        $form = $this->formFactory->create(
+            $this->contratForm,
+            array(
+                'indemnites' => $contrat->getIndemnites(),
+            ),
+            array('type' => Forms\Contrat::TYPE_EDIT)
+        );
+
+        $form->bind($this->request);
+
+        if($form->isValid())
+        {
+            $contratDTO = $contrat->getDTO();
+            $contratDTO->nom = $form->get('nom')->getData();
+            $contratDTO->salaireHoraire = $form->get('salaireHoraire')->getData();
+            (new Domains\Contrat($contratDTO))->persist($this->contratRepository);
+
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Contrat mis à jour',
+                    'data' => array(),
                 )
                 , 200
             );
@@ -148,6 +237,21 @@ class Contrat
         }
 
         return $employeId;
+    }
+
+    private function buildContratBaseData()
+    {
+        $indemnitesTemplate = $this->ligneTemplateRepository->findFromContexts(array(Constants\Lignes\Context::INDEMNITE));
+        $indemnites = array();
+        foreach($indemnitesTemplate as $indemniteTemplate)
+        {
+            $indemniteDTO = new DTO\Indemnite();
+            $indemnites[$indemniteTemplate->getTypeId()] = new Domains\Indemnite($indemniteDTO);
+        }
+
+        return array(
+            'indemnites' => $indemnites,
+        );
     }
 
     public function readAction()

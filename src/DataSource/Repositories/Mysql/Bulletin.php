@@ -6,7 +6,6 @@ use Assmat\DataSource\Domains;
 use Assmat\DataSource\Constants;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
-use Assmat\Services\Evenements;
 use Muffin\Queries;
 use Muffin\Types;
 use Muffin\Tests\Escapers\SimpleEscaper;

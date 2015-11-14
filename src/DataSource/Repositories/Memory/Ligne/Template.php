@@ -47,6 +47,11 @@ class Template implements Repositories\LigneTemplate
 
     public function findFromTypes(array $types)
     {
-        return new Iterators\Filters\Lignes\Code(new \ArrayIterator($this->lignes), $types);
+        return new Iterators\Filters\Lignes\Type(new \ArrayIterator($this->lignes), $types);
+    }
+
+    public function findFromContexts(array $contexts)
+    {
+        return new Iterators\Filters\Lignes\Context(new \ArrayIterator($this->lignes), $contexts);
     }
 }
