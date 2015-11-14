@@ -10,5 +10,5 @@ interface Evenement
 
     public function findAllFromContrat($contratId, \DateTime $date = null, $fullWeek = false);
 
-    public function findAllFromContact($contactId);
+    public function findAllFromContact($contactId, \DateTime $date = null);
 }
