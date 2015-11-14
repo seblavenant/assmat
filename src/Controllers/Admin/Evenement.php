@@ -65,7 +65,7 @@ class Evenement
         )));
     }
 
-    public function ContactListAction()
+    public function contactListAction()
     {
         $mois = $this->request->get('mois') ? $this->request->get('mois') : date('m');
         $annee = $this->request->get('annee') ? $this->request->get('annee') : date('Y');
