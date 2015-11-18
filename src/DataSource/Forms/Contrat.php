@@ -33,7 +33,7 @@ class Contrat extends AbstractType
         }
     }
 
-    public function buildEditForm(FormBuilderInterface $builder)
+    private function buildEditForm(FormBuilderInterface $builder)
     {
         $builder
             ->add('nom', 'text', array(
@@ -57,7 +57,7 @@ class Contrat extends AbstractType
             ->add('employeurId', 'hidden')
             ;
 
-            $builder->add('indemnites', 'collection', array('type' => new Indemnite()));
+        $builder->add('indemnites', 'collection', array('type' => new Indemnite()));
     }
 
     private function buildNewForm(FormBuilderInterface $builder, array $options)

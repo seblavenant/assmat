@@ -165,6 +165,10 @@ class Application extends AbstractApplication
             return new Forms\Indemnite();
         };
 
+        $this['form.profile'] = function() {
+            return new Forms\Profile();
+        };
+
         $this['form.errors'] = function() {
             return new Form\Errors($this['translator']);
         };

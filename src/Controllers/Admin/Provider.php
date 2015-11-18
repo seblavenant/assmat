@@ -16,6 +16,7 @@ class Provider implements ControllerProviderInterface
         $this->initializeContratsControllers($controllers, $app);
         $this->initializeBulletinsControllers($controllers, $app);
         $this->initializeEvenementControllers($controllers, $app);
+        $this->initializeProfileControllers($controllers, $app);
         return $controllers;
     }
 
@@ -124,12 +125,10 @@ class Provider implements ControllerProviderInterface
             );
         });
 
-        $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:setAction')
-                    ->method('POST')
+        $controllers->post('/contrats/{contratId}/evenements/', 'evenement.controller:setAction')
                     ->bind('admin_evenements_set');
 
-        $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:deleteAction')
-                    ->method('DELETE')
+        $controllers->delete('/contrats/{contratId}/evenements/', 'evenement.controller:deleteAction')
                     ->bind('admin_evenements_delete');
 
         $controllers->get('/contrats/{contratId}/evenements/', 'evenement.controller:listAction')
@@ -137,5 +136,25 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/evenements/', 'evenement.controller:contactListAction')
                     ->bind('admin_evenements_contact_list');
+    }
+
+    private function initializeProfileControllers(ControllerCollection $controllers, Application $app)
+    {
+        $app['profile.controller'] = $app->share(function() use($app) {
+            return new Profile(
+                $app['twig'],
+                $app['request'],
+                $app['security'],
+                $app['form.factory'],
+                $app['form.profile']
+            );
+        });
+
+        $controllers->get('/profiles/', 'profile.controller:editAction')
+                    ->bind('admin_profiles_edit');
+
+        $controllers->post('/profiles/', 'profile.controller:updateAction')
+                    ->bind('admin_profiles_update');
+
     }
 }
