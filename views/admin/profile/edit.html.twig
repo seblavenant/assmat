@@ -1,5 +1,13 @@
 {% extends 'admin/layout.html.twig' %}
 
+{% block specificStylesheets %}
+    <style>
+        #submit .control-group {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <div id="breadcrumb" class="col-xs-12">
@@ -13,6 +21,57 @@
         <div class="col-xs-12">
             <form novalidate class="form-horizontal" method="post" data-ajax-form="true" action="{{ path('admin_profiles_update') }}">
                 <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Contact :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.contacts.email) }}</div><div class="col-xs-9">{{ form_widget(form.contacts.email) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.contacts.nom) }}</div><div class="col-xs-9">{{ form_widget(form.contacts.nom) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.contacts.prenom) }}</div><div class="col-xs-9">{{ form_widget(form.contacts.prenom) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.contacts.adresse) }}</div><div class="col-xs-9">{{ form_widget(form.contacts.adresse) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.contacts.codePostal) }}</div><div class="col-xs-9">{{ form_widget(form.contacts.codePostal) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.contacts.ville) }}</div><div class="col-xs-9">{{ form_widget(form.contacts.ville) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Employé :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.employes.ssId) }}</div><div class="col-xs-9">{{ form_widget(form.employes.ssId) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Employeur :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.employeurs.pajeEmploiId) }}</div><div class="col-xs-9">{{ form_widget(form.employeurs.pajeEmploiId) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box" id="submit">
                     {{ form_rest(form) }}
                     <input type="submit" value="Enregistrer" />
                 </div>

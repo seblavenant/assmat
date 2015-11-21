@@ -12,7 +12,9 @@ contrats:
         301:
             montant: Idemn. entretien
 employes:
-    ssId: SSID
+    ssId: Num. sécurité sociale
+employeurs:
+    pajeEmploiId: Identifiant PAJE
 contacts:
     key: Clé d'identification
     email: Email

@@ -59,6 +59,55 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
         return $this->fetchAll($query);
     }
 
+    public function persist(DTO\Employeur $employeurDTO)
+    {
+        if($employeurDTO->id !== null)
+        {
+            return $this->update($employeurDTO);
+        }
+
+        return $this->create($employeurDTO);
+    }
+
+    private function update(DTO\Employeur $employeurDTO)
+    {
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'paje_emploi_id' => $employeurDTO->pajeEmploiId,
+            ),
+            array(
+                'id' => $employeurDTO->id,
+            ),
+            array(
+                \PDO::PARAM_STR,
+            )
+        );
+
+        return new Domains\Employeur($employeurDTO);
+    }
+
+    private function create(DTO\Employeur $employeurDTO)
+    {
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'paje_emploi_id' => $employeurDTO->pajeEmploiId,
+                'contact_id' => $employeurDTO->contactId,
+            ),
+            array(
+                'id' => $employeurDTO->id,
+            ),
+            array(
+                \PDO::PARAM_STR,
+            )
+        );
+
+        $employeurDTO->id = (int) $this->db->lastInsertId();
+
+        return new Domains\Employeur($employeurDTO);
+    }
+
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
@@ -72,7 +121,7 @@ class Employeur extends AbstractMysql implements Repositories\Employeur
     {
         return array(
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
-            'pajeEmploiId' => new Fields\NotNullable(new Fields\String('paje_emploi_id')),
+            'pajeEmploiId' => new Fields\String('paje_emploi_id'),
             'contactId' => new Fields\NotNullable(new Fields\UnsignedInteger('contact_id')),
         );
     }

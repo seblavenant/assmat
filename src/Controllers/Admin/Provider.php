@@ -146,7 +146,11 @@ class Provider implements ControllerProviderInterface
                 $app['request'],
                 $app['security'],
                 $app['form.factory'],
-                $app['form.profile']
+                $app['form.profile'],
+                $app['form.errors'],
+                $app['repository.employe'],
+                $app['repository.employeur'],
+                $app['repository.contact']
             );
         });
 

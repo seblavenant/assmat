@@ -42,6 +42,7 @@ class Contact extends AbstractType
                 'label' => 'contacts.ville',
                 'required' => false,
             ))
+            ->add('id', 'hidden')
             ;
 
         return $builder;
@@ -54,6 +55,6 @@ class Contact extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array());
+
     }
 }

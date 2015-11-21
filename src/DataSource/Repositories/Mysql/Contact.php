@@ -41,6 +41,49 @@ class Contact extends AbstractMysql implements Repositories\Contact
         return $query;
     }
 
+    public function persist(DTO\Contact $contactDTO)
+    {
+        if($contactDTO->id !== null)
+        {
+            return $this->update($contactDTO);
+        }
+
+        return $this->create($contactDTO);
+    }
+
+    private function update(DTO\Contact $contactDTO)
+    {
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'email' => $contactDTO->email,
+                'nom' => $contactDTO->nom,
+                'prenom' => $contactDTO->prenom,
+                'adresse' => $contactDTO->adresse,
+                'code_postal' => $contactDTO->codePostal,
+                'ville' => $contactDTO->ville,
+            ),
+            array(
+                'id' => $contactDTO->id,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+            )
+        );
+
+        return new Domains\Contact($contactDTO);
+    }
+
+    private function create(DTO\Contact $contactDTO)
+    {
+
+    }
+
     public function getFields()
     {
         return array(

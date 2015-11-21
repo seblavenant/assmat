@@ -6,18 +6,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class Profile extends AbstractType
+class Employeur extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('contacts', new Contact());
-        $builder->add('employes', new Employe());
-        $builder->add('employeurs', new Employeur());
+        $builder
+            ->add('pajeEmploiId', 'text', array(
+                'label' => 'employeurs.pajeEmploiId',
+                'required' => false,
+            ))
+            ->add('id', 'hidden')
+            ;
+
+        return $builder;
     }
 
     public function getName()
     {
-        return '';
+        return 'employeurs';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
