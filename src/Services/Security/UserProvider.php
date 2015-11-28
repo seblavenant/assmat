@@ -28,7 +28,6 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        //TODO : Manager roles
         return new ContactUser($contact);
     }
 
