@@ -78,8 +78,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     $this->getEvenementAbsenceNonPayee()
                 ),
             ),
-            array(
-                Constants\Contrats\Salaire::MENSUALISE, 8.5, 85, 65.26,
+            'absence non payée (mensuel)' => array(
+                Constants\Contrats\Salaire::MENSUALISE, 122.5, 1225, 940.67,
                 array(
                     $this->getEvenementAbsenceNonPayee(),
                     $this->getEvenementGarde()
