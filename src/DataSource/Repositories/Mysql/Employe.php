@@ -106,9 +106,6 @@ class Employe extends AbstractMysql implements Repositories\Employe
                 'contact_id' => $employeDTO->contactId,
             ),
             array(
-                'id' => $employeDTO->id,
-            ),
-            array(
                 \PDO::PARAM_STR,
             )
         );
