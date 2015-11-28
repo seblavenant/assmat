@@ -79,13 +79,11 @@ class Ligne
 
     public function persist(Repositories\Ligne $ligneRepository)
     {
-        if($this->fields->id === null)
+        if($this->fields->id !== null)
         {
-            $ligneRepository->create($this->fields);
+            return;
         }
-        else
-        {
-            //$ligneRepository->update($this->fields);
-        }
+
+        $ligneRepository->create($this->fields);
     }
 }
