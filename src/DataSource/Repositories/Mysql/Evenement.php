@@ -87,7 +87,7 @@ class Evenement extends AbstractMysql implements Repositories\Evenement
             $dateDebut = $date;
             if($fullWeek === true)
             {
-                $dateDebut = new \DateTime(date('Y-m-d', strtotime($date->format('Y-m') .' last monday of previous month')));
+                $dateDebut = new \DateTime(date('Y-m-d', strtotime($date->format('Y-m') . ' last monday of previous month')));
             }
 
             $dateFin = new \DateTime($date->format('Y-m-t'));
