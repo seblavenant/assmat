@@ -58,54 +58,50 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testSalaireBuildProvider()
     {
         return array(
-            // test garde
-            array(
+            'garde (heures)' => array(
                 Constants\Contrats\Salaire::HEURES, 8.5, 85, 65.26,
                 array(
                     $this->getEvenementGarde()
                 ),
             ),
-            array(
+            'garde (mensuel)' => array(
                 Constants\Contrats\Salaire::MENSUALISE, 130, 1300, 998.27,
                 array(
                     $this->getEvenementGarde()
                 ),
             ),
-            // test absence non payee
-            array(
+            'absence non payée (heures)' => array(
                 Constants\Contrats\Salaire::HEURES, 0, 0, 0,
                 array(
                     $this->getEvenementAbsenceNonPayee()
                 ),
             ),
-            array(
-                Constants\Contrats\Salaire::MENSUALISE, 8.5, 85, 65.26,
+            'absence non payée (mensuel)' => array(
+                Constants\Contrats\Salaire::MENSUALISE, 122.5, 1225, 940.67,
                 array(
                     $this->getEvenementAbsenceNonPayee(),
                     $this->getEvenementGarde()
                 ),
             ),
-            // test absence payee
-            array(
+            'absence payée (heures)' => array(
                 Constants\Contrats\Salaire::HEURES, 7.5, 75, 57.58,
                 array(
                     $this->getEvenementAbsencePayee()
                 ),
             ),
-            array(
+            'absence payée (mensuel)' => array(
                 Constants\Contrats\Salaire::MENSUALISE, 130, 1300, 998.27,
                 array(
                     $this->getEvenementAbsencePayee()
                 ),
             ),
-            // test congés payés
-            array(
+            'congé payé (heures)' => array(
                 Constants\Contrats\Salaire::HEURES, 7.5, 75, 57.58,
                 array(
                     $this->getEvenementCongePaye()
                 ),
             ),
-            array(
+            'congé payés (mensuel)' => array(
                 Constants\Contrats\Salaire::MENSUALISE, 130, 1300, 998.27,
                 array(
                     $this->getEvenementAbsencePayee()
@@ -127,30 +123,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);
-        $builderValidator->assertSalaire($heures, $salaireBrut);
+        $builderValidator->assertSalaire($heures, $salaireBrut, $salaireNet);
     }
-
-    /**
-     * @dataProvider testSalaireBuildProvider
-     */
-    public function testSalaireNetBuild($typeID, $heures, $salaireBrut, $salaireNet, $evenements)
-    {
-        $contratDTO = $this->getBaseContratDTO();
-        $contratDTO->typeId = $typeID;
-
-        // TODO : ajouter les indemnites
-
-        $contrat = new Domains\Contrat($contratDTO);
-
-        $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
-        $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
-
-        $builderValidator = new BuilderValidator($bulletin);
-
-        $builderValidator->assertEquals($bulletin->getSalaireBrut(), $salaireBrut);
-        $builderValidator->assertEquals($bulletin->getSalaireNet(), $salaireNet);
-    }
-
 
     private function getBaseContratDTO()
     {

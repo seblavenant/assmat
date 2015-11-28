@@ -244,10 +244,6 @@ class Bulletin
         {
             $evenement->computeFromType();
 
-            if(!$evenement->isJourPaye())
-            {
-                $contrat->setTypeId(Constants\Contrats\Salaire::HEURES);
-            }
             $heuresPayees = $this->computeHeuresPayees($evenement);
             $this->addHeuresPayees($heuresPayees, $evenement);
             $this->addHeuresNonPayees($evenement);
