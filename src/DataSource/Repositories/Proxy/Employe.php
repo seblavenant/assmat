@@ -3,6 +3,7 @@
 namespace Assmat\DataSource\Repositories\Proxy;
 
 use Assmat\DataSource\Repositories;
+use Assmat\DataSource\DataTransferObjects as DTO;
 
 class Employe implements Repositories\Employe
 {
@@ -34,6 +35,11 @@ class Employe implements Repositories\Employe
     public function findFromKey($key)
     {
         return $this->getEmployeRepository()->findFromKey($key);
+    }
+
+    public function persist(DTO\Employe $employeDTO)
+    {
+        return $this->getEmployeRepository()->persist($employeDTO);
     }
 
     public function getEmployeRepository()

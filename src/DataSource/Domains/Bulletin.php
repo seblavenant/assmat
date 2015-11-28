@@ -238,8 +238,6 @@ class Bulletin
 
     public function compute()
     {
-        $contrat = $this->getContrat();
-
         foreach($this->getEvenements() as $evenement)
         {
             $evenement->computeFromType();

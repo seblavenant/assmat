@@ -21,9 +21,13 @@ class Errors
 
     private function getErrors(FormInterface $form, $parentForm = array())
     {
-        $parentForm[] = $form->getName();
+        $formName = $form->getName();
+        if(!empty($formName))
+        {
+            $parentForm[] = $form->getName();
+        }
         $errors = array();
-        foreach ($form->getErrors() as $error)
+        foreach($form->getErrors() as $error)
         {
             return array('form' => array(
                 'label' => addSlashes($this->translator->trans(implode('.', $parentForm))),
@@ -31,11 +35,17 @@ class Errors
             ));
         }
 
-        foreach ($form->all() as $fieldName => $child)
+        foreach($form->all() as $fieldName => $child)
         {
-            if ($err = $this->getErrors($child, $parentForm))
+            if($err = $this->getErrors($child, $parentForm))
             {
-                $errors[implode('_', $parentForm).'_'.$fieldName] = $err;
+                $fieldPrefix = implode('_', $parentForm);
+                if(!empty($fieldPrefix))
+                {
+                    $fieldName = $fieldPrefix . '_' . $fieldName;
+                }
+
+                $errors[$fieldName] = $err;
             }
         }
 

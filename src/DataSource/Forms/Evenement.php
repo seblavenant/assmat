@@ -30,7 +30,7 @@ class Evenement extends AbstractType
 
     public function getName()
     {
-        return 'evenement';
+        return 'evenements';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -3,6 +3,7 @@
 namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\DataSource\Repositories;
 
 class Employe
 {
@@ -37,5 +38,18 @@ class Employe
     public function getEmployeurs()
     {
         return $this->fields->load('employeurs');
+    }
+
+    public function toArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'ssId' => $this->getSSId()
+        );
+    }
+
+    public function persist(Repositories\Employe $employeRepository)
+    {
+        return $employeRepository->persist($this->fields);
     }
 }

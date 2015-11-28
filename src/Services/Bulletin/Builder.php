@@ -18,7 +18,6 @@ class Builder
 
     public function build(Domains\Contrat $contrat, array $evenements, $annee, $mois)
     {
-        // TODO : remplace ligneRepository par lignesCollector
         $lignes = $this->ligneTemplateRepository->findAll();
 
         $bulletinDTO = new DTO\Bulletin();

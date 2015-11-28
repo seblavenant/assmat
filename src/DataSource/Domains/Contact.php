@@ -3,6 +3,7 @@
 namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
+use Assmat\DataSource\Repositories;
 
 class Contact
 {
@@ -57,5 +58,25 @@ class Contact
     public function getVille()
     {
         return $this->fields->ville;
+    }
+
+    public function toArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'key' => $this->getKey(),
+            'email' => $this->getEmail(),
+            'password' => $this->getPassword(),
+            'nom' => $this->getNom(),
+            'prenom' => $this->getPrenom(),
+            'adresse' => $this->getAdresse(),
+            'codePostal' => $this->getCodePostal(),
+            'ville' => $this->getVille(),
+        );
+    }
+
+    public function persist(Repositories\Contact $contactRepository)
+    {
+        return $contactRepository->persist($this->fields);
     }
 }
