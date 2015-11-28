@@ -42,7 +42,7 @@ class BuilderValidator extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function assertSalaire($quantiteExpected, $valeurExpected)
+    public function assertSalaire($quantiteExpected, $salaireBrut, $salaireNet)
     {
         $this->assertArrayHasKey(Constants\Lignes\Type::SALAIRE, $this->lignes);
         $this->assertEquals(
@@ -51,9 +51,12 @@ class BuilderValidator extends \PHPUnit_Framework_TestCase
             '#' . Constants\Lignes\Type::SALAIRE . ' #getQuantite'
         );
         $this->assertEquals(
-            $valeurExpected,
+            $salaireBrut,
             $this->lignes[Constants\Lignes\Type::SALAIRE]->getValeur($this->bulletin),
-            '#' . Constants\Lignes\Type::SALAIRE . ' getValeur'
+            '#' . Constants\Lignes\Type::SALAIRE . ' #getValeur'
         );
+
+        $this->assertEquals($this->bulletin->getSalaireBrut(), $salaireBrut);
+        $this->assertEquals($this->bulletin->getSalaireNet(), $salaireNet);
     }
 }
