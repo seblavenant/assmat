@@ -110,12 +110,6 @@
                 height: 30px;
                 padding: 2px 5px;
             }
-            #heures-semaine th {
-            	width: 10%;
-            }
-            #heures-semaine th.right {
-            	width: 45%;
-            }
             #lignes td, #conges-payes td, #heures-semaine td {
                 padding: 2px 5px;
                 height: 30px;
@@ -262,7 +256,7 @@
                         <tbody>
                             {% for semaine in bulletin.semainesCompletes %}
                             <tr>
-                                <td class="left">{{ semaine }}</td>
+                                <td>{{ semaine | date('d/m/Y')}} au {{ (semaine ~ ' +6 days') | date('d/m/Y')}} (sem. {{ semaine | date('W')}})</td>
                                 <td class="right">{{ bulletin.heuresPayeesParSemaine(semaine) }}</td>
                                 <td class="right">{{ bulletin.heuresComplementairesParSemaine(semaine) }}</td>
                             </tr>

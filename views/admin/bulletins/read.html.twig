@@ -120,7 +120,7 @@
                         <tbody>
                             {% for semaine in bulletin.semainesCompletes %}
                             <tr>
-                                <td>{{ semaine }}</td>
+                                <td>{{ semaine | date('d/m/Y')}} au {{ (semaine ~ ' +6 days') | date('d/m/Y')}} (sem. {{ semaine | date('W')}})</td>
                                 <td>{{ bulletin.heuresPayeesParSemaine(semaine) }}</td>
                                 <td>{{ bulletin.heuresComplementairesParSemaine(semaine) }}</td>
                             </tr>

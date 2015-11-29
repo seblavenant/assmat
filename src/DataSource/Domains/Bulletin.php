@@ -141,7 +141,7 @@ class Bulletin
             return;
         }
 
-        $week = $evenement->getDate()->format('W');
+        $week = $evenement->getDate()->format('o\WW');
         if(!isset($this->heuresPayeesParSemaine[$week]))
         {
             $this->heuresPayeesParSemaine[$week] = 0;

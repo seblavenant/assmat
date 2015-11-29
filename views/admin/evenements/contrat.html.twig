@@ -104,6 +104,7 @@
     });
 
     var calendar = $('#calendar').fullCalendar({
+        weekNumbers: true,
         events: [
             {% for evenement in evenements %}
             {
