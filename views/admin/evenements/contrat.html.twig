@@ -158,7 +158,7 @@
                 method: 'POST',
                 url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
-                    evenement: {
+                    evenements: {
                         date : start.format('YYYY-MM-DD'),
                         heureDebut : start.format('HH:mm'),
                         heureFin : end.format('HH:mm'),
@@ -209,7 +209,7 @@
                 method: 'POST',
                 url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
-                    evenement: {
+                    evenements: {
                         date : event.start.format('YYYY-MM-DD'),
                         heureDebut : event.start.format('HH:mm'),
                         heureFin : event.end.format('HH:mm'),
@@ -240,7 +240,7 @@
                 method: 'POST',
                 url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
-                    evenement: {
+                    evenements: {
                         date : event.start.format('YYYY-MM-DD'),
                         heureDebut : event.start.format('HH:mm'),
                         heureFin : event.end.format('HH:mm'),
@@ -285,7 +285,7 @@
                 method: 'POST',
                 url: '{{ path('admin_evenements_set', {contratId: contrat.id}) }}',
                 data: {
-                    evenement: {
+                    evenements: {
                         date : date.format('YYYY-MM-DD'),
                         contratId : '{{ contrat.id }}',
                         typeId : copiedEventObject.typeId
