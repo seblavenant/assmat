@@ -169,6 +169,10 @@ class Application extends AbstractApplication
             return new Forms\Profile();
         };
 
+        $this['form.password'] = function() {
+            return new Forms\Password();
+        };
+
         $this['form.errors'] = function() {
             return new Form\Errors($this['translator']);
         };

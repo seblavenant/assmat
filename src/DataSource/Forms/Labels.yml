@@ -23,3 +23,6 @@ contacts:
     adresse: Adresse
     codePostal: Code postal
     ville: Ville
+    password:
+        first: Mot de passe
+        second: Confirmation
