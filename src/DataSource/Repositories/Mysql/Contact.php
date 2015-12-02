@@ -57,6 +57,7 @@ class Contact extends AbstractMysql implements Repositories\Contact
             self::TABLE_NAME,
             array(
                 'email' => $contactDTO->email,
+                'password' => $contactDTO->password,
                 'nom' => $contactDTO->nom,
                 'prenom' => $contactDTO->prenom,
                 'adresse' => $contactDTO->adresse,
@@ -67,6 +68,7 @@ class Contact extends AbstractMysql implements Repositories\Contact
                 'id' => $contactDTO->id,
             ),
             array(
+                \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
