@@ -12,6 +12,7 @@ use Assmat\DataSource\Repositories;
 use Assmat\Services\Form;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Domains;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class Profile
 {
@@ -19,20 +20,24 @@ class Profile
         $twig,
         $request,
         $security,
+        $encoderFactory,
         $formFactory,
         $profileForm,
+        $passwordForm,
         $formErrors,
         $employeRepository,
         $employeurRepository,
         $contactRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, FormFactoryInterface $formFactory, Forms\Profile $profileForm, Form\Errors $formErrors, Repositories\Employe $employeRepository, Repositories\Employeur $employeurRepository, Repositories\Contact $contactRepository)
+    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, EncoderFactoryInterface $encoderFactory, FormFactoryInterface $formFactory, Forms\Profile $profileForm, Forms\Password $passwordForm, Form\Errors $formErrors, Repositories\Employe $employeRepository, Repositories\Employeur $employeurRepository, Repositories\Contact $contactRepository)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->security = $security;
         $this->formFactory = $formFactory;
+        $this->encoderFactory = $encoderFactory;
         $this->profileForm = $profileForm;
+        $this->passwordForm = $passwordForm;
         $this->formErrors = $formErrors;
         $this->employeRepository = $employeRepository;
         $this->employeurRepository = $employeurRepository;
@@ -56,7 +61,6 @@ class Profile
 
         if($form->isValid())
         {
-
             $contactForm = $form->get('contacts');
             $contactDTO = new DTO\Contact();
             $contactDTO->id = $contactForm->get('id')->getData();
@@ -85,6 +89,55 @@ class Profile
             $response = new JsonResponse(
                 array(
                     'msg' => 'Profil modifié',
+                    'data' => array(),
+                )
+                , 200
+            );
+        }
+        else
+        {
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Une erreur s\'est produite lors de l\'enregistrement',
+                    'data' => $this->formErrors->getMessages($form),
+                )
+                , 400
+            );
+        }
+
+        return $response;
+    }
+
+    public function passwordEditAction()
+    {
+        $form = $this->formFactory->create($this->passwordForm, $this->buildProfileFormData());
+
+        return new Response($this->twig->render('admin/profile/password/edit.html.twig', array(
+            'form' => $form->createView(),
+        )));
+    }
+
+    public function passwordUpdateAction()
+    {
+        $form = $this->formFactory->create($this->passwordForm, $this->buildProfileFormData());
+
+        $form->bind($this->request);
+
+        if($form->isValid())
+        {
+            $user = $this->security->getToken()->getUser();
+
+            $encoder = $this->encoderFactory->getEncoder($user);
+            $password = $encoder->encodePassword($form->get('password')->getData(), $user->getSalt());
+
+            $contact = $user->getContact();
+
+            $contact->savePassword($password);
+            $contact->persist($this->contactRepository);
+
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Mot de passe modifié',
                     'data' => array(),
                 )
                 , 200

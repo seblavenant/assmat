@@ -1,0 +1,23 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div id="breadcrumb" class="col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_index') }}">Dashboard</a></li>
+                <li>Modification de mot de passe</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form novalidate class="form-horizontal" method="post" data-ajax-form="true" action="{{ path('admin_profiles_password_update') }}">
+                <div class="box" id="submit">
+                    {{ form_rest(form) }}
+                    <input type="submit" value="Enregistrer" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
