@@ -13,18 +13,18 @@ use Puzzle\Configuration;
 class UserProvider implements UserProviderInterface
 {
     private
-        $contactRepositories,
+        $contactRepository,
         $configuration;
 
-    public function __construct(Repositories\Contact $contactRepositories, Configuration $configuration)
+    public function __construct(Repositories\Contact $contactRepository, Configuration $configuration)
     {
-        $this->contactRepositories = $contactRepositories;
+        $this->contactRepository = $contactRepository;
         $this->configuration = $configuration;
     }
 
     public function loadUserByUsername($username)
     {
-        $contact = $this->contactRepositories->findFromEmail($username);
+        $contact = $this->contactRepository->findFromEmail($username);
 
         if(!$contact instanceof Domains\Contact)
         {
