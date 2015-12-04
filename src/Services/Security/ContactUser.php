@@ -13,7 +13,8 @@ class ContactUser implements AdvancedUserInterface
         $accountNonExpired,
         $credentialsNonExpired,
         $accountNonLocked,
-        $roles;
+        $roles,
+        $salt;
 
     public function __construct(Domains\Contact $contact, $salt)
     {
