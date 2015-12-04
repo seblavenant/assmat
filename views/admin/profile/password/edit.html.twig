@@ -12,6 +12,21 @@
     <div class="row">
         <div class="col-xs-12">
             <form novalidate class="form-horizontal" method="post" data-ajax-form="true" action="{{ path('admin_profiles_password_update') }}">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-name">
+                            <i class="fa fa-user"></i>Mot de passe :
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.password.first) }}</div><div class="col-xs-9">{{ form_widget(form.password.first) }}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3">{{ form_label(form.password.second) }}</div><div class="col-xs-9">{{ form_widget(form.password.second) }}</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="box" id="submit">
                     {{ form_rest(form) }}
                     <input type="submit" value="Enregistrer" />
