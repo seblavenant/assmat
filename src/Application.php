@@ -46,6 +46,7 @@ class Application extends AbstractApplication
     {
         $this->mount('/', new Controllers\Home\Provider());
         $this->mount('/admin', new Controllers\Admin\Provider());
+        $this->mount('/user', new Controllers\User\Provider());
     }
 
     private function configureTwig()
