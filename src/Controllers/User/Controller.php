@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Puzzle\Configuration;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
@@ -17,17 +16,15 @@ class Controller
     private
         $twig,
         $request,
-        $security,
         $configuration,
         $contactRepository,
         $passwordEncoder,
         $mailer;
 
-    public function __construct(Twig_Environment $twig, Request $request, SecurityContextInterface $security, Configuration $configuration, Repositories\Contact $contactRepository, PasswordEncoderInterface $passwordEncoder, $mailer)
+    public function __construct(Twig_Environment $twig, Request $request, Configuration $configuration, Repositories\Contact $contactRepository, PasswordEncoderInterface $passwordEncoder, $mailer)
     {
         $this->twig = $twig;
         $this->request = $request;
-        $this->security = $security;
         $this->configuration = $configuration;
         $this->contactRepository = $contactRepository;
         $this->passwordEncoder = $passwordEncoder;

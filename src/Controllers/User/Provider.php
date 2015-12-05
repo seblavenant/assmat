@@ -14,7 +14,6 @@ class Provider implements ControllerProviderInterface
             return new Controller(
                 $app['twig'],
                 $app['request'],
-                $app['security'],
                 $app['configuration'],
                 $app['repository.contact'],
                 $app['security.encoder.digest'],
