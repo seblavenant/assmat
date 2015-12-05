@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Assmat\DataSource\Repositories;
-use Assmat\DataSource\Domains\Contact;
+use Assmat\DataSource\Domains;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Puzzle\Configuration;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
@@ -64,7 +64,7 @@ class Controller
     {
         $contact = $this->contactRepository->findFromEmail($email);
 
-        if($contact instanceof Contact)
+        if($contact instanceof Domains\Contact)
         {
             $password = $this->createNewPassword($contact);
             $messageBody = $this->twig->render('user/lostpass_mail.html.twig', array(
@@ -77,7 +77,7 @@ class Controller
         }
     }
 
-    private function createNewPassword($contact)
+    private function createNewPassword(Domains\Contact $contact)
     {
         $newPassword = substr(hash('sha512', uniqid()), 0, 20);
 
