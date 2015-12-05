@@ -6,7 +6,6 @@ use Twig_Environment;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains\Contact;
 use Symfony\Component\Security\Core\SecurityContextInterface;
