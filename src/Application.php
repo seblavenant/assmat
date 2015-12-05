@@ -36,6 +36,7 @@ class Application extends AbstractApplication
         $this->register(new SilexProvider\ValidatorServiceProvider());
         $this->register(new SilexProvider\TranslationServiceProvider(), array('locale' => 'fr'));
         $this->register(new SilexProvider\HttpFragmentServiceProvider());
+        $this->register(new SilexProvider\SwiftmailerServiceProvider());
         $this->register(new SpearProvider\Twig());
         $this->register(new SpearProvider\AsseticServiceProvider());
         $this->register(new \Assmat\Providers\MysqlDBAL());
