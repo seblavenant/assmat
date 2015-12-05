@@ -13,6 +13,7 @@ class Password extends AbstractType
     {
         $builder
             ->add('password', 'repeated', array(
+                'type' => 'password',
                 'label' => 'contacts.password',
                 'invalid_message' => 'Les 2 mots de passes saisis ne sont pas identiques',
                 'first_options'=> array('label' => 'Mot de passe'),
