@@ -25,7 +25,7 @@
         "symfony/translation": "~2.6",
         "symfony/security-csrf": "~2.6",
         "symfony/security": "~2.6",
-        "swiftmailer/swiftmailer": "~5.4"
+        "swiftmailer/swiftmailer": "~5.4",
         "silex-spear/persistence" : "~1.0",
         "silex-spear/application": "~1.0",
         "silex-spear/assetic-provider" : "~1.0",
@@ -35,6 +35,6 @@
         "fortawesome/font-awesome": "~4.3",
         "oyejorge/less.php" : "~1.7",
         "knplabs/knp-snappy": "0.4",
-        "h4cc/wkhtmltopdf-i386": "0.12.2.1",
+        "h4cc/wkhtmltopdf-i386": "0.12.2.1"
     }
 }
