@@ -110,7 +110,7 @@ class Profile
 
     public function passwordEditAction()
     {
-        $form = $this->formFactory->create($this->passwordForm, $this->buildProfileFormData());
+        $form = $this->formFactory->create($this->passwordForm);
 
         return new Response($this->twig->render('admin/profile/password/edit.html.twig', array(
             'form' => $form->createView(),
@@ -119,7 +119,7 @@ class Profile
 
     public function passwordUpdateAction()
     {
-        $form = $this->formFactory->create($this->passwordForm, $this->buildProfileFormData());
+        $form = $this->formFactory->create($this->passwordForm);
 
         $form->bind($this->request);
 
