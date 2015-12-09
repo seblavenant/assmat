@@ -97,7 +97,7 @@ class Controller
             ->setSubject('Récupération du mot de passe')
             ->setFrom(array('assmat@s3b.fr'))
             ->setTo(array($email))
-            ->setBody($messageBody);
+            ->setBody($messageBody, 'text/html');
 
         $this->mailer->send($message);
     }
