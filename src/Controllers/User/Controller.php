@@ -10,6 +10,7 @@ use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains;
 use Puzzle\Configuration;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Controller
 {
@@ -17,15 +18,17 @@ class Controller
         $twig,
         $request,
         $configuration,
+        $urlGenerator,
         $contactRepository,
         $passwordEncoder,
         $mailer;
 
-    public function __construct(Twig_Environment $twig, Request $request, Configuration $configuration, Repositories\Contact $contactRepository, PasswordEncoderInterface $passwordEncoder, $mailer)
+    public function __construct(Twig_Environment $twig, Request $request, Configuration $configuration, UrlGeneratorInterface $urlGenerator, Repositories\Contact $contactRepository, PasswordEncoderInterface $passwordEncoder, $mailer)
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->configuration = $configuration;
+        $this->urlGenerator = $urlGenerator;
         $this->contactRepository = $contactRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
@@ -48,13 +51,17 @@ class Controller
 
         $this->sendMailToContact($email);
 
-        return new JsonResponse(
-            array(
-                'msg' => $error === null ? 'Votre demande de récupération de mot de passe a bien été prise en compte' : $error,
-                'data' => array(),
-            )
-            , $error=== null ? 200 : 400
+        $responseData = array(
+            'msg' => $error === null ? 'Votre demande de récupération de mot de passe a bien été prise en compte' : $error,
+            'data' => array(),
         );
+
+        if(! $error)
+        {
+            $responseData['location'] = $this->urlGenerator->generate('user_login');
+        }
+
+        return new JsonResponse($responseData, $error=== null ? 200 : 400);
     }
 
     private function sendMailToContact($email)

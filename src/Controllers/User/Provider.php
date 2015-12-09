@@ -15,6 +15,7 @@ class Provider implements ControllerProviderInterface
                 $app['twig'],
                 $app['request'],
                 $app['configuration'],
+                $app['url_generator'],
                 $app['repository.contact'],
                 $app['security.encoder.digest'],
                 $app['mailer']
