@@ -44,7 +44,7 @@ class Controller
         $email = $this->request->get('email');
         $error = null;
 
-        if (! $email = filter_var($email, FILTER_VALIDATE_EMAIL))
+        if (!$email = filter_var($email, FILTER_VALIDATE_EMAIL))
         {
             $error = 'Cette adresse email est invalide';
         }
@@ -56,12 +56,12 @@ class Controller
             'data' => array(),
         );
 
-        if(! $error)
+        if($error !== null)
         {
             $responseData['location'] = $this->urlGenerator->generate('user_login');
         }
 
-        return new JsonResponse($responseData, $error=== null ? 200 : 400);
+        return new JsonResponse($responseData, $error === null ? 200 : 400);
     }
 
     private function sendMailToContact($email)
