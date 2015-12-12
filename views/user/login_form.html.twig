@@ -1,7 +1,5 @@
 {% extends 'common/layout.html.twig' %}
 
-{% block title %}Login{% endblock %}
-
 {% block content %}
 <div class="container-fluid">
 	<div id="page-login" class="row">
@@ -24,6 +22,7 @@
 							<input type="password" class="form-control" name="_password" value="" />
 						</div>
 						<button type="submit" class="btn btn-primary">Se connecter</button>
+						<a href="{{ path('user_lostpass_edit') }}">Mot de passe perdu ?</a>
 					</form>
 				</div>
 			</div>

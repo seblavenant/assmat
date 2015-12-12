@@ -36,6 +36,7 @@ class Application extends AbstractApplication
         $this->register(new SilexProvider\ValidatorServiceProvider());
         $this->register(new SilexProvider\TranslationServiceProvider(), array('locale' => 'fr'));
         $this->register(new SilexProvider\HttpFragmentServiceProvider());
+        $this->register(new SilexProvider\SwiftmailerServiceProvider());
         $this->register(new SpearProvider\Twig());
         $this->register(new SpearProvider\AsseticServiceProvider());
         $this->register(new \Assmat\Providers\MysqlDBAL());
@@ -46,6 +47,7 @@ class Application extends AbstractApplication
     {
         $this->mount('/', new Controllers\Home\Provider());
         $this->mount('/admin', new Controllers\Admin\Provider());
+        $this->mount('/user', new Controllers\User\Provider());
     }
 
     private function configureTwig()
@@ -83,7 +85,7 @@ class Application extends AbstractApplication
                 'form' => array('login_path' => '/user/login', 'check_path' => '/admin/login_check'),
                 'logout' => array('logout_path' => '/admin/logout'),
                 'users' => $this->share(function() {
-                    return new Services\Security\UserProvider($this['repository.contact']);
+                    return new Services\Security\UserProvider($this['repository.contact'], $this['configuration']);
                 }),
             ),
         );
@@ -167,6 +169,10 @@ class Application extends AbstractApplication
 
         $this['form.profile'] = function() {
             return new Forms\Profile();
+        };
+
+        $this['form.password'] = function() {
+            return new Forms\Password();
         };
 
         $this['form.errors'] = function() {

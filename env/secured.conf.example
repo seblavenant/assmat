@@ -7,3 +7,7 @@ db.user:
     prod =
 db.password:
     prod = 
+baseUrl:
+    prod =
+salt:
+    prod =

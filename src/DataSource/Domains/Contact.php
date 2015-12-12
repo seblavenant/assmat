@@ -79,4 +79,11 @@ class Contact
     {
         return $contactRepository->persist($this->fields);
     }
+
+    public function savePassword($password)
+    {
+        $this->fields->password = $password;
+
+        return $this;
+    }
 }

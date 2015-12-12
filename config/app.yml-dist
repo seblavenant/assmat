@@ -1,3 +1,5 @@
 debug: <%debug%>
 webProfiler: <%webProfiler%>
 var.path: <%var.path%>
+baseUrl: <%baseUrl%>
+salt: <%salt%>

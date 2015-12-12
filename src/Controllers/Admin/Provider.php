@@ -145,8 +145,10 @@ class Provider implements ControllerProviderInterface
                 $app['twig'],
                 $app['request'],
                 $app['security'],
+                $app['security.encoder_factory'],
                 $app['form.factory'],
                 $app['form.profile'],
+                $app['form.password'],
                 $app['form.errors'],
                 $app['repository.employe'],
                 $app['repository.employeur'],
@@ -160,5 +162,10 @@ class Provider implements ControllerProviderInterface
         $controllers->post('/profiles/', 'profile.controller:updateAction')
                     ->bind('admin_profiles_update');
 
+        $controllers->get('/profiles/password', 'profile.controller:passwordEditAction')
+                    ->bind('admin_profiles_password_edit');
+
+        $controllers->post('/profiles/password', 'profile.controller:passwordUpdateAction')
+                    ->bind('admin_profiles_password_update');
     }
 }

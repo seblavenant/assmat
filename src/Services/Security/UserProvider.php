@@ -8,27 +8,30 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Domains;
+use Puzzle\Configuration;
 
 class UserProvider implements UserProviderInterface
 {
     private
-        $contactRepositories;
+        $contactRepository,
+        $configuration;
 
-    public function __construct(Repositories\Contact $contactRepositories)
+    public function __construct(Repositories\Contact $contactRepository, Configuration $configuration)
     {
-        $this->contactRepositories = $contactRepositories;
+        $this->contactRepository = $contactRepository;
+        $this->configuration = $configuration;
     }
 
     public function loadUserByUsername($username)
     {
-        $contact = $this->contactRepositories->findFromEmail($username);
+        $contact = $this->contactRepository->findFromEmail($username);
 
         if(!$contact instanceof Domains\Contact)
         {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        return new ContactUser($contact);
+        return new ContactUser($contact, $this->configuration->readRequired('app/salt'));
     }
 
     public function refreshUser(UserInterface $user)

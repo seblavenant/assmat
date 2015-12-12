@@ -12,12 +12,11 @@
     ],
     "require": {
         "silex/silex": "~1.2",
+        "silex/web-profiler": "~1.0",
         "twig/twig": "~1.16",
         "niktux/karma": "~4.0",
         "puzzle/configuration": "~1.7",
-        "silex-spear/dbal-provider": "2.0.0",
         "lebris/muffin": "1.2.0",
-        "silex-spear/persistence" : "~1.0",
         "symfony/console" : "~2.6",
         "symfony/twig-bridge" : "~2.6",
         "symfony/form": "~2.6",
@@ -25,6 +24,9 @@
         "symfony/config": "~2.6",
         "symfony/translation": "~2.6",
         "symfony/security-csrf": "~2.6",
+        "symfony/security": "~2.6",
+        "swiftmailer/swiftmailer": "~5.4",
+        "silex-spear/persistence" : "~1.0",
         "silex-spear/application": "~1.0",
         "silex-spear/assetic-provider" : "~1.0",
         "silex-spear/dbal-provider" : "~2.0",
@@ -32,9 +34,7 @@
         "twbs/bootstrap" : "~3.3",
         "fortawesome/font-awesome": "~4.3",
         "oyejorge/less.php" : "~1.7",
-        "symfony/security": "~2.6",
         "knplabs/knp-snappy": "0.4",
-        "h4cc/wkhtmltopdf-i386": "0.12.2.1",
-        "silex/web-profiler": "~1.0"
+        "h4cc/wkhtmltopdf-i386": "0.12.2.1"
     }
 }
