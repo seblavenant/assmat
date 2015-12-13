@@ -76,7 +76,12 @@ class Controller
             $newPassword = $this->createHash();
             $contact->savePassword($this->passwordEncoder->encodePassword($newPassword, $this->configuration->readRequired('app/salt')));
             $contact->persist($this->contactRepository);
-            $this->sendMailToContact($contact, 'user/lostpass_mail.html.twig', array('password' => $newPassword));
+            $this->sendMailToContact(
+                $contact,
+                'user/lostpass_mail.html.twig',
+                'Récupération de mot de passe',
+                array('password' => $newPassword)
+            );
         }
 
         $responseData = array(
@@ -136,7 +141,12 @@ class Controller
             $contactDTO->password = $this->passwordEncoder->encodePassword($password, $this->configuration->readRequired('app/salt'));
             $contact = (new Domains\Contact($contactDTO))->persist($this->contactRepository);
 
-            $this->sendMailToContact($contact, 'user/new_mail.html.twig', array('password' => $password));
+            $this->sendMailToContact(
+                $contact,
+                'user/new_mail.html.twig',
+                'Création de compte',
+                array('password' => $password)
+            );
 
             $response = new JsonResponse(
                 array(
@@ -161,7 +171,7 @@ class Controller
         return $response;
     }
 
-    private function sendMailToContact(Domains\Contact $contact, $template, array $parameters = array())
+    private function sendMailToContact(Domains\Contact $contact, $template, $subject, array $parameters = array())
     {
         $messageBody = $this->twig->render($template, array(
             'contact' => $contact,
@@ -169,7 +179,7 @@ class Controller
             'baseUrl' => $this->configuration->readRequired('app/baseUrl'),
         ));
 
-        $this->sendMail($contact->getEmail(), $messageBody);
+        $this->sendMail($contact->getEmail(), $subject, $messageBody);
     }
 
     private function createHash()
@@ -177,10 +187,10 @@ class Controller
         return substr(hash('sha512', uniqid()), 0, 20);
     }
 
-    private function sendMail($email, $messageBody)
+    private function sendMail($email, $subject, $messageBody)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject('Récupération du mot de passe')
+            ->setSubject($subject)
             ->setFrom(array('assmat@s3b.fr'))
             ->setTo(array($email))
             ->setBody($messageBody, 'text/html');
