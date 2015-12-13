@@ -57,7 +57,6 @@ class Contact extends AbstractMysql implements Repositories\Contact
             self::TABLE_NAME,
             array(
                 'email' => $contactDTO->email,
-                'password' => $contactDTO->password,
                 'nom' => $contactDTO->nom,
                 'prenom' => $contactDTO->prenom,
                 'adresse' => $contactDTO->adresse,
@@ -74,9 +73,24 @@ class Contact extends AbstractMysql implements Repositories\Contact
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
-                \PDO::PARAM_STR,
             )
         );
+
+        if(! empty($contactDTO->password))
+        {
+            $this->db->update(
+                self::TABLE_NAME,
+                array(
+                    'password' => $contactDTO->password,
+                ),
+                array(
+                    'id' => $contactDTO->id,
+                ),
+                array(
+                    \PDO::PARAM_STR,
+                )
+            );
+        }
 
         return new Domains\Contact($contactDTO);
     }
