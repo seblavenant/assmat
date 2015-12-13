@@ -11,6 +11,10 @@ use Assmat\DataSource\Domains;
 use Puzzle\Configuration;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Assmat\DataSource\Forms;
+use Symfony\Component\Form\FormFactoryInterface;
+use Assmat\Services\Form;
+use Assmat\DataSource\DataTransferObjects as DTO;
 
 class Controller
 {
@@ -19,16 +23,33 @@ class Controller
         $request,
         $configuration,
         $urlGenerator,
+        $formFactory,
+        $contactForm,
+        $formErrors,
         $contactRepository,
         $passwordEncoder,
         $mailer;
 
-    public function __construct(Twig_Environment $twig, Request $request, Configuration $configuration, UrlGeneratorInterface $urlGenerator, Repositories\Contact $contactRepository, PasswordEncoderInterface $passwordEncoder, $mailer)
+    public function __construct(
+        Twig_Environment $twig,
+        Request $request,
+        Configuration $configuration,
+        UrlGeneratorInterface $urlGenerator,
+        FormFactoryInterface $formFactory,
+        Forms\Contact $contactForm,
+        Form\Errors $formErrors,
+        Repositories\Contact $contactRepository,
+        PasswordEncoderInterface $passwordEncoder,
+        $mailer
+    )
     {
         $this->twig = $twig;
         $this->request = $request;
         $this->configuration = $configuration;
         $this->urlGenerator = $urlGenerator;
+        $this->formFactory = $formFactory;
+        $this->contactForm = $contactForm;
+        $this->formErrors = $formErrors;
         $this->contactRepository = $contactRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
@@ -49,7 +70,15 @@ class Controller
             $error = 'Cette adresse email est invalide';
         }
 
-        $this->sendMailToContact($email);
+        $contact = $this->contactRepository->findFromEmail($email);
+
+        if($contact instanceof Domains\Contact)
+        {
+            $newPassword = $this->createHash();
+            $contact->savePassword($this->passwordEncoder->encodePassword($newPassword, $this->configuration->readRequired('app/salt')));
+            $contact->persist($this->contactRepository);
+            $this->sendMailToContact($contact, 'user/lostpass_mail.html.twig', array('password' => $newPassword));
+        }
 
         $responseData = array(
             'msg' => $error === null ? 'Votre demande de récupération de mot de passe a bien été prise en compte' : $error,
@@ -64,31 +93,89 @@ class Controller
         return new JsonResponse($responseData, $error === null ? 200 : 400);
     }
 
-    private function sendMailToContact($email)
+    public function newAction()
     {
-        $contact = $this->contactRepository->findFromEmail($email);
+        $form = $this->formFactory->create($this->contactForm);
 
-        if($contact instanceof Domains\Contact)
-        {
-            $password = $this->createNewPassword($contact);
-            $messageBody = $this->twig->render('user/lostpass_mail.html.twig', array(
-                'contact' => $contact,
-                'password' => $password,
-                'baseUrl' => $this->configuration->readRequired('app/baseUrl'),
-            ));
-
-            $this->sendMail($email, $messageBody);
-        }
+        return new Response($this->twig->render('user/new.html.twig', array(
+            'form' => $form->createView(),
+        )));
     }
 
-    private function createNewPassword(Domains\Contact $contact)
+    public function createAction()
     {
-        $newPassword = substr(hash('sha512', uniqid()), 0, 20);
+        $form = $this->formFactory->create($this->contactForm);
 
-        $contact->savePassword($this->passwordEncoder->encodePassword($newPassword, $this->configuration->readRequired('app/salt')));
-        $contact->persist($this->contactRepository);
+        $form->bind($this->request);
 
-        return $newPassword;
+        if($form->isValid())
+        {
+            $email = $form->get('email')->getData();
+            $contact = $this->contactRepository->findFromEmail($email);
+
+            if($contact instanceof Domains\Contact)
+            {
+                return new JsonResponse(
+                    array(
+                        'msg' => 'Il existe déjà un compte avec cet email',
+                        'data' => array(),
+                    ),
+                    400
+                );
+            }
+
+            $contactDTO = new DTO\Contact();
+            $contactDTO->email = $email;
+            $contactDTO->nom = $form->get('nom')->getData();
+            $contactDTO->prenom = $form->get('prenom')->getData();
+            $contactDTO->adresse = $form->get('adresse')->getData();
+            $contactDTO->codePostal = $form->get('codePostal')->getData();
+            $contactDTO->ville = $form->get('ville')->getData();
+            $contactDTO->authCode = $this->createHash();
+
+            $password = $this->createHash();
+            $contactDTO->password = $this->passwordEncoder->encodePassword($password, $this->configuration->readRequired('app/salt'));
+            $contact = (new Domains\Contact($contactDTO))->persist($this->contactRepository);
+
+            $this->sendMailToContact($contact, 'user/new_mail.html.twig', array('password' => $password));
+
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Profil créé',
+                    'data' => array(),
+                    'location' => $this->urlGenerator->generate('user_login'),
+                ),
+                200
+            );
+        }
+        else
+        {
+            $response = new JsonResponse(
+                array(
+                    'msg' => 'Une erreur s\'est produite lors de la création',
+                    'data' => $this->formErrors->getMessages($form),
+                ),
+                400
+            );
+        }
+
+        return $response;
+    }
+
+    private function sendMailToContact(Domains\Contact $contact, $template, array $parameters = array())
+    {
+        $messageBody = $this->twig->render($template, array(
+            'contact' => $contact,
+            'parameters' => $parameters,
+            'baseUrl' => $this->configuration->readRequired('app/baseUrl'),
+        ));
+
+        $this->sendMail($contact->getEmail(), $messageBody);
+    }
+
+    private function createHash()
+    {
+        return substr(hash('sha512', uniqid()), 0, 20);;
     }
 
     private function sendMail($email, $messageBody)
