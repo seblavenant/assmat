@@ -15,20 +15,17 @@ class Contact extends AbstractType
             ->add('email', 'email', array(
                 'label' => 'contacts.email',
                 'required' => true,
+                'constraints' => array(
+                    new Constraints\Email(),
+                )
             ))
             ->add('nom', 'text', array(
                 'label' => 'contacts.nom',
-                'required' => true,
-                'constraints' => array(
-                     new Constraints\NotBlank(),
-                 ),
+                'required' => false,
             ))
             ->add('prenom', 'text', array(
                 'label' => 'contacts.prenom',
-                'required' => true,
-                'constraints' => array(
-                     new Constraints\NotBlank(),
-                 ),
+                'required' => false
             ))
             ->add('adresse', 'text', array(
                 'label' => 'contacts.adresse',
