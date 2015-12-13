@@ -175,7 +175,7 @@ class Controller
 
     private function createHash()
     {
-        return substr(hash('sha512', uniqid()), 0, 20);;
+        return substr(hash('sha512', uniqid()), 0, 20);
     }
 
     private function sendMail($email, $messageBody)
