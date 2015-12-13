@@ -12,7 +12,7 @@ interface Employe
 
     public function findFromEmployeur($employeurId);
 
-    public function findFromKey($key);
+    public function findFromAuthCode($authCode);
 
     public function persist(DTO\Employe $employeDTO);
 }

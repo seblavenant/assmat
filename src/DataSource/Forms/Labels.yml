@@ -16,7 +16,7 @@ employes:
 employeurs:
     pajeEmploiId: Identifiant PAJE
 contacts:
-    key: Clé d'identification
+    authCode: Clé d'identification
     email: Email
     nom: Nom
     prenom: Prénom

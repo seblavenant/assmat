@@ -104,8 +104,8 @@ class Contrat extends AbstractType
                 'choices' => $this->retrieveEmployees($options),
                 'placeholder' => '-- Sélectionnez un employé --',
             ))
-            ->add('employeKey', 'text', array(
-                'label' => 'contacts.key',
+            ->add('employeAuthCode', 'text', array(
+                'label' => 'contacts.authCode',
             ))
             ;
     }

@@ -32,9 +32,9 @@ class Employe implements Repositories\Employe
         return $this->getEmployeRepository()->findFromEmployeur($employeurId);
     }
 
-    public function findFromKey($key)
+    public function findFromAuthCode($authCode)
     {
-        return $this->getEmployeRepository()->findFromKey($key);
+        return $this->getEmployeRepository()->findFromAuthCode($authCode);
     }
 
     public function persist(DTO\Employe $employeDTO)

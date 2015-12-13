@@ -228,9 +228,9 @@ class Contrat
     private function retreiveEmployeId(FormInterface $form)
     {
         $employeId = $form->get('employeId')->getData();
-        $employeKey = $form->get('employeKey')->getData();
+        $employeAuthCode = $form->get('employeAuthCode')->getData();
 
-        $employe = $this->employeRepository->findFromKey($employeKey);
+        $employe = $this->employeRepository->findFromAuthCode($employeAuthCode);
         if($employe instanceof Domains\Employe)
         {
             $employeId = $employe->getId();
