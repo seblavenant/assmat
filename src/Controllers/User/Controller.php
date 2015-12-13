@@ -41,8 +41,7 @@ class Controller
         Repositories\Contact $contactRepository,
         PasswordEncoderInterface $passwordEncoder,
         $mailer
-    )
-    {
+    ){
         $this->twig = $twig;
         $this->request = $request;
         $this->configuration = $configuration;
@@ -65,7 +64,7 @@ class Controller
         $email = $this->request->get('email');
         $error = null;
 
-        if (!$email = filter_var($email, FILTER_VALIDATE_EMAIL))
+        if(!$email = filter_var($email, FILTER_VALIDATE_EMAIL))
         {
             $error = 'Cette adresse email est invalide';
         }
