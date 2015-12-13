@@ -1,4 +1,3 @@
-ALTER TABLE `contact` CHANGE `password` `password` VARCHAR( 256 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
 ALTER TABLE `contact` CHANGE `nom` `nom` VARCHAR( 128 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
 ALTER TABLE `contact` CHANGE `prenom` `prenom` VARCHAR( 128 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
 ALTER TABLE `contact` CHANGE `adresse` `adresse` VARCHAR( 256 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
