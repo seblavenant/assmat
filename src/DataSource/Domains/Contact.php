@@ -64,7 +64,7 @@ class Contact
     {
         return array(
             'id' => $this->getId(),
-            'key' => $this->getKey(),
+            'authCode' => $this->getAuthCode(),
             'email' => $this->getEmail(),
             'password' => $this->getPassword(),
             'nom' => $this->getNom(),
