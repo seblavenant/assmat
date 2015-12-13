@@ -35,7 +35,7 @@ class Contact extends AbstractMysql implements Repositories\Contact
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'email', 'password', 'nom', 'prenom', 'adresse', 'code_postal', 'ville'))
+            ->select(array('id', 'email', 'password', 'nom', 'prenom', 'adresse', 'code_postal', 'ville', 'auth_code'))
             ->from(self::TABLE_NAME);
 
         return $query;
@@ -92,11 +92,12 @@ class Contact extends AbstractMysql implements Repositories\Contact
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
             'email' => new Fields\NotNullable(new Fields\String('email')),
             'password' => new Fields\NotNullable(new Fields\String('password')),
-            'nom' => new Fields\NotNullable(new Fields\String('nom')),
-            'prenom' => new Fields\NotNullable(new Fields\String('prenom')),
-            'adresse' => new Fields\NotNullable(new Fields\String('adresse')),
-            'codePostal' => new Fields\NotNullable(new Fields\String('code_postal')),
-            'ville' => new Fields\NotNullable(new Fields\String('ville')),
+            'nom' => new Fields\String('nom'),
+            'prenom' => new Fields\String('prenom'),
+            'adresse' => new Fields\String('adresse'),
+            'codePostal' => new Fields\String('code_postal'),
+            'ville' => new Fields\String('ville'),
+            'authCode' => new Fields\String('auth_code'),
         );
     }
 
