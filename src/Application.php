@@ -171,6 +171,10 @@ class Application extends AbstractApplication
             return new Forms\Profile();
         };
 
+        $this['form.contact'] = function() {
+            return new Forms\Contact();
+        };
+
         $this['form.password'] = function() {
             return new Forms\Password();
         };

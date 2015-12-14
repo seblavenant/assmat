@@ -20,9 +20,9 @@ class Contact
         return $this->fields->id;
     }
 
-    public function getKey()
+    public function getAuthCode()
     {
-        return $this->fields->key;
+        return $this->fields->authCode;
     }
 
     public function getEmail()
@@ -64,7 +64,7 @@ class Contact
     {
         return array(
             'id' => $this->getId(),
-            'key' => $this->getKey(),
+            'authCode' => $this->getAuthCode(),
             'email' => $this->getEmail(),
             'password' => $this->getPassword(),
             'nom' => $this->getNom(),

@@ -59,12 +59,12 @@ class Employe extends AbstractMysql implements Repositories\Employe
         return $this->fetchAll($query);
     }
 
-    public function findFromKey($key)
+    public function findFromAuthCode($authCode)
     {
         $query = $this->getBaseQuery();
         $query
             ->leftJoin('contact')->on('contact_id', 'contact.id')
-            ->where((new Types\String('contact.key'))->equal($key));
+            ->where((new Types\String('contact.auth_code'))->equal($authCode));
 
         return $this->fetchOne($query);
     }

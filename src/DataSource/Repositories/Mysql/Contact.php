@@ -35,7 +35,7 @@ class Contact extends AbstractMysql implements Repositories\Contact
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select(array('id', 'email', 'password', 'nom', 'prenom', 'adresse', 'code_postal', 'ville'))
+            ->select(array('id', 'email', 'password', 'nom', 'prenom', 'adresse', 'code_postal', 'ville', 'auth_code'))
             ->from(self::TABLE_NAME);
 
         return $query;
@@ -57,7 +57,6 @@ class Contact extends AbstractMysql implements Repositories\Contact
             self::TABLE_NAME,
             array(
                 'email' => $contactDTO->email,
-                'password' => $contactDTO->password,
                 'nom' => $contactDTO->nom,
                 'prenom' => $contactDTO->prenom,
                 'adresse' => $contactDTO->adresse,
@@ -74,16 +73,57 @@ class Contact extends AbstractMysql implements Repositories\Contact
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
-                \PDO::PARAM_STR,
             )
         );
+
+        if(! empty($contactDTO->password))
+        {
+            $this->db->update(
+                self::TABLE_NAME,
+                array(
+                    'password' => $contactDTO->password,
+                ),
+                array(
+                    'id' => $contactDTO->id,
+                ),
+                array(
+                    \PDO::PARAM_STR,
+                )
+            );
+        }
 
         return new Domains\Contact($contactDTO);
     }
 
     private function create(DTO\Contact $contactDTO)
     {
+        $this->db->insert(
+            self::TABLE_NAME,
+            array(
+                'email' => $contactDTO->email,
+                'password' => $contactDTO->password,
+                'nom' => $contactDTO->nom,
+                'prenom' => $contactDTO->prenom,
+                'adresse' => $contactDTO->adresse,
+                'code_postal' => $contactDTO->codePostal,
+                'ville' => $contactDTO->ville,
+                'auth_code' => $contactDTO->authCode,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+            )
+        );
 
+        $contactDTO->id = $this->db->lastInsertId();
+
+        return new Domains\Contact($contactDTO);
     }
 
     public function getFields()
@@ -92,11 +132,12 @@ class Contact extends AbstractMysql implements Repositories\Contact
             'id' => new Fields\NotNullable(new Fields\UnsignedInteger('id')),
             'email' => new Fields\NotNullable(new Fields\String('email')),
             'password' => new Fields\NotNullable(new Fields\String('password')),
-            'nom' => new Fields\NotNullable(new Fields\String('nom')),
-            'prenom' => new Fields\NotNullable(new Fields\String('prenom')),
-            'adresse' => new Fields\NotNullable(new Fields\String('adresse')),
-            'codePostal' => new Fields\NotNullable(new Fields\String('code_postal')),
-            'ville' => new Fields\NotNullable(new Fields\String('ville')),
+            'nom' => new Fields\String('nom'),
+            'prenom' => new Fields\String('prenom'),
+            'adresse' => new Fields\String('adresse'),
+            'codePostal' => new Fields\String('code_postal'),
+            'ville' => new Fields\String('ville'),
+            'authCode' => new Fields\String('auth_code'),
         );
     }
 
