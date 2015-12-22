@@ -1,0 +1,32 @@
+src:
+    image: s3b/src
+    volumes:
+        - .:/var/www
+    tty: true
+web:
+    image: s3b/apache-php
+    ports:
+        - 80:80
+    volumes_from:
+        - src
+    links:
+        - database
+database:
+    image: mysql
+    ports:
+        - 3306:3306 
+    environment:
+        - MYSQL_ROOT_PASSWORD=passwd
+        - MYSQL_DATABASE=assmat
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=passwd
+
+phpmyadmin:
+    image: corbinu/docker-phpmyadmin
+    ports :
+        - 81:80
+    environment:
+        - MYSQL_USERNAME=root
+        - MYSQL_PASSWORD=passwd
+    links:
+        - database:mysql
