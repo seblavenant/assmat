@@ -5,9 +5,10 @@ web:
     volumes:
         - .:/var/www
     links:
-        - database:mysql
+        - database
         - mailer
 database:
+    container_name: database
     image: mysql
     ports:
         - 3306:3306 
