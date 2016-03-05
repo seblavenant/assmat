@@ -1,0 +1,2 @@
+host: <%mailer.host%>
+port: <%mailer.port%>

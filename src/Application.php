@@ -19,6 +19,7 @@ class Application extends AbstractApplication
     protected function initializeServices()
     {
         $this->configureTwig();
+        $this->configureMailer();
         $this->initializeRepositories();
         $this->initializeSecurity();
         $this->initializeForms();
@@ -69,6 +70,14 @@ class Application extends AbstractApplication
         }));
 
         $this['twig']->addExtension(new Services\Twig\AdminExtension());
+    }
+
+    private function configureMailer()
+    {
+        $this['swiftmailer.options'] = array(
+            'host' => $this['configuration']->read('mailer/host'),
+            'port' => $this['configuration']->read('mailer/port'),
+        );
     }
 
     private function initializeSecurity()

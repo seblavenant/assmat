@@ -1,16 +1,12 @@
-src:
-    image: s3b/src
-    volumes:
-        - .:/var/www
-    tty: true
 web:
     image: s3b/apache-php
     ports:
         - 80:80
-    volumes_from:
-        - src
+    volumes:
+        - .:/var/www
     links:
-        - database
+        - database:mysql
+        - mailer
 database:
     image: mysql
     ports:
@@ -30,3 +26,9 @@ phpmyadmin:
         - MYSQL_PASSWORD=passwd
     links:
         - database:mysql
+
+mailer:
+    container_name: mailer
+    image: schickling/mailcatcher
+    ports:
+        - 1080:1080
