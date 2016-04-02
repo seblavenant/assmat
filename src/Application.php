@@ -31,6 +31,8 @@ class Application extends AbstractApplication
 
     protected function registerProviders()
     {
+        $this['documentRoot.path'] = $this['root.path'] . 'web' . DIRECTORY_SEPARATOR;
+
         $this->register(new SilexProvider\SessionServiceProvider());
         $this->register(new SilexProvider\UrlGeneratorServiceProvider());
         $this->register(new SilexProvider\FormServiceProvider());
