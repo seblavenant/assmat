@@ -1,5 +1,5 @@
 web:
-    image: s3b/apache-php
+    image: seblavenant/php-apache
     ports:
         - 80:80
     volumes:
