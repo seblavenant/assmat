@@ -4,7 +4,7 @@ web:
         - 80:80
     volumes:
         - .:/var/www
-        - .docker/confs/apache/:/etc/apache2/sites-enabled/
+        - .deploy/confs/apache/:/etc/apache2/sites-enabled/
     links:
         - database:mysql
         - mailer
