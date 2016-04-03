@@ -6,7 +6,7 @@ web:
         - .:/var/www
         - .docker/confs/apache/:/etc/apache2/sites-enabled/
     links:
-        - database
+        - database:mysql
         - mailer
 database:
     container_name: database
