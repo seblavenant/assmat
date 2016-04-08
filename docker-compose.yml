@@ -6,10 +6,9 @@ web:
         - .:/var/www
         - .deploy/confs/apache/:/etc/apache2/sites-enabled/
     links:
-        - database:mysql
+        - database
         - mailer
 database:
-    container_name: database
     image: mysql
     environment:
         - MYSQL_ROOT_PASSWORD=passwd
