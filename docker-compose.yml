@@ -8,6 +8,7 @@ web:
     links:
         - database
         - mailer
+        - mailcatcher
 database:
     image: mysql
     environment:
@@ -26,8 +27,10 @@ phpmyadmin:
     links:
         - database:mysql
 
-mailer:
-    container_name: mailer
+mailcatcher:
     image: schickling/mailcatcher
     ports:
         - 1080:1080
+
+mailer:
+    image: tianon/exim4
