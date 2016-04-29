@@ -37,7 +37,7 @@ mailcatcher:
     ports:
         - 1080
     environment:
-        - SERVICE_NAME=app-mail
+        - SERVICE_NAME=serv-mail
         - SERVICE_TAGS=dev
 
 mailer:
