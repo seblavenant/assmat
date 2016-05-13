@@ -11,7 +11,6 @@ web:
         - mailcatcher
     environment:
         - SERVICE_NAME=app-assmat
-        - SERVICE_TAGS=dev
 database:
     image: mysql
     environment:
@@ -28,7 +27,6 @@ phpmyadmin:
         - MYSQL_USERNAME=root
         - MYSQL_PASSWORD=passwd
         - SERVICE_NAME=app-phpmyadmin
-        - SERVICE_TAGS=dev
     links:
         - database:mysql
 
@@ -38,7 +36,6 @@ mailcatcher:
         - 1080
     environment:
         - SERVICE_NAME=serv-mail
-        - SERVICE_TAGS=dev
 
 mailer:
     image: tianon/exim4
