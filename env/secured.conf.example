@@ -1,13 +1,7 @@
 [variables]
-db.name:
-    prod =
-db.host:
-    prod =
 db.user:
     prod =
 db.password:
     prod = 
-baseUrl:
-    prod =
 salt:
     prod =

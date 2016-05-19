@@ -8,3 +8,4 @@ web/js
 web/css
 cache
 .vagrant/machines
+env/secured.conf
