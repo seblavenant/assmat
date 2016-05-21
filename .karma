@@ -1,1 +1,1 @@
-sourcePath: config/
+sourcePath: [config/,.deploy/config/docker]

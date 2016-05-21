@@ -32,13 +32,3 @@ phpmyadmin:
         - SERVICE_NAME=app-phpmyadmin
     links:
         - database:mysql
-
-mailcatcher:
-    image: schickling/mailcatcher
-    ports:
-        - 1080
-    environment:
-        - SERVICE_NAME=serv-mail
-
-mailer:
-    image: tianon/exim4
