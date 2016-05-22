@@ -2,9 +2,10 @@ web:
     image: seblavenant/php-apache
     ports:
         - 80
+    dns: ${HOST_IP}
     volumes:
-        - ../../../:/var/www/
-        - ../vhosts/application/:/etc/apache2/sites-enabled/
+        - /root/apps/assmat/app/:/var/www/
+        - /root/apps/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/
     links:
         - database
     environment:
@@ -18,15 +19,15 @@ database:
         - MYSQL_USER=<%db.user%>
         - MYSQL_PASSWORD=<%db.password%>
     volumes:
-        - ../../../../var/data/mysql/:/var/lib/mysql/
+        - /root/apps/assmat/var/data/mysql/:/var/lib/mysql/
 
 phpmyadmin:
     image: corbinu/docker-phpmyadmin
     ports :
         - 80
     environment:
-        - MYSQL_USERNAME=root
-        - MYSQL_PASSWORD=passwd
+        - MYSQL_USERNAME=<%db.user%>
+        - MYSQL_PASSWORD=<%db.password%>
         - SERVICE_NAME=app-phpmyadmin
     links:
         - database:mysql
