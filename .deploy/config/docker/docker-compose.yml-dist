@@ -3,12 +3,10 @@ web:
     ports:
         - 80
     volumes:
-        - ..:/var/www
-        - ../.deploy/confs/apache/:/etc/apache2/sites-enabled/
+        - ../../../:/var/www/
+        - ../vhosts/application/:/etc/apache2/sites-enabled/
     links:
         - database
-        - mailer
-        - mailcatcher
     environment:
         - SERVICE_NAME=app-assmat
 
@@ -20,7 +18,7 @@ database:
         - MYSQL_USER=<%db.user%>
         - MYSQL_PASSWORD=<%db.password%>
     volumes:
-        - ../../var/data/mysql/:/var/lib/mysql/
+        - ../../../../var/data/mysql/:/var/lib/mysql/
 
 phpmyadmin:
     image: corbinu/docker-phpmyadmin
