@@ -4,7 +4,8 @@ web:
         - 80
     dns: ${HOST_IP}
     volumes:
-        - /root/apps/assmat/app/:/var/www/
+        - /root/apps/assmat/:/var/www/
+        - /var/www/html
         - /root/apps/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/
     links:
         - database

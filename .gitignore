@@ -1,7 +1,5 @@
 .settings
 vendor
-config/*
-!config/*.yml-dist
 var/
 assets/compiled/
 web/js

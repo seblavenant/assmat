@@ -7,7 +7,7 @@ use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local;
 use Assmat\Application;
 
-$configurationFilesStorage = new Filesystem(new Local(__DIR__ . '/../config'));
+$configurationFilesStorage = new Filesystem(new Local(__DIR__ . '/../../var/config/'));
 $configuration = new Yaml($configurationFilesStorage);
 
 $rootDir = realpath(__DIR__ . '/..');
