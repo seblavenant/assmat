@@ -1,6 +1,4 @@
 [variables]
-db.user:
-    prod =
 db.password:
     prod = 
 salt:
