@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "67007ae9fb5f1119f26c8ecd06940b78",
-    "content-hash": "d477705b4eaf05f6121cad52cfa36b66",
+    "hash": "6a6acd01f6b3cfdd73dc269710e8b1fc",
+    "content-hash": "0bc0e8e372b39149d10e2a826d91c2ee",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -541,7 +541,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/fddd2c240452e6c8990c4ef75e0265b455aa7968",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/dbc8d1b9b67daaab357bcc41dbf549c3684cf5f1",
                 "reference": "dbc8d1b9b67daaab357bcc41dbf549c3684cf5f1",
                 "shasum": ""
             },
@@ -988,17 +988,11 @@
         },
         {
             "name": "niktux/karma",
-            "version": "5.3.1",
+            "version": "dev-target",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Niktux/karma.git",
-                "reference": "9baa8e1e0defbdf55a75b2f1a9b912481ee4bc8f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Niktux/karma/zipball/9baa8e1e0defbdf55a75b2f1a9b912481ee4bc8f",
-                "reference": "9baa8e1e0defbdf55a75b2f1a9b912481ee4bc8f",
-                "shasum": ""
+                "url": "https://github.com/seblavenant/karma.git",
+                "reference": "f3a5e3ed8fff9c6a39860ac2d6aa82773e917c37"
             },
             "require": {
                 "cpliakas/git-wrapper": "~1.2",
@@ -1022,7 +1016,6 @@
                     "Karma": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1038,7 +1031,10 @@
                 "configuration",
                 "environment"
             ],
-            "time": "2015-12-04 15:29:26"
+            "support": {
+                "issues": "https://github.com/Niktux/karma/issues"
+            },
+            "time": "2016-06-04 18:53:32"
         },
         {
             "name": "oyejorge/less.php",
@@ -1652,7 +1648,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/cc75e0cf582c412e49ad4cd5f83bd0d8e6ff2b33",
+                "url": "https://api.github.com/repos/symfony/config/zipball/f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae",
                 "reference": "f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae",
                 "shasum": ""
             },
@@ -1977,7 +1973,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/form/zipball/e183d1ab59692a479e7e085223281b92a0b9e1ae",
+                "url": "https://api.github.com/repos/symfony/form/zipball/acf67de80790ee0f27949d37711bde000bc32d33",
                 "reference": "acf67de80790ee0f27949d37711bde000bc32d33",
                 "shasum": ""
             },
@@ -4413,7 +4409,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "niktux/karma": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
