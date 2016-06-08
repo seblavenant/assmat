@@ -1,4 +1,4 @@
-web:
+assmat-web:
     image: seblavenant/php-apache
     ports:
         - 80
@@ -8,27 +8,28 @@ web:
         - /var/www/html
         - /root/apps/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/
     links:
-        - database
+        - assmat-database
     environment:
-        - SERVICE_NAME=app-assmat
+        - SERVICE_NAME=app-assmat-web
 
-database:
+assmat-database:
     image: mysql
-    environment:
-        - MYSQL_ROOT_PASSWORD=<%db.password%>
-        - MYSQL_DATABASE=<%db.name%>
-        - MYSQL_USER=<%db.user%>
-        - MYSQL_PASSWORD=<%db.password%>
     volumes:
         - /root/apps/assmat/var/data/mysql/:/var/lib/mysql/
+    environment:
+        - MYSQL_DATABASE=<%db.name%>
+        - MYSQL_ROOT_PASSWORD=<%db.password%>
+        - MYSQL_USER=<%db.user%>
+        - MYSQL_PASSWORD=<%db.password%>
+        - SERVICE_NAME=srv-assmat-database
 
-phpmyadmin:
+assmat-phpmyadmin:
     image: corbinu/docker-phpmyadmin
     ports :
         - 80
+    links:
+        - assmat-database:mysql
     environment:
         - MYSQL_USERNAME=<%db.user%>
         - MYSQL_PASSWORD=<%db.password%>
-        - SERVICE_NAME=app-phpmyadmin
-    links:
-        - database:mysql
+        - SERVICE_NAME=app-assmat-phpmyadmin
