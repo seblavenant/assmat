@@ -7,8 +7,6 @@ assmat-web:
         - /root/apps/assmat/:/var/www/
         - /var/www/html
         - /root/apps/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/
-    links:
-        - assmat-database
     environment:
         - SERVICE_NAME=app-assmat-web
 
@@ -27,8 +25,6 @@ assmat-phpmyadmin:
     image: corbinu/docker-phpmyadmin
     ports :
         - 80
-    links:
-        - assmat-database:mysql
     environment:
         - MYSQL_USERNAME=<%db.user%>
         - MYSQL_PASSWORD=<%db.password%>
