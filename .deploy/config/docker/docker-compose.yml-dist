@@ -22,10 +22,10 @@ assmat-database:
         - SERVICE_NAME=srv-assmat-database
 
 assmat-phpmyadmin:
-    image: corbinu/docker-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    dns: ${HOST_IP}
     ports :
         - 80
     environment:
-        - MYSQL_USERNAME=<%db.user%>
-        - MYSQL_PASSWORD=<%db.password%>
+        - PMA_HOST=srv-assmat-database.service.consul
         - SERVICE_NAME=app-assmat-phpmyadmin
