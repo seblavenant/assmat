@@ -1,2 +1,3 @@
-sourcePath: [config/,.deploy/config/docker]
+sourcePath: [config/templates/,.deploy/config/docker/]
 targetPath: ../var/config/
+confDir: config/env/
