@@ -16,6 +16,16 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
     const
         TABLE_NAME = 'ligne';
 
+    private
+        $ligneTemplateRepository;
+
+    public function __construct(Mysql $db, Repositories\LigneTemplate $ligneTemplateRepository)
+    {
+        parent::__construct($db);
+        
+        $this->ligneTemplateRepository = $ligneTemplateRepository;
+    }
+        
     public function findFromBulletin($bulletinId)
     {
         $query = $this->getBaseQuery();
@@ -38,7 +48,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
             ->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->lowerOrEqualThan($date->format('Ym')))
             ->groupBy('type_id')
             ;
-
+            
         $dataSet = $this->db->fetchAll($query->toString());
 
         $contexts = array();
@@ -56,14 +66,33 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
     private function getBaseQuery()
     {
         $query = (new Queries\Select())->setEscaper(new SimpleEscaper())
-            ->select($this->prefixTableFields(array('id', 'label', 'type_id', 'action_id', 'context_id', 'base', 'taux', 'quantite', 'valeur', 'bulletin_id')))
+            ->select($this->prefixTableFields(array('id', 'label', 'type_id', 'action_id', 'context_id', 'base', 'quantite', 'valeur', 'bulletin_id')))
             ->from(self::TABLE_NAME);
 
         return $query;
     }
+    
+    protected function buildDTOObject($record)
+    {
+        $dto = parent::buildDTOObject($record);
+        
+        $ligneTemplate = $this->ligneTemplateRepository->find($dto->typeId);
+
+        if(! $ligneTemplate instanceof Domains\Ligne)
+        {
+            throw new \RuntimeException(sprintf('ligneTemplate "%s" not found', $dto->typeId));
+        }
+        
+        $dto->baseEditable = $ligneTemplate->isBaseEditable();
+        $dto->quantiteEditable = $ligneTemplate->isQuantiteEditable();
+        $dto->taux = $ligneTemplate->isTaux();
+
+        return $dto;
+    }
 
     public function create(DTO\Ligne $ligneDTO)
     {
+        
         $this->db->insert(
             self::TABLE_NAME,
             array(
@@ -72,7 +101,6 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
                 'action_id' => $ligneDTO->actionId,
                 'context_id' => $ligneDTO->contextId,
                 'base' => $ligneDTO->base,
-                'taux' => $ligneDTO->taux,
                 'quantite' => $ligneDTO->quantite,
                 'valeur' => $ligneDTO->valeur,
                 'bulletin_id' => $ligneDTO->bulletinId,
@@ -94,6 +122,40 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
 
         return new Domains\Ligne($ligneDTO);
     }
+    
+    public function update(DTO\Ligne $ligneDTO)
+    {
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'label' => $ligneDTO->label,
+                'type_id' => $ligneDTO->typeId,
+                'action_id' => $ligneDTO->actionId,
+                'context_id' => $ligneDTO->contextId,
+                'base' => $ligneDTO->base,
+                'quantite' => $ligneDTO->quantite,
+                'valeur' => $ligneDTO->valeur,
+                'bulletin_id' => $ligneDTO->bulletinId,
+            ),
+            array(
+                'id' => $ligneDTO->id,
+            ),
+            array(
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+            )
+        );
+
+        return new Domains\Ligne($ligneDTO);
+    }
 
     public function getFields()
     {
@@ -104,7 +166,6 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
             'actionId' => new Fields\NotNullable(new Fields\Integer('action_id')),
             'contextId' => new Fields\NotNullable(new Fields\Integer('context_id')),
             'base' => new Fields\Float('base'),
-            'taux' => new Fields\Float('taux'),
             'quantite' => new Fields\Float('quantite'),
             'valeur' => new Fields\Float('valeur'),
             'bulletinId' => new Fields\NotNullable(new Fields\Integer('bulletin_id')),

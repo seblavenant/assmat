@@ -1,9 +1,9 @@
 <?php
 
-namespace Assmat\Services\Bulletin\Indemnites;
+namespace Assmat\Services\Bulletin\Indemnites\FromEvenements;
 
-require_once(__DIR__ . '/../BuilderHelper.php');
-require_once(__DIR__ . '/../BuilderValidator.php');
+require_once(__DIR__ . '/../../BuilderHelper.php');
+require_once(__DIR__ . '/../../BuilderValidator.php');
 
 use Assmat\Services\Bulletin\BuilderValidator;
 use Assmat\Services\Bulletin\BuilderHelper;
@@ -12,6 +12,7 @@ use Assmat\DataSource\Domains;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Constants;
 use Assmat\Services\Bulletin;
+use Assmat\Services\Providers;
 
 class SalairesTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,7 +92,7 @@ class SalairesTest extends \PHPUnit_Framework_TestCase
         $contratDTO->typeId = $typeID;
         $contrat = new Domains\Contrat($contratDTO);
 
-        $bulletinBuilder = new Bulletin\Builder(new Repositories\Memory\Ligne\Template());
+        $bulletinBuilder = new Bulletin\Builders\FromEvenements(new Repositories\Memory\Ligne\Template(), new Providers\LigneBuilder());
         $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);

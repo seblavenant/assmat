@@ -25,8 +25,8 @@ class Template implements Repositories\LigneTemplate
             Constants\Lignes\Type::ASSURANCE_CHOMAGE => (new Templates\Cotisations\AssuranceChomage())->getDomain(),
             Constants\Lignes\Type::INDEMNITES_NOURRITURE => (new Templates\Indemnites\Nourriture())->getDomain(),
             Constants\Lignes\Type::INDEMNITES_ENTRETIEN => (new Templates\Indemnites\Entretien())->getDomain(),
-            Constants\Lignes\Type::CONGES_PAYES_ACQUIS => (new Templates\CongesPayes\Acquis())->getDomain(),
-            Constants\Lignes\Type::CONGES_PAYES_PRIS => (new Templates\CongesPayes\Pris())->getDomain(),
+            Constants\Lignes\Type::CONGES_PAYES_ACQUIS => (new Templates\CongesPayes\CpAcquis())->getDomain(),
+            Constants\Lignes\Type::CONGES_PAYES_PRIS => (new Templates\CongesPayes\CpPris())->getDomain(),
         );
     }
 

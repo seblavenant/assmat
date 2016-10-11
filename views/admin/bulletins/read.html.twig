@@ -30,7 +30,6 @@
                     </a>
                     {% endif %}
                     </form>
-
                     <form id="evenementPeriode" action="{{ path('admin_bulletins_new', { contratId: contrat.id }) }}" method="get">
                         {% include 'admin/common/date.select.html.twig' with { contratId : contrat.id } %}
                     </form>
@@ -131,12 +130,14 @@
             </div>
         </div>
     </div>
+    <div id="loader-img"></div>
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
+                <div id="loader"></div>
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>Salaire net : {{ bulletin.salaireNet | round(2) }} €
+                        <i class="fa fa-user"></i>Salaire net : <span id="valeur_{{ constant('Assmat\\DataSource\\Constants\\Lignes\\Type::SALAIRE_NET') }}">{{ bulletin.salaireNet | round(2) }}</span> €
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -145,26 +146,31 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <table class="table">
-                        <thead>
-                            <th>Label</td>
-                            <th>Base</th>
-                            <th>Taux / Qté</th>
-                            <th>Gain</th>
-                            <th>Retenue</th>
-                        </thead>
-                        <tbody>
-                        {% for ligne in bulletin.lignes %}
-                            <tr>
-                                <td>{{ ligne.label }}</td>
-                                <td>{{ ligne.base ? ligne.base | round(2) }}</td>
-                                <td>{{ ligne.taux ? ligne.taux | round(2) ~ ' %' }}{{ ligne.quantite ? ligne.quantite | round(2)}}</td>
-                                <td>{{ ligne.actionId == 1 ? ligne.valeur | round(2) }}</td>
-                                <td>{{ ligne.actionId == 2 ? ligne.valeur | round(2) }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    <form id="bulletinEditForm"
+                    {% if editable %}
+                        action="{{ path('admin_bulletins_update', { id: bulletin.id }) }}" method="put"
+                        data-ligneAction="{{ path('admin_bulletins_lignes', { id: bulletin.id }) }}"
+                    {% endif %}
+                    >
+                        <table class="table">
+                            <thead>
+                                <th>Label</td>
+                                <th>Base</th>
+                                <th>Taux / Qté</th>
+                                <th>Gain</th>
+                                <th>Retenue</th>
+                            </thead>
+                            <tbody>
+                            {% for ligne in bulletin.lignes %}
+                                {% if editable %}
+                                    {{ include('admin/bulletins/_line_edit.html.twig') }}
+                                {% else %}
+                                    {{ include('admin/bulletins/_line_read.html.twig') }}
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
@@ -207,11 +213,23 @@
         </div>
     </div>
     {% endif %}
+</script>
 
 {% endblock %}
 
 {% block specificsJavascripts %}
 <script>
+    var loader = {
+        pendingStart: function(){
+            $('#loader-img').html('<img alt="preloader" class="devoops-getdata" src="/img/devoops_getdata.gif">');
+            $('#loader').show();
+        },
+        pendingStop: function(){
+            $('#loader-img').html('');
+            $('#loader').hide();
+        }
+    };
+
     $(function(){
         $('#evenementAnnee option').each(function(){
             if($(this).val() == '{{ annee }}')
@@ -236,6 +254,48 @@
             window.location.href=$(this).attr('action') + '?' + http_build_query(params);
         });
 
+        $('#bulletinEditForm input').change(function(e){
+            e.preventDefault();
+            loader.pendingStart();
+
+            var self = $('#bulletinEditForm');
+
+            $.ajax({
+                data: $(self).serialize(),
+                method: $(self).attr('method'),
+                url:  $(self).attr('action')
+            })
+            .done(function(){
+            	$.ajax({
+                    method: 'GET',
+                    url:  $(self).attr('data-ligneAction')
+                })
+                .done(function(data){
+                    data.forEach(function(element, index, array){
+                        $('#base_' + element.typeId).val(element.base);
+                        $('#qte_' + element.typeId).val(element.quantite);
+                        $('#valeur_' + element.typeId).html(element.valeur);
+                    });
+
+                    Notifier.success('Le bulletin a été mis à jour');
+                    loader.pendingStop();
+                });
+            })
+            .fail(function(){
+                Notifier.success('Une erreur s\'est produit lors de l\'enrestrement');
+                loader.pendingStop();
+            });
+
+        });
     });
 </script>
 {% endblock %}
+
+{% block specificStylesheets %}
+<style>
+    .base, .qte, .valeur {
+        width: 70px;
+        text-align: right;
+    }
+</style>
+{% endblock specificStylesheets %}

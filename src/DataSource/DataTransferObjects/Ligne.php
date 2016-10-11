@@ -13,9 +13,10 @@ class Ligne implements DataTransferObject
         $actionId,
         $contextId,
         $base,
-        $taux,
         $quantite,
         $valeur,
         $bulletinId,
-        $computeClosure;
+        $baseEditable,
+        $quantiteEditable,
+        $taux;
 }

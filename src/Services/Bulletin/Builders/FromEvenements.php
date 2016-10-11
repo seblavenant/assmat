@@ -1,19 +1,22 @@
 <?php
 
-namespace Assmat\Services\Bulletin;
+namespace Assmat\Services\Bulletin\Builders;
 
 use Assmat\DataSource\Domains;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
+use Assmat\Services\Providers\ServiceProvider;
 
-class Builder
+class FromEvenements
 {
     private
-        $ligneTemplateRepository;
+        $ligneTemplateRepository,
+        $ligneBuilderProvider;
 
-    public function __construct(Repositories\LigneTemplate $ligneTemplateRepository)
+    public function __construct(Repositories\LigneTemplate $ligneTemplateRepository, ServiceProvider $ligneBuilderProvider)
     {
         $this->ligneTemplateRepository = $ligneTemplateRepository;
+        $this->ligneBuilderProvider = $ligneBuilderProvider;
     }
 
     public function build(Domains\Contrat $contrat, array $evenements, $annee, $mois)
@@ -34,7 +37,8 @@ class Builder
 
         foreach($lignes as $ligne)
         {
-            $ligne->compute($bulletin);
+            $ligneBuilder = $this->ligneBuilderProvider->get($ligne->getTypeId());
+            $ligneBuilder()->compute($ligne, $bulletin);
         }
 
         return $bulletin;

@@ -1,0 +1,22 @@
+<tr>
+    <td>{{ ligne.label }}</td>
+    <td>
+        <input class="base" {% if not ligne.isBaseEditable %}disabled{% endif %}  id="base_{{ ligne.typeId }}" name="lignes[{{ ligne.typeId }}][base]" type="text" data-id={{ ligne.typeId }} value="{{ ligne.base ? ligne.base | number_format(2, '.', '') : 0 }}" />
+        <input name="lignes[{{ ligne.typeId }}][id]" type="hidden" value="{{ ligne.typeId }}" />
+    </td>
+    <td>
+        <input class="qte" {% if not ligne.isQuantiteEditable %}disabled{% endif %}  
+        {% if ligne.contextId == constant('Assmat\\DataSource\\Constants\\Lignes\\Context::COTISATION') %}
+        data-type="pourcent"
+        {% endif %}
+        id="qte_{{ ligne.typeId }}" name="lignes[{{ ligne.typeId }}][quantite]" type="text" data-id={{ ligne.typeId }} value="{{ ligne.quantite ? ligne.quantite | number_format(2, '.', '')  : 0}}" />
+    </td>
+    <td>{% if ligne.actionId == constant('Assmat\\DataSource\\Constants\\Lignes\\Action::GAIN') %}
+        <div class="valeur" id="valeur_{{ ligne.typeId }}">{{ ligne.valeur | number_format(2, '.', '') }}</div>
+    {% endif %}
+    </td>
+    <td>{% if ligne.actionId == constant('Assmat\\DataSource\\Constants\\Lignes\\Action::RETENUE') %}
+        <div class="valeur" id="valeur_{{ ligne.typeId }}">{{ ligne.valeur | number_format(2, '.', '') }}</div>
+    {% endif %}
+    </td>
+</tr>

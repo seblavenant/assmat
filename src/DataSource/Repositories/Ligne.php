@@ -7,4 +7,8 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 interface Ligne
 {
     public function create(DTO\Ligne $ligneDTO);
+    
+    public function findFromBulletin($bulletinId);
+
+    public function countAllFromContratAndContext($contratId, $contextId, \DateTime $date);
 }

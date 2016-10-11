@@ -1,0 +1,7 @@
+<tr>
+    <td>{{ ligne.label }}</td>
+    <td>{{ ligne.base ? ligne.base | round(2) }}</td>
+    <td>{{ ligne.quantite ? ligne.quantite | round(2) : 0 }}</td>
+    <td>{{ ligne.actionId == 1 ? ligne.valeur | round(2) }}</td>
+    <td>{{ ligne.actionId == 2 ? ligne.valeur | round(2) }}</td>
+</tr>

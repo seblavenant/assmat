@@ -11,6 +11,8 @@ use Assmat\Services;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Assmat\DataSource\Constants;
 
 class Bulletin
 {
@@ -22,9 +24,20 @@ class Bulletin
         $bulletinRepository,
         $evenementRepository,
         $contratRepository,
-        $bulletinBuilder;
+        $bulletinBuilderFromEvenements,
+        $bulletinBuilderFromLignes;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, UrlGeneratorInterface $urlGenerator, Repositories\Bulletin $bulletinRepository, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Services\Bulletin\Builder $bulletinBuilder)
+    public function __construct(
+        \Twig_Environment $twig,
+        Request $request,
+        SecurityContextInterface $security,
+        UrlGeneratorInterface $urlGenerator,
+        Repositories\Bulletin $bulletinRepository,
+        Repositories\Evenement $evenementRepository,
+        Repositories\Contrat $contratRepository,
+        Services\Bulletin\Builders\FromEvenements $bulletinBuilderFromEvenements,
+        Services\Bulletin\Builders\FromLignes $bulletinBuilderFromLignes
+    )
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -32,7 +45,8 @@ class Bulletin
         $this->bulletinRepository = $bulletinRepository;
         $this->evenementRepository = $evenementRepository;
         $this->contratRepository = $contratRepository;
-        $this->bulletinBuilder = $bulletinBuilder;
+        $this->bulletinBuilderFromEvenements = $bulletinBuilderFromEvenements;
+        $this->bulletinBuilderFromLignes = $bulletinBuilderFromLignes;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -61,7 +75,7 @@ class Bulletin
         $contrat = $this->contratRepository->find($contratId);
         $contrat->validateContactAutorisation($this->getContact());
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), true);
-        $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
+        $bulletin = $this->bulletinBuilderFromEvenements->build($contrat, $evenements, $annee, $mois);
 
         return new Response($this->twig->render('admin/bulletins/read.html.twig', array(
             'contrat' => $contrat,
@@ -70,6 +84,7 @@ class Bulletin
             'mois' => $mois,
             'bulletin' => $bulletin,
             'saveEnable' => true,
+            'editable' => false,
         )));
     }
 
@@ -83,7 +98,7 @@ class Bulletin
         $contrat->validateIsGrantedEmployeur($this->getContact());
 
         $evenements = $this->evenementRepository->findAllFromContrat($contratId, new \DateTime(sprintf('%d-%d-01', $annee, $mois)), true);
-        $bulletin = $this->bulletinBuilder->build($contrat, $evenements, $annee, $mois);
+        $bulletin = $this->bulletinBuilderFromEvenements->build($contrat, $evenements, $annee, $mois);
 
         try
         {
@@ -91,7 +106,7 @@ class Bulletin
 
             return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_read', array('id' => $bulletin->getId())));
         }
-        catch(\Exception $e)
+        catch(\RuntimeException $e)
         {
             return new RedirectResponse($this->urlGenerator->generate('admin_bulletins_new', array('contratId' => $contratId, 'annee' => $annee, 'mois' => $mois)));
         }
@@ -119,11 +134,48 @@ class Bulletin
         return new Response($bulletinPdf, 200, $headers);
     }
 
+    public function lignesAction($id)
+    {
+        $bulletin = $this->bulletinRepository->find($id);
+        
+        if(!$bulletin instanceof Domains\Bulletin)
+        {
+            throw new \Exception('Aucun bulletin ne correspond à cet identifiant');
+        }
+        
+        $lignes = [];
+        foreach($bulletin->getLignes() as $ligne)
+        {
+            $lignes[] = $ligne->toArray();
+        }
+        
+        $lignes[] = [
+            'typeId' => Constants\Lignes\Type::SALAIRE_NET,
+            'valeur' => number_format($bulletin->getSalaireNet(), 2, '.', ''),
+        ];
+        
+        return new JsonResponse($lignes);
+    }
+    
+    public function updateAction($id)
+    {
+        $lignes = $this->request->get('lignes');
+        
+        $bulletin = $this->bulletinRepository->find($id);
+        $this->bulletinBuilderFromLignes->build($bulletin, $lignes);
+
+        return new JsonResponse(
+            array(
+                'msg' => 'Bulletin modifié',
+                'data' => array(),
+            )
+            , 200
+        );
+    }
+    
     private function renderBulletin($id, $view)
     {
         $bulletin = $this->bulletinRepository->find($id);
-
-        $bulletin->compute();
 
         if(!$bulletin instanceof Domains\Bulletin)
         {
@@ -139,6 +191,7 @@ class Bulletin
             'mois' => $bulletin->getMois(),
             'bulletin' => $bulletin,
             'saveEnable' => false,
+            'editable' => true,
         ));
     }
 
