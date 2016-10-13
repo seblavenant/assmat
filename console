@@ -10,7 +10,7 @@ use Gaufrette\Adapter\Local;
 use Spear\Skeleton\Application;
 use Spear\Skeleton\Console;
 
-$configurationFilesStorage = new Filesystem(new Local(__DIR__ . '/config'));
+$configurationFilesStorage = new Filesystem(new Local(__DIR__ . '/../var/config'));
 $configuration = new Yaml($configurationFilesStorage);
 $rootDir = realpath(__DIR__);
 
@@ -18,3 +18,4 @@ $app = new Assmat\Application($configuration, $rootDir);
 
 $console = new Assmat\Console($app);
 $console->run();
+
