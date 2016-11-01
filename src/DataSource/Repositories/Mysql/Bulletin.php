@@ -71,6 +71,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         }
 
         $lignes = $bulletinDTO->load('lignes');
+
         foreach($lignes as $ligne)
         {
             $ligne->setBulletinId($bulletinDTO->id);
@@ -103,7 +104,24 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
 
     public function update(DTO\Bulletin $bulletinDTO)
     {
-        throw new \Exception('Bulletin update not implemented yet !');
+         $this->db->update(
+            self::TABLE_NAME,
+            array(
+                'annee' => $bulletinDTO->annee,
+                'mois' => $bulletinDTO->mois,
+                'contrat_id' => $bulletinDTO->contratId,
+            ),
+            array(
+                'id' => $bulletinDTO->id,
+            ),
+            array(
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+            )
+        );
+
+        return new Domains\Bulletin($bulletinDTO);
     }
 
     private function getBaseQuery()

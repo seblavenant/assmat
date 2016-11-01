@@ -3,7 +3,6 @@
 namespace Assmat\DataSource\Domains;
 
 use Assmat\DataSource\DataTransferObjects as DTO;
-use Assmat\DataSource\Domains;
 use Assmat\DataSource\Repositories;
 
 class Ligne
@@ -41,19 +40,46 @@ class Ligne
         return $this->fields->contextId;
     }
 
+    public function setBase($base)
+    {
+        $this->fields->base = $base;
+
+        return $this;
+    }
+
     public function getBase()
     {
         return $this->fields->base;
     }
 
-    public function getTaux()
+    public function setQuantite($quantite)
     {
-        return $this->fields->taux;
+        if($this->isTaux())
+        {
+            $quantite = $quantite / 100;
+        }
+
+        $this->fields->quantite = $quantite;
+
+        return $this;
     }
 
     public function getQuantite()
     {
-        return $this->fields->quantite;
+        $quantite = $this->fields->quantite;
+        if($this->isTaux())
+        {
+            $quantite = $quantite * 100;
+        }
+        
+        return $quantite;
+    }
+
+    public function computeValeur()
+    {
+        $this->fields->valeur = round($this->fields->quantite * $this->fields->base, 2);
+
+        return $this;
     }
 
     public function getValeur()
@@ -70,20 +96,47 @@ class Ligne
     {
         return $this->fields->bulletinId;
     }
-
-    public function compute(Domains\Bulletin $bulletin)
+    
+    public function isBaseEditable()
     {
-        $computeClosure = $this->fields->computeClosure;
-        $computeClosure($bulletin);
+        return (bool) $this->fields->baseEditable;
+    }
+    
+    public function isQuantiteEditable()
+    {
+        return (bool) $this->fields->quantiteEditable;
+    }
+    
+    public function isTaux()
+    {
+        return (bool) $this->fields->taux;
     }
 
     public function persist(Repositories\Ligne $ligneRepository)
     {
         if($this->fields->id !== null)
         {
-            return;
+            return $ligneRepository->update($this->fields);
         }
 
-        $ligneRepository->create($this->fields);
+        return $ligneRepository->create($this->fields);
+    }
+    
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'typeId' => $this->getTypeId(),
+            'actionId' => $this->getActionId(),
+            'contextId' => $this->getContextId(),
+            'base' => number_format($this->getBase(), 2, '.', ''),
+            'quantite' => number_format($this->getQuantite(), 2, '.', ''),
+            'valeur' => number_format($this->getValeur(), 2, '.', ''),
+            'bulletinId' => $this->getBulletinId(),
+            'isBaseEditable' => $this->isBaseEditable(),
+            'isQuantiteEditable' => $this->isQuantiteEditable(),
+            'isTaux' => $this->isTaux(),
+        ];
     }
 }

@@ -2,29 +2,25 @@
 
 namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Cotisations;
 
-use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
-use Assmat\DataSource\Domains;
+use Assmat\DataSource\Repositories\Memory\Ligne\Templates\AbstractTemplate;
 
-class AssuranceChomage
+class AssuranceChomage extends AbstractTemplate
 {
     const
         TAUX = 2.40;
 
-    public function getDomain()
+    public function __construct()
     {
-        $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'Assurance chômage';
-        $ligneDTO->typeId = Constants\Lignes\Type::CSG_RDS;
-        $ligneDTO->actionId = Constants\Lignes\Action::RETENUE;
-        $ligneDTO->contextId = Constants\Lignes\Context::COTISATION;
-        $ligneDTO->taux = self::TAUX;
-        $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
-            $base = $bulletin->getSalaireBrut();
-            $ligneDTO->base = $base;
-            $ligneDTO->valeur = round($base * $ligneDTO->taux / 100, 2);
-        };
+        parent::__construct();
+        
+        $this->ligneDTO->label = 'Assurance chômage';
+        $this->ligneDTO->typeId = Constants\Lignes\Type::ASSURANCE_CHOMAGE;
+        $this->ligneDTO->actionId = Constants\Lignes\Action::RETENUE;
+        $this->ligneDTO->contextId = Constants\Lignes\Context::COTISATION;
+        $this->ligneDTO->quantite = self::TAUX / 100;
 
-        return new Domains\Ligne($ligneDTO);
+        $this->ligneDTO->quantiteEditable = true;
+        $this->ligneDTO->taux = true;
     }
 }

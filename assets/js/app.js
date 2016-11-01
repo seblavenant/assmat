@@ -15,7 +15,7 @@ var App = {
 
                 $.ajax({
                     data: $(this).serialize(),
-                    type: $(this).attr('method'),
+                    method: $(this).attr('method'),
                     url:  $(this).attr("action")
                 })
                 .done(function(response)
@@ -87,6 +87,4 @@ var App = {
 
         return error;
     }
-
-
 }

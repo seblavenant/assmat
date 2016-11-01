@@ -2,29 +2,25 @@
 
 namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Cotisations;
 
-use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
-use Assmat\DataSource\Domains;
+use Assmat\DataSource\Repositories\Memory\Ligne\Templates\AbstractTemplate;
 
-class RetraiteComplementaire
+class RetraiteComplementaire extends AbstractTemplate
 {
     const
         TAUX = 3.10;
 
-    public function getDomain()
+    public function __construct()
     {
-        $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'Retraite complementaire';
-        $ligneDTO->typeId = Constants\Lignes\Type::CSG_RDS;
-        $ligneDTO->actionId = Constants\Lignes\Action::RETENUE;
-        $ligneDTO->contextId = Constants\Lignes\Context::COTISATION;
-        $ligneDTO->taux = self::TAUX;
-        $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
-            $base = $bulletin->getSalaireBrut();
-            $ligneDTO->base = $base;
-            $ligneDTO->valeur = round($base * $ligneDTO->taux / 100, 2);
-        };
+        parent::__construct();
+        
+        $this->ligneDTO->label = 'Retraite complementaire';
+        $this->ligneDTO->typeId = Constants\Lignes\Type::RETRAITE_COMPLEMENTAIRE;
+        $this->ligneDTO->actionId = Constants\Lignes\Action::RETENUE;
+        $this->ligneDTO->contextId = Constants\Lignes\Context::COTISATION;
+        $this->ligneDTO->quantite = self::TAUX / 100;
 
-        return new Domains\Ligne($ligneDTO);
+        $this->ligneDTO->quantiteEditable = true;
+        $this->ligneDTO->taux = true;
     }
 }

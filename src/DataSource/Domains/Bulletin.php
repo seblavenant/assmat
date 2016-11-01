@@ -48,6 +48,13 @@ class Bulletin
         return $this->fields->mois;
     }
 
+    public function refreshLignes(Repositories\Ligne $ligneRepository)
+    {
+        $this->fields->set('lignes', function() use($ligneRepository) {
+            return $ligneRepository->findFromBulletin($this->getId());
+        });
+    }
+    
     public function getLignes()
     {
         return $this->fields->load('lignes');
@@ -110,14 +117,15 @@ class Bulletin
 
     private function computeContextMontant(array $context)
     {
-        $salaireBrut = 0;
-        $lignesRemuneration = new FilterIterators\Lignes\Context(new \ArrayIterator($this->getLignes()), $context);
-        foreach($lignesRemuneration as $ligne)
+        $valeur = 0;
+        $lignes = new FilterIterators\Lignes\Context(new \ArrayIterator($this->getLignes()), $context);
+
+        foreach($lignes as $ligne)
         {
-            $salaireBrut += $ligne->getValeur();
+            $valeur += $ligne->getValeur();
         }
 
-        return $salaireBrut;
+        return $valeur;
     }
 
     public function addHeuresPayees($heuresPayees, Domains\Evenement $evenement)

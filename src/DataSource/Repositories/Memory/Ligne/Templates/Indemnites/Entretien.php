@@ -2,23 +2,21 @@
 
 namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Indemnites;
 
-use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
-use Assmat\DataSource\Domains;
+use Assmat\DataSource\Repositories\Memory\Ligne\Templates\AbstractTemplate;
 
-class Entretien extends AbstractIndemnite
+class Entretien extends AbstractTemplate
 {
-    public function getDomain()
+    public function __construct()
     {
-        $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'Indemnites d\'entretien';
-        $ligneDTO->typeId = Constants\Lignes\Type::INDEMNITES_ENTRETIEN;
-        $ligneDTO->actionId = Constants\Lignes\Action::GAIN;
-        $ligneDTO->contextId = Constants\Lignes\Context::INDEMNITE;
-        $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
-            $this->compute($bulletin, $ligneDTO);
-        };
-
-        return new Domains\Ligne($ligneDTO);
+        parent::__construct();
+        
+        $this->ligneDTO->label = 'Indemnites d\'entretien';
+        $this->ligneDTO->typeId = Constants\Lignes\Type::INDEMNITES_ENTRETIEN;
+        $this->ligneDTO->actionId = Constants\Lignes\Action::GAIN;
+        $this->ligneDTO->contextId = Constants\Lignes\Context::INDEMNITE;
+        
+        $this->ligneDTO->baseEditable = true;
+        $this->ligneDTO->quantiteEditable = true;
     }
 }

@@ -141,6 +141,23 @@ class Contrat
         }
     }
 
+    public function getIndemniteByTypeId($typeId)
+    {
+        $indemnites = $this->getIndemnites();
+        if(! is_array($indemnites))
+        {
+            return;
+        }
+
+        foreach($indemnites as $indemnite)
+        {
+            if($indemnite->getTypeId() === $typeId)
+            {
+                return $indemnite;
+            }
+        }
+    }
+    
     public function persist(Repositories\Contrat $contratRepository)
     {
         return $contratRepository->persist($this->fields);

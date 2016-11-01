@@ -24,9 +24,17 @@ class Application extends AbstractApplication
         $this->initializeSecurity();
         $this->initializeForms();
 
-        $this['bulletin.builder'] = function($c) {
-            return new Services\Bulletin\Builder($c['repository.ligneTemplate']);
+        $this['bulletin.builder.fromEvenements'] = function() {
+            return new Services\Bulletin\Builders\FromEvenements($this['repository.ligneTemplate'], $this['provider.ligneBuilder']);
         };
+
+        $this['bulletin.builder.fromLignes'] = function() {
+            return new Services\Bulletin\Builders\FromLignes($this['repository.ligne'], $this['provider.ligneBuilder']);
+        };
+
+        $this['provider.ligneBuilder'] = $this->share(function() {
+            return new Services\Providers\LigneBuilder();
+        });
     }
 
     protected function registerProviders()
@@ -164,7 +172,7 @@ class Application extends AbstractApplication
         };
 
         $this['repository.ligne'] = function() {
-            return new Repositories\Mysql\Ligne($this['db.default']);
+            return new Repositories\Mysql\Ligne($this['db.default'], $this['repository.ligneTemplate']);
         };
     }
 

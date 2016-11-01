@@ -88,7 +88,8 @@ class Provider implements ControllerProviderInterface
                 $app['repository.bulletin'],
                 $app['repository.evenement'],
                 $app['repository.contrat'],
-                $app['bulletin.builder']
+                $app['bulletin.builder.fromEvenements'],
+                $app['bulletin.builder.fromLignes']
             );
         });
 
@@ -100,9 +101,15 @@ class Provider implements ControllerProviderInterface
 
         $controllers->get('/bulletins/{id}', 'bulletin.controller:readAction')
                     ->bind('admin_bulletins_read');
+        
+        $controllers->put('/bulletins/{id}', 'bulletin.controller:updateAction')
+                    ->bind('admin_bulletins_update');
 
         $controllers->get('/bulletins/{id}/print', 'bulletin.controller:printAction')
                     ->bind('admin_bulletins_print');
+
+        $controllers->get('/bulletins/{id}/lignes', 'bulletin.controller:lignesAction')
+                    ->bind('admin_bulletins_lignes');
 
         $controllers->get('/contrats/{contratId}/bulletins/new', 'bulletin.controller:newAction')
                     ->bind('admin_bulletins_new');

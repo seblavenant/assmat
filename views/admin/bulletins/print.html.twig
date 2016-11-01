@@ -274,7 +274,7 @@
         <tr>
             <td>{{ ligne.label }}</td>
             <td class="right">{{ ligne.base ? ligne.base | number_format(2, ',', ' ') }}</td>
-            <td class="right">{{ ligne.taux ? ligne.taux | number_format(2, ',', ' ') ~ ' %' }}{{ ligne.quantite ? ligne.quantite | number_format(2, ',', ' ') }}</td>
+            <td class="right">{{ ligne.quantite ? ligne.quantite | number_format(2, ',', ' ') }}</td>
             <td class="right">{{ ligne.actionId == 1 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
             <td class="right">{{ ligne.actionId == 2 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
         </tr>

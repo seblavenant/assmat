@@ -2,23 +2,21 @@
 
 namespace Assmat\DataSource\Repositories\Memory\Ligne\Templates\Indemnites;
 
-use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Constants;
-use Assmat\DataSource\Domains;
+use Assmat\DataSource\Repositories\Memory\Ligne\Templates\AbstractTemplate;
 
-class Nourriture extends AbstractIndemnite
+class Nourriture extends AbstractTemplate
 {
-    public function getDomain()
+    public function __construct()
     {
-        $ligneDTO = new DTO\Ligne();
-        $ligneDTO->label = 'Indemnites nourriture';
-        $ligneDTO->typeId = Constants\Lignes\Type::INDEMNITES_NOURRITURE;
-        $ligneDTO->actionId = Constants\Lignes\Action::GAIN;
-        $ligneDTO->contextId = Constants\Lignes\Context::INDEMNITE;
-        $ligneDTO->computeClosure = function(Domains\Bulletin $bulletin) use($ligneDTO) {
-            $this->compute($bulletin, $ligneDTO);
-        };
+        parent::__construct();
 
-        return new Domains\Ligne($ligneDTO);
+        $this->ligneDTO->label = 'Indemnites nourriture';
+        $this->ligneDTO->typeId = Constants\Lignes\Type::INDEMNITES_NOURRITURE;
+        $this->ligneDTO->actionId = Constants\Lignes\Action::GAIN;
+        $this->ligneDTO->contextId = Constants\Lignes\Context::INDEMNITE;
+
+        $this->ligneDTO->quantiteEditable = true;
+        $this->ligneDTO->baseEditable = true;
     }
 }

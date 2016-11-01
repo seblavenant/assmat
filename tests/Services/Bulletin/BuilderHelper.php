@@ -69,13 +69,23 @@ class BuilderHelper
         return new Domains\Evenement($evenementGarde);
     }
 
-    public function getIndemnite()
+    public function getIndemniteNourriture()
     {
         $indemniteDTO = new DTO\Indemnite();
         $indemniteDTO->contratId = 1;
         $indemniteDTO->typeId = Constants\Lignes\Type::INDEMNITES_NOURRITURE;
         $indemniteDTO->montant = 2.5;
 
+        return new Domains\Indemnite($indemniteDTO);
+    }
+    
+    public function getIndemniteEntretien()
+    {
+        $indemniteDTO = new DTO\Indemnite();
+        $indemniteDTO->contratId = 1;
+        $indemniteDTO->typeId = Constants\Lignes\Type::INDEMNITES_ENTRETIEN;
+        $indemniteDTO->montant = 3.2;
+    
         return new Domains\Indemnite($indemniteDTO);
     }
 }
