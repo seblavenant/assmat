@@ -39,6 +39,11 @@ class Contact extends AbstractType
                 'label' => 'contacts.ville',
                 'required' => false,
             ))
+            ->add('authCode', 'text', array(
+                'label' => 'contacts.authCode',
+                'attr' => ['readonly' => true],
+                'required' => false,
+            ))
             ->add('id', 'hidden')
             ;
 

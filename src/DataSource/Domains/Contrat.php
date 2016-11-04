@@ -120,7 +120,7 @@ class Contrat
             $contact->getId() !== $this->getEmploye()->getContact()->getId()
             && $contact->getId() !== $this->getEmployeur()->getContact()->getId()
         ) {
-            throw new \Exception('Vous n\'êtes pas autorisé à adminitrer ce contrat');
+            throw new \Exception('Vous n\'êtes pas autorisé à administrer ce contrat');
         }
     }
 
