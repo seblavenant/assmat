@@ -1,3 +1,3 @@
 sourcePath: [config/templates/,.deploy/config/docker/]
-targetPath: ../var/config/
+targetPath: config/hydrated/
 confDir: config/env/

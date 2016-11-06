@@ -3,9 +3,9 @@
 .buildpath
 vendor
 var/
+config/generated/
 assets/compiled/
 web/js
 web/css
 cache
-.vagrant/machines
 env/secured.conf
