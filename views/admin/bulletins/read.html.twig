@@ -96,6 +96,7 @@
         </div>
     </div>
 
+    {% if saveEnable %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -123,13 +124,15 @@
                                 <td>{{ bulletin.heuresPayeesParSemaine(semaine) }}</td>
                                 <td>{{ bulletin.heuresComplementairesParSemaine(semaine) }}</td>
                             </tr>
-                        {% endfor %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+   {% endif %}
+
     <div id="loader-img"></div>
     <div class="row">
         <div class="col-xs-12">

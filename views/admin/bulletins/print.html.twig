@@ -246,24 +246,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="heures-semaine" class="column clear">
-                    <table class="table">
-                        <thead>
-                            <th class="left">HEURES/SEMAINE COMPLETE</td>
-                            <th class="right">HEURES EFFECTUEES</th>
-                            <th class="right">HEURES COMPLEMENTAIRES</th>
-                        </thead>
-                        <tbody>
-                            {% for semaine in bulletin.semainesCompletes %}
-                            <tr>
-                                <td>{{ semaine | date('d/m/Y')}} au {{ (semaine ~ ' +6 days') | date('d/m/Y')}} (sem. {{ semaine | date('W')}})</td>
-                                <td class="right">{{ bulletin.heuresPayeesParSemaine(semaine) }}</td>
-                                <td class="right">{{ bulletin.heuresComplementairesParSemaine(semaine) }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </body>
