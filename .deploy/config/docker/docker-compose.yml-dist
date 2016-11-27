@@ -4,16 +4,16 @@ assmat-web:
         - 80
     dns: ${HOST_IP}
     volumes:
-        - /root/apps/assmat/:/var/www/
+        - "${APPS_PATH}/assmat/:/var/www/"
         - /var/www/html
-        - /root/apps/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/
+        - "${APPS_PATH}/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/"
     environment:
         - SERVICE_NAME=app-assmat-web
 
 assmat-database:
     image: mysql
     volumes:
-        - /root/apps/assmat/var/data/mysql/:/var/lib/mysql/
+        - "${APPS_PATH}/assmat/var/data/mysql/:/var/lib/mysql/"
     environment:
         - MYSQL_DATABASE=<%db.name%>
         - MYSQL_ROOT_PASSWORD=<%db.password%>
