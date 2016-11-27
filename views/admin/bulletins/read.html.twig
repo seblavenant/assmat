@@ -178,17 +178,18 @@
             </div>
         </div>
     </div>
-    {% if bulletin.congesPayes is not empty%}
+
+    {% if bulletin.congesPayes is not empty %}
         {% set congesPayes = bulletin.congesPayes %}
-        {% set aquis = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS')] %}
+        {% set aquisReference = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS_REFERENCE')] %}
         {% set pris = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS')] %}
-        {% set restant = aquis - pris %}
+        {% set restant = aquisReference - pris %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>Congés payés restants : {{ restant | round(2) }} jour(s)
+                        <i class="fa fa-user"></i>Congés payés restants : {{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_RESTANT')] | round(2) }} jour(s)
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -199,15 +200,17 @@
                 <div class="box-content">
                     <table class="table">
                         <thead>
-                            <th>Acquis</th>
-                            <th>Pris</th>
+                            <th>Acquis N-1</th>
+                            <th>Acquis N</th>
+                            <th>Pris N</th>
                             <th>Restant</th>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ aquis | round(2)}}</td>
-                                <td>{{ pris | round(2)}}</td>
-                                <td>{{ restant | round(2)}}</td>
+                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS_REFERENCE')] | round(2)}}</td>
+                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS')] | round(2)}}</td>
+                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS')] | round(2)}}</td>
+                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_RESTANT')] | round(2)}}</td>
                             </tr>
                         </tbody>
                     </table>

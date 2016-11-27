@@ -3,6 +3,8 @@
 namespace Assmat;
 
 use Spear\Silex\Provider\Commands\AsseticDumper;
+use Assmat\Commands\CpReferenceComputer;
+use Assmat\Services\Lignes\Computers\CpAnneeReference;
 
 class Console
 {
@@ -19,6 +21,7 @@ class Console
         $this->app = new \Symfony\Component\Console\Application('silex-spear-app');
 
         $this->app->add(new AsseticDumper($this->configuration, $dic['assetic.dumper'], $dic['assetic.path_to_web']));
+        $this->app->add(new CpReferenceComputer($dic['db'], $dic['repository.cpReference']));
     }
 
     public function run()

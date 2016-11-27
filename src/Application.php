@@ -25,7 +25,7 @@ class Application extends AbstractApplication
         $this->initializeForms();
 
         $this['bulletin.builder.fromEvenements'] = function() {
-            return new Services\Bulletin\Builders\FromEvenements($this['repository.ligneTemplate'], $this['provider.ligneBuilder']);
+            return new Services\Bulletin\Builders\FromEvenements($this['repository.ligneTemplate'], $this['repository.ligne'], $this['repository.cpReference'], $this['provider.ligneBuilder']);
         };
 
         $this['bulletin.builder.fromLignes'] = function() {
@@ -173,6 +173,10 @@ class Application extends AbstractApplication
 
         $this['repository.ligne'] = function() {
             return new Repositories\Mysql\Ligne($this['db.default'], $this['repository.ligneTemplate']);
+        };
+
+        $this['repository.cpReference'] = function() {
+            return new Repositories\Mysql\CpReference($this['db.default'], $this['repository.ligne']);
         };
     }
 

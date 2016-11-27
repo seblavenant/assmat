@@ -34,7 +34,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
         return $this->fetchAll($query);
     }
 
-    public function countAllFromContratAndContext($contratId, $contextId, \DateTime $date)
+    public function countAllFromContratAndContext($contratId, $contextId, \DateTime $dateEnd, \DateTime $dateStart = null)
     {
         $fields = $this->prefixTableFields(array('type_id'));
         array_push($fields, 'sum( valeur ) AS count');
@@ -45,10 +45,15 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
             ->leftJoin(Repositories\Mysql\Bulletin::TABLE_NAME)->on($this->prefixTableField('bulletin_id'), 'bulletin.id')
             ->where((new Types\Integer('context_id'))->equal($contextId))
             ->where((new Types\Integer('contrat_id'))->equal($contratId))
-            ->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->lowerOrEqualThan($date->format('Ym')))
+            ->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->lowerOrEqualThan($dateEnd->format('Ym')))
             ->groupBy('type_id')
             ;
-            
+        
+        if($dateStart !== null)
+        {
+            $query->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->greaterOrEqualThan($dateStart->format('Ym')));
+        }
+        
         $dataSet = $this->db->fetchAll($query->toString());
 
         $contexts = array();
