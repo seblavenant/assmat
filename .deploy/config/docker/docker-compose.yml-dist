@@ -9,6 +9,8 @@ assmat-web:
         - "${APPS_PATH}/assmat/app/.deploy/config/vhosts/application/:/etc/apache2/sites-enabled/"
     environment:
         - SERVICE_NAME=app-assmat-web
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
 
 assmat-database:
     image: mysql
