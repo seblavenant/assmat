@@ -4,17 +4,16 @@ namespace Assmat\DataSource\DataTransferObjects;
 
 use Spear\Silex\Persistence\DataTransferObjects\Related;
 
-class CpReference extends Related
+class CongePaye extends Related
 {
     public
-        $id,
-        $annee,
-        $tauxJournalier,
-        $nbJours,
-        $contratId;
-
+        $acquisNb,
+        $prisNb;
+    
     public function __construct()
     {
-        parent::__construct([]);
+        parent::__construct([
+            'reference'
+        ]);
     }
 }

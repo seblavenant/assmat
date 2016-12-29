@@ -180,16 +180,12 @@
     </div>
 
     {% if bulletin.congesPayes is not empty %}
-        {% set congesPayes = bulletin.congesPayes %}
-        {% set aquisReference = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS_REFERENCE')] %}
-        {% set pris = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS')] %}
-        {% set restant = aquisReference - pris %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div clas="box-header">
                     <div class="box-name">
-                        <i class="fa fa-user"></i>Congés payés restants : {{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_RESTANT')] | round(2) }} jour(s)
+                        <i class="fa fa-user"></i>Congés payés restants (validés) : {{ bulletin.congesPayes.restantNb | round(2) }}  jour(s)
                     </div>
                     <div class="box-icons">
                         <a class="collapse-link" data-toggle="collapse">
@@ -207,10 +203,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS_REFERENCE')] | round(2)}}</td>
-                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS')] | round(2)}}</td>
-                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS')] | round(2)}}</td>
-                                <td>{{ bulletin.congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_RESTANT')] | round(2)}}</td>
+                                <td>{{ bulletin.congesPayes.reference ? bulletin.congesPayes.reference.nbJours | round(2) }}</td>
+                                <td>{{ bulletin.congesPayes.acquisNb | round(2) }}</td>
+                                <td>{{ bulletin.congesPayes.prisNb | round(2) }}</td>
+                                <td>{{ bulletin.congesPayes.restantNb | round(2) }}</td>
                             </tr>
                         </tbody>
                     </table>

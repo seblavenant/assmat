@@ -3,7 +3,6 @@
 namespace Assmat\DataSource\Repositories\Mysql;
 
 use Assmat\DataSource\Domains;
-use Assmat\DataSource\Constants;
 use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Muffin\Queries;
@@ -21,15 +20,23 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
     private
         $evenementRepository,
         $contratRepository,
-        $ligneRepository;
+        $ligneRepository,
+        $congePayeRepository;
 
-    public function __construct(Mysql $db, Repositories\Evenement $evenementRepository, Repositories\Contrat $contratRepository, Repositories\Ligne $ligneRepository)
+    public function __construct(
+        Mysql $db,
+        Repositories\Evenement $evenementRepository,
+        Repositories\Contrat $contratRepository,
+        Repositories\Ligne $ligneRepository,
+        Repositories\CongePaye $congePayeRepository
+    )
     {
         parent::__construct($db);
 
         $this->evenementRepository = $evenementRepository;
         $this->contratRepository = $contratRepository;
         $this->ligneRepository = $ligneRepository;
+        $this->congePayeRepository = $congePayeRepository;
     }
 
     public function find($id)
@@ -160,7 +167,7 @@ class Bulletin extends AbstractMysql implements Repositories\Bulletin
         });
 
         $dto->set('congesPayes', function() use($dto) {
-            return $this->ligneRepository->countAllFromContratAndContext($dto->contratId, Constants\Lignes\Context::CONGE_PAYE, new \DateTime(sprintf('%d-%d', $dto->annee, $dto->mois)));
+            return $this->congePayeRepository->findFromContratAndDate($dto->contratId, $dto->annee, $dto->mois);
         });
 
         return new Domains\Bulletin($dto);

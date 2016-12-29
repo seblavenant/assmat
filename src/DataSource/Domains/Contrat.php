@@ -50,6 +50,11 @@ class Contrat
     {
         return $this->fields->salaireHoraire;
     }
+    
+    public function getSalaireJour()
+    {
+        return $this->getSalaireHoraire() * $this->getHeuresJour();
+    }
 
     public function getJoursGarde()
     {

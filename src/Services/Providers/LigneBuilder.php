@@ -19,6 +19,12 @@ class LigneBuilder implements ServiceProvider
             Constants\Lignes\Type::HEURES_COMPLEMENTAIRES => function() {
                 return new Builders\Remunerations\HeuresComplementaires();
             },
+            Constants\Lignes\Type::ABSENCE_CONGES_PAYES => function() {
+                return new Builders\Remunerations\AbsenceCP();
+            },
+            Constants\Lignes\Type::INDEMNITES_CONGES_PAYES=> function() {
+                return new Builders\Remunerations\IndemnitesCP();
+            },
             Constants\Lignes\Type::CSG_RDS => function() {
                 return new Builders\Cotisations\CsgRds();
             },

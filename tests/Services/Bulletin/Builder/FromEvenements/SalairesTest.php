@@ -92,7 +92,7 @@ class SalairesTest extends \PHPUnit_Framework_TestCase
         $contratDTO->typeId = $typeID;
         $contrat = new Domains\Contrat($contratDTO);
 
-        $bulletinBuilder = new Bulletin\Builders\FromEvenements(new Repositories\Memory\Ligne\Template(), new Repositories\Memory\CpReference(), new Providers\LigneBuilder());
+        $bulletinBuilder = new Bulletin\Builders\FromEvenements(new Repositories\Memory\Ligne\Template(), new Repositories\Memory\CongePaye(), new Providers\LigneBuilder());
         $bulletin = $bulletinBuilder->build($contrat, $evenements, 2015, 01);
 
         $builderValidator = new BuilderValidator($bulletin);

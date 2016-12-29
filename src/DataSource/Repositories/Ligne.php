@@ -10,5 +10,5 @@ interface Ligne
     
     public function findFromBulletin($bulletinId);
 
-    public function countAllFromContratAndContext($contratId, $contextId, \DateTime $date);
+    public function countAllFromContratAndContext($contratId, $contextId, \DateTime $dateEnd, \DateTime $dateStart = null);
 }

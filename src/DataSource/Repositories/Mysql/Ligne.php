@@ -53,7 +53,7 @@ class Ligne extends AbstractMysql implements Repositories\Ligne
         {
             $query->where((new Types\String('concat( bulletin.annee, LPAD( bulletin.mois, 2, "0" ))'))->greaterOrEqualThan($dateStart->format('Ym')));
         }
-        
+
         $dataSet = $this->db->fetchAll($query->toString());
 
         $contexts = array();

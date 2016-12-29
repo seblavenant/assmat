@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-
         <style>
             * {
                 font-family: verdana;
@@ -226,22 +225,17 @@
                 <div id="conges-payes" class="column clear">
                     <table class="table">
                         <thead>
-                            <th class="left">CONGES PAYES</td>
-                            <th class="right">ACQUIS</th>
-                            <th class="right">PRIS</th>
-                            <th class="right">RESTANT</th>
+                            <th class="left">Acquis N-1</th>
+                            <th class="left">Acquis N</th>
+                            <th class="left">Pris N</th>
+                            <th class="left">Restant</th>
                         </thead>
                         <tbody>
-                            {{ _self.displayCongesPayes(bulletin.lignes) }}
-                            {% set congesPayes = bulletin.congesPayes %}
-                            {% set aquis = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_ACQUIS')] %}
-                            {% set pris = congesPayes[constant('Assmat\\DataSource\\Constants\\Lignes\\Type::CONGES_PAYES_PRIS')] %}
-                            {% set restant = aquis - pris %}
                             <tr>
-                                <td>Cumul à ce mois </td>
-                                <td class="right">{{ aquis | round(2)}}</td>
-                                <td class="right">{{ pris | round(2)}}</td>
-                                <td class="right">{{ restant | round(2)}}</td>
+                                <td class="left">{{ bulletin.congesPayes.reference ? bulletin.congesPayes.reference.nbJours | round(2) }}</td>
+                                <td class="left">{{ bulletin.congesPayes.acquisNb | round(2) }}</td>
+                                <td class="left">{{ bulletin.congesPayes.prisNb | round(2) }}</td>
+                                <td class="left">{{ bulletin.congesPayes.restantNb | round(2) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -261,22 +255,4 @@
             <td class="right">{{ ligne.actionId == 2 ? ligne.valeur | number_format(2, ',', ' ') }}</td>
         </tr>
     {% endfor %}
-{% endmacro %}
-{% macro displayCongesPayes(lignes) %}
-    {% set aquis = 0 %}
-    {% set pris = 0 %}
-    {% for ligne in lignes if ligne.contextId == constant('Assmat\\DataSource\\Constants\\Lignes\\Context::CONGE_PAYE') %}
-        {% if ligne.actionId == constant('Assmat\\DataSource\\Constants\\Lignes\\Action::GAIN') %}
-            {% set aquis = ligne.valeur %}
-        {% endif %}
-        {% if ligne.actionId == constant('Assmat\\DataSource\\Constants\\Lignes\\Action::RETENUE') %}
-            {% set pris = ligne.valeur %}
-        {% endif %}
-    {% endfor %}
-        <tr>
-            <td>Mois en cours</td>
-            <td class="right">{{ aquis != 0 ? aquis | number_format(2, ',', ' ') }}</td>
-            <td class="right">{{ pris != 0 ? pris | number_format(2, ',', ' ') }}</td>
-            <td class="right"></td>
-        </tr>
 {% endmacro %}

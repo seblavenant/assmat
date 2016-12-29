@@ -16,6 +16,8 @@ class Template implements Repositories\LigneTemplate
         $this->lignes = array(
             Constants\Lignes\Type::SALAIRE => (new Templates\Remunerations\Salaire())->getDomain(),
             Constants\Lignes\Type::HEURES_COMPLEMENTAIRES => (new Templates\Remunerations\HeuresComplementaires())->getDomain(),
+            Constants\Lignes\Type::ABSENCE_CONGES_PAYES => (new Templates\Remunerations\AbsenceCP())->getDomain(),
+            Constants\Lignes\Type::INDEMNITES_CONGES_PAYES => (new Templates\Remunerations\IndemnitesCP())->getDomain(),
             Constants\Lignes\Type::CSG_RDS => (new Templates\Cotisations\CsgRds())->getDomain(),
             Constants\Lignes\Type::CSG_DEDUCTIBLE => (new Templates\Cotisations\CsgDeductible())->getDomain(),
             Constants\Lignes\Type::SECURITE_SOCIALE => (new Templates\Cotisations\SecuriteSociale())->getDomain(),

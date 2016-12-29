@@ -33,9 +33,4 @@ class CpReference
     {
         return $this->fields->contratId;
     }
-    
-    public function getDetails()
-    {
-    	return $this->fields->load('details');
-    }
 }

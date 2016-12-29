@@ -54,7 +54,7 @@ class Bulletin
             return $ligneRepository->findFromBulletin($this->getId());
         });
     }
-    
+
     public function getLignes()
     {
         return $this->fields->load('lignes');

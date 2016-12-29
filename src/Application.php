@@ -25,7 +25,7 @@ class Application extends AbstractApplication
         $this->initializeForms();
 
         $this['bulletin.builder.fromEvenements'] = function() {
-            return new Services\Bulletin\Builders\FromEvenements($this['repository.ligneTemplate'], $this['repository.ligne'], $this['repository.cpReference'], $this['provider.ligneBuilder']);
+            return new Services\Bulletin\Builders\FromEvenements($this['repository.ligneTemplate'], $this['repository.congePaye'], $this['provider.ligneBuilder']);
         };
 
         $this['bulletin.builder.fromLignes'] = function() {
@@ -152,7 +152,7 @@ class Application extends AbstractApplication
         };
 
         $this['repository.bulletin'] = function() {
-            return new Repositories\Mysql\Bulletin($this['db.default'], $this['repository.evenement'], $this['repository.contrat'], $this['repository.ligne']);
+            return new Repositories\Mysql\Bulletin($this['db.default'], $this['repository.evenement'], $this['repository.contrat'], $this['repository.ligne'], $this['repository.congePaye']);
         };
 
         $this['repository.evenement'] = function() {
@@ -177,6 +177,10 @@ class Application extends AbstractApplication
 
         $this['repository.cpReference'] = function() {
             return new Repositories\Mysql\CpReference($this['db.default'], $this['repository.ligne']);
+        };
+
+        $this['repository.congePaye'] = function() {
+            return new Repositories\Mysql\CongePaye($this['repository.ligne'], $this['repository.cpReference']);
         };
     }
 

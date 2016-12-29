@@ -7,6 +7,10 @@ interface Type
     const
         SALAIRE = 100,
         HEURES_COMPLEMENTAIRES = 101,
+
+        ABSENCE_CONGES_PAYES = 150,
+        INDEMNITES_CONGES_PAYES = 151,
+
         SALAIRE_NET = 199,
 
         CSG_RDS = 200,

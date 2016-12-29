@@ -4,7 +4,6 @@ namespace Assmat;
 
 use Spear\Silex\Provider\Commands\AsseticDumper;
 use Assmat\Commands\CpReferenceComputer;
-use Assmat\Services\Lignes\Computers\CpAnneeReference;
 
 class Console
 {
