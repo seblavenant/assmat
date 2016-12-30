@@ -23,9 +23,20 @@ class Evenement
         $evenementRepository,
         $evenementTypeRepository,
         $bulletinRepository,
-        $contratRepository;
+        $contratRepository,
+        $congePayeRepository;
 
-    public function __construct(\Twig_Environment $twig, Request $request, SecurityContextInterface $security, FormFactoryInterface $formFactory, Repositories\Evenement $evenementRepository, Repositories\EvenementType $evenementTypeRepository, Repositories\Bulletin $bulletinRepository, Repositories\Contrat $contratRepository)
+    public function __construct(
+        \Twig_Environment $twig,
+        Request $request,
+        SecurityContextInterface $security,
+        FormFactoryInterface $formFactory,
+        Repositories\Evenement $evenementRepository,
+        Repositories\EvenementType $evenementTypeRepository,
+        Repositories\Bulletin $bulletinRepository,
+        Repositories\Contrat $contratRepository,
+        Repositories\CongePaye $congePayeRepository
+    )
     {
         $this->twig = $twig;
         $this->request = $request;
@@ -35,6 +46,7 @@ class Evenement
         $this->evenementTypeRepository = $evenementTypeRepository;
         $this->bulletinRepository = $bulletinRepository;
         $this->contratRepository = $contratRepository;
+        $this->congePayeRepository = $congePayeRepository;
     }
 
     public function listAction($contratId)
@@ -96,6 +108,7 @@ class Evenement
         }
 
         $contratId = $evenementForm->get('contratId')->getData();
+        $contrat = $this->contratRepository->find($contratId);
         $date = $evenementForm->get('date')->getData();
 
         $evenementDTO = new DTO\Evenement();
@@ -105,12 +118,13 @@ class Evenement
         $evenementDTO->contratId = $contratId;
         $evenementDTO->typeId = $evenementForm->get('typeId')->getData();
 
+        $dateTime = new \DateTime($date);
         try
         {
-            $contrat = $this->contratRepository->find($contratId);
+            $this->validateCPHebdo($contrat, $dateTime);
             $contrat->validateContactAutorisation($this->getContact());
+            $this->validateEvenementHasNoActiveBulletin($contratId, $dateTime);
 
-            $this->validateEvenementHasNoActiveBulletin($contratId, $date);
             $this->evenementRepository->persist($evenementDTO);
         }
         catch(\Exception $e)
@@ -124,7 +138,7 @@ class Evenement
     public function deleteAction()
     {
         $contratId = $this->request->get('contratId');
-        $date = $this->request->get('date');
+        $date = new \DateTime($this->request->get('date'));
 
         try
         {
@@ -132,7 +146,7 @@ class Evenement
             $contrat->validateContactAutorisation($this->getContact());
 
             $this->validateEvenementHasNoActiveBulletin($contratId, $date);
-            $evenement = $this->evenementRepository->findOneFromContratAndDay($contratId, new \DateTime($date));
+            $evenement = $this->evenementRepository->findOneFromContratAndDay($contratId, $date);
             $this->evenementRepository->delete($evenement->getId());
         }
         catch(\Exception $e)
@@ -143,9 +157,18 @@ class Evenement
         return new JsonResponse(array('ok'));
     }
 
-    private function validateEvenementHasNoActiveBulletin($contratId, $date)
+    private function validateCPHebdo(Domains\Contrat $contrat, \DateTime $date)
     {
-        $date = new \DateTime($date);
+        $cpCount = $this->congePayeRepository->coundAllFromContratAndWeek($contrat->getId(), $date);
+
+        if($cpCount >= $contrat->getJoursGarde())
+        {
+            throw new \RuntimeException(sprintf('Vous ne pouvez poser plus de CP par semaine que le nombre de jours de garde définit au contrat (%s)', $contrat->getJoursGarde()));
+        }
+    }
+
+    private function validateEvenementHasNoActiveBulletin($contratId, \DateTime $date)
+    {
         $bulletin = $this->bulletinRepository->findOneFromContratAndDate($contratId, (int) $date->format('Y'), (int) $date->format('m'));
 
         if($bulletin instanceof Domains\Bulletin)

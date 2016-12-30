@@ -176,11 +176,11 @@ class Application extends AbstractApplication
         };
 
         $this['repository.cpReference'] = function() {
-            return new Repositories\Mysql\CpReference($this['db.default'], $this['repository.ligne']);
+            return new Repositories\Mysql\CpReference($this['db.default']);
         };
 
         $this['repository.congePaye'] = function() {
-            return new Repositories\Mysql\CongePaye($this['repository.ligne'], $this['repository.cpReference']);
+            return new Repositories\Mysql\CongePaye($this['db.default'], $this['repository.ligne'], $this['repository.cpReference']);
         };
     }
 

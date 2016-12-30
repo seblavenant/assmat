@@ -16,7 +16,7 @@ use Assmat\DataSource\Repositories\Mysql\Mysql;
 class CpReferenceComputer extends Command
 {
     const
-        NAME= 'cp:reference:computer';
+        NAME = 'cp:reference:computer';
 
     private
         $db,

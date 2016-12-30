@@ -20,7 +20,7 @@ class Console
         $this->app = new \Symfony\Component\Console\Application('silex-spear-app');
 
         $this->app->add(new AsseticDumper($this->configuration, $dic['assetic.dumper'], $dic['assetic.path_to_web']));
-        $this->app->add(new CpReferenceComputer($dic['db'], $dic['repository.cpReference']));
+        $this->app->add(new CpReferenceComputer($dic['db.default'], $dic['repository.cpReference']));
     }
 
     public function run()

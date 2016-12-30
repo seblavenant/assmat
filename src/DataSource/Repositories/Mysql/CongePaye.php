@@ -7,19 +7,39 @@ use Assmat\DataSource\DataTransferObjects as DTO;
 use Assmat\DataSource\Repositories;
 use Assmat\DataSource\Constants;
 use Assmat\Services\Lignes\Computers\CpAnneeReference;
+use Muffin\Tests\Escapers\SimpleEscaper;
+use Muffin\Queries;
+use Muffin\Types;
+use Muffin\Queries\Select;
+use Assmat\DataSource\Constants\Evenements\Type;
 
 class CongePaye implements Repositories\CongePaye
 {
     private
         $ligneRepository,
-        $cpReferenceRepository;
+        $cpReferenceRepository,
+        $db;
 
-    public function __construct(Repositories\Ligne $ligneRepository, Repositories\CpReference $cpReferenceRepository)
+    public function __construct(Mysql $db, Repositories\Ligne $ligneRepository, Repositories\CpReference $cpReferenceRepository)
     {
+        $this->db = $db;
         $this->ligneRepository = $ligneRepository;
         $this->cpReferenceRepository = $cpReferenceRepository;
     }
 
+    public function coundAllFromContratAndWeek($contratId, \DateTime $date)
+    {
+        $query = (new Queries\Select())->setEscaper(new SimpleEscaper());
+        $query
+            ->select('count(*) as count')
+            ->from('evenement')
+            ->where((new Types\String('YEARWEEK(date)'))->equal($date->format('YW')))
+            ->where((new Types\Integer('type_id'))->equal(Type::CONGE_PAYE))
+            ->where((new Types\Integer('contrat_id'))->equal($contratId));
+
+        return ((int) $this->db->fetchColumn($query->toString()));
+    }
+    
     public function findFromContratAndDate($contratId, $annee, $mois)
     {
         $anneeDebut = ($mois >= 6) ? $annee : $annee - 1;
